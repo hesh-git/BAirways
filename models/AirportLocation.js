@@ -1,0 +1,23 @@
+// save location name to location table
+const save_to_location = (name, dbCon, callback) => {
+    let sql = 'INSERT INTO `Location` (`Name`) VALUES (?)';
+    dbCon.query(sql, [name], callback);
+}
+
+// create location pairs
+const save_location_pair = (parentLevelID, childLevelID, dbCon, callback) => {
+    let sql = 'INSERT INTO `LocationPair` (`ParentLevelID`, `ChildLevelID`) VALUES (?, ?)';
+    dbCon.query(sql, [parentLevelID, childLevelID], callback);
+}
+
+// save airport code to Airport table
+const save_airport_code = (airportCode, locationID, dbCon, callback) => {
+    let sql = 'INSERT INTO `Airport` (`AirportCode`, `LocationID`) VALUES (?,?)';
+    dbCon.query(sql, [airportCode, locationID], callback);
+}
+
+module.exports = {
+    save_to_location,
+    save_location_pair,
+    save_airport_code
+}
