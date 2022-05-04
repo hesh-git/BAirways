@@ -1,57 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-    <%- include('../partials/head.ejs') %> 
-<body>
-    <div class="container-fluid">
-        <div class="row">
-        <div class="col-3">
-            <%- include('../partials/admin_sidebar.ejs') %> 
-        </div>
-        <div class="col-9">
-            <h1 class="">Dashboard</h1>
-            <h2 class="text-center">Today Schedule - <% 
-            const today = new Date();
-            const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-            %> <%= date %>  </h2>
-            <div>
-                <div class="row">
-                    <div class="col-2">Flight</div>
-                    <div class="col-2">From</div>
-                    <div class="col-2">Duration</div>
-                    <div class="col-2">To</div>
-                    <div class="col-2">People</div>
-                    <div class="col-2">Status</div>
-                </div>
-                <hr>
-                <!-- for one schedule of a flight-->
-                <div class="row">
-                    <div class="col-2">
-                        FlightNo
-                    </div>
-                    <div class="col-2">
-                        <div>08:00</div>
-                        <div>Indonesia</div>
-                    </div>
-                    <div class="col-2">
-                        <div>7h 30m</div>
-                        <hr>
-                        <div></div>
-                    </div>
-                    <div class="col-2">
-                        <div>08:00</div>
-                        <div>Indonesia</div>
-                    </div>
-                    <div class="col-2">200</div>
-                    <div class="col-2">Ongoing</div>
-                </div>
-                <hr>
-            </div>
-
-            <div class="text-center">
-                <a href="/admin/add-schedule">Add New</a>
-            </div>
-        </div>
-        </div>
+<h1 class="">Dashboard</h1>
+<h2 class="text-center">Today Schedule - <% const today=new Date(); const date=today.getFullYear() + '-' +
+        (today.getMonth() + 1) + '-' + today.getDate(); %>
+        <%= date %>
+</h2>
+<div>
+    <div class="row">
+        <div class="col-2">Flight</div>
+        <div class="col-2">From</div>
+        <div class="col-2">Duration</div>
+        <div class="col-2">To</div>
+        <div class="col-2">People</div>
+        <div class="col-2">Status</div>
     </div>
-</body>
-</html>
+    <hr>
+    <!-- for one schedule of a flight-->
+    <div class="row">
+        <div class="col-2">
+            FlightNo
+        </div>
+        <div class="col-2">
+            <div>08:00</div>
+            <div>Indonesia</div>
+        </div>
+        <div class="col-2">
+            <div>7h 30m</div>
+            <hr>
+            <div></div>
+        </div>
+        <div class="col-2">
+            <div>08:00</div>
+            <div>Indonesia</div>
+        </div>
+        <div class="col-2">200</div>
+        <div class="col-2">Ongoing</div>
+    </div>
+    <hr>
+</div>
+
+<div class="text-center">
+    <a href="/admin/add-schedule">Add New</a>
+</div>

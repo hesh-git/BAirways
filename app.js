@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const morgan =require('morgan');
 const adminRoutes = require('./routes/AdminRoutes');
+const expressLayouts = require('express-ejs-layouts');
 
 //express app
 const app = express(); 
@@ -28,6 +29,9 @@ connection.getConnection((err, mclient) => {
 
 //view engine
 app.set('view engine', 'ejs');
+
+// layouts
+app.use(expressLayouts);
 
 app.use(function(req, res, next) {
     req.dbCon = dbCon;

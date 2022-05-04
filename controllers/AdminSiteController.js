@@ -1,5 +1,5 @@
-// dashboard
-const testModel = require("../models/test")
+const AircraftModel = require("../models/AircraftModel");
+const Aircraft = require("../models/Aircraft");
 
 
 const dashboard = (req, res) => {
@@ -15,32 +15,29 @@ const add_airport_get = (req, res) => {
 }
 
 const add_aircraft_get = (req, res) => {
-    res.render('./admin/add_aircraft', {title: 'Admin | Aircraft'})
+    res.render('./admin/add_aircraft', {title: 'Admin | Aircraft', layout: './layouts/admin_layout'})
 }
 
 const add_aircraft_post = (req, res) => {
-    console.log(req.body);
+    const data = req.body; // data entered by user
+    const dbCon = req.dbCon;
 
-//     const connection = require('./database/dbConnPool');
-//     connection.getConnection((err, mclient) => {
-//     if (err) {
-//         console.log(err.message);
-//         return;
-//     }
-//     console.log('connected to db');
-//     app.listen(PORT, () => {
-//         console.log(`listening on port ${PORT}`);
-//     })
-// });  
+    // save aircraft model data to database
+    AircraftModel.save(data, dbCon, (err, result, fields) => {
+        if(err) throw err;
 
-    
-    
-    testModel.test(req.dbCon, function(error, results) {
-        if (error) {
-            return console.error(error.message);
+        const NoOfAircrafts = data.NoOfAircrafts; // number of aircrafts for user entered model
+
+        // save aircraft ids to database
+        for(let i = 0; i < NoOfAircrafts; i++){
+            console.log(data["id"+i])
+            Aircraft.save({'ID': data["id"+i], 'ModelID': result.insertId}, dbCon, (err, result, fields) => {
+                if(err) throw err
+
+            });
         }
-        console.log(results);
-        })
+        res.redirect('/admin/add_aircraft');
+    })
 }
 
 module.exports = {
