@@ -19,6 +19,7 @@ router.post('/add_aircraft', adminSiteController.add_aircraft_post);
 
 
 // add a flight
-router.get('/add_flight');
+router.get('/add_flight', adminSiteController.add_flight_get);
+router.post('/add_flight', adminSiteController.add_flight_post);
 
 module.exports = router;

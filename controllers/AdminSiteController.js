@@ -2,13 +2,14 @@
 const AircraftModel = require("../models/AircraftModel");
 const Aircraft = require("../models/Aircraft");
 const AirportLocationModel = require("../models/AirportLocation");
+const FlightModel = require("../models/Flight");
 
 const dashboard = (req, res) => {
-    res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard'});
+    res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', layout: './layouts/admin_layout'});
 }
 
 const add_schedule_get = (req, res) => {
-    res.render('./admin/add_schedule', {title: 'Add | Flight Schedule'});
+    res.render('./admin/add_schedule', {title: 'Add | Flight Schedule', layout: './layouts/admin_layout'});
 }
 
 // add a airport
@@ -103,6 +104,7 @@ const add_aircraft_post = (req, res) => {
     const data = req.body; // data entered by user
     const dbCon = req.dbCon;
 
+    AircraftModel.set_database(dbCon);
     // save aircraft model data to database
     AircraftModel.save(data, dbCon, (err, result, fields) => {
         if(err) throw err;
@@ -121,11 +123,50 @@ const add_aircraft_post = (req, res) => {
     })
 }
 
+const add_flight_get = (req, res) => {
+    const dbCon = req.dbCon;
+    
+
+    // get all airport codes : need to limit
+    AirportLocationModel.get_all_airports(dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        const airportCodes = []
+        
+        result.forEach((value, index, array) => {
+            airportCodes.push(value["AirportCode"])
+        })
+
+        res.render('./admin/add_flight', {title: 'Add | Flight', airportCodes: airportCodes, layout: './layouts/admin_layout'});
+    })
+
+
+    
+}
+
+const add_flight_post = (req, res) => {
+    const data = req.body;
+    const dbCon = req.dbCon;
+    
+    const FlightNo = data.FlightNo;
+    const Origin = data.Origin;
+    const Destination = data.Destination;
+
+    FlightModel.save(FlightNo, Origin, Destination, dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        res.redirect("/admin/add_flight");
+    })
+
+}
+
 module.exports = {
     dashboard,
     add_schedule_get,
     add_airport_get,
     add_airport_post,
     add_aircraft_get,
-    add_aircraft_post
+    add_aircraft_post,
+    add_flight_get,
+    add_flight_post
 }
