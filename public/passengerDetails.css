@@ -1,6 +1,7 @@
 body {
-    font-family: "Roboto", sans-serif;
-    background-color: #fff;
+    font-family: "Karla", sans-serif;
+    background-image: url("./images/bg-image.svg");
+    min-height: 100vh;
     line-height: 1.9;
     color: #8c8c8c;
     position: relative; }
@@ -53,7 +54,8 @@ body {
     border-bottom: 1px solid #ccc;
     padding-left: 0;
     padding-right: 0;
-    border-radius: 0; }
+    border-radius: 0; 
+    background: #C1D9F8;}
     .custom-select:active, .custom-select:focus {
       outline: none;
       -webkit-box-shadow: none;
@@ -61,16 +63,23 @@ body {
       border-color: #000; }
   
   .btn {
+    
     border: none;
     border-radius: 0;
     font-size: 11px;
     letter-spacing: .2rem;
-    text-transform: uppercase;
-    border-radius: 30px !important; }
+    text-transform: uppercase; }
     .btn.btn-primary {
-      border-radius: 30px !important;
-      background: #6C63FF;
-      color: #fff;
+        
+        padding: 13px 20px 12px;
+        background-color: #6C63FF;
+        border-radius: 4px;
+        font-size: 17px;
+        font-weight: bold;
+        line-height: 20px;
+        color: #fff;
+        margin-bottom: 0px;
+        max-width: 326px;
     }    
     .btn:hover {
       color: #fff; }
@@ -80,17 +89,26 @@ body {
       box-shadow: none; }
   
   .contact-wrap {
-    -webkit-box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.05);
-    box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid #efefef; }
+      
+    
+    /* -webkit-box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.05); */
+   
+    
+    }
     .contact-wrap .col-form-label {
       font-size: 14px;
-      color: #b3b3b3;
+      color: #484856;
       margin: 0 0 10px 0;
       display: inline-block;
       padding: 0; }
     .contact-wrap .form, .contact-wrap .contact-info {
-      padding: 40px; }
+        
+        box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
+        padding: 40px; 
+        padding-bottom: 0;
+      border-radius: 27.5px;
+      border: 0 
+      }
     .contact-wrap .contact-info {
       color: rgba(255, 255, 255, 0.5); }
       .contact-wrap .contact-info ul li {
@@ -101,7 +119,7 @@ body {
           color: #fff;
           margin-top: 5px; }
     .contact-wrap .form {
-      background: #fff; }
+        background-color: #C1D9F8; }
       .contact-wrap .form h3 {
         color: #0d2366;
         font-size: 2rem;
