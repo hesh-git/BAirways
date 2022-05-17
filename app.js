@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const morgan =require('morgan');
-const bookingRoutes = require('./routes/bookingRoutes')
+const bookingRoutes = require('./routes/BookingRoutes')
 
 //express app
 const app = express(); 
@@ -9,6 +9,8 @@ const app = express();
 //db connect
 const PORT = process.env.PORT;
 const connection = require('./database/dbConnPool');
+let dbCon;
+
 connection.getConnection((err, mclient) => {
     if (err) {
         console.log(err.message);
@@ -17,13 +19,20 @@ connection.getConnection((err, mclient) => {
     console.log('connected to db');
     app.listen(PORT, () => {
         console.log(`listening on port ${PORT}`);
-    })
+    });
+
+    dbCon = mclient; 
 });  
 
 
 
 //view engine
 app.set('view engine', 'ejs');
+
+app.use(function(req, res, next) {
+    req.dbCon = dbCon;
+    next()
+})
 
 //middleware
 app.use(express.static('public'));
