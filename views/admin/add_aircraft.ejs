@@ -1,20 +1,20 @@
 <form action="/admin/add_aircraft" method="POST">
 
-    <div class="form-group row">
+    <div class="form-group row mt-5">
         <label for="modelName" class="col-sm-2 col-form-label">Model Name</label>
         <div class="col-sm-10">
             <input type="text" name="ModelName" class="form-control" id="modelName" required>
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row mt-4">
         <label for="seatingCapacity" class="col-sm-2 col-form-label">Seating Capacity</label>
         <div class="col-sm-10">
             <input type="number" name="SeatingCapacity" class="form-control" id="seatingCapacity" required>
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row mt-4">
         <label for="noOfAircrafts" class="col-sm-2 col-form-label">No of Aircrafts</label>
         <div class="col-sm-10">
             <input onchange="addFields()" type="number" name="NoOfAircrafts" class="form-control" id="noOfAircrafts" required>
@@ -25,7 +25,7 @@
 
     </div>
 
-    <button type="submit">Add</button>
+    <button type="submit" class="link link-btn btn btn-outline-primary btn-lg btn-block">Add</button>
 </form>
 
 <script>

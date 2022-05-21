@@ -7,18 +7,18 @@
         </div>
     </div> -->
 
-    <div class="form-group row">
+    <div class="form-group row mt-5">
         <label for="FlightNo" class="col-sm-2 col-form-label">Flight Number</label>
         <div class="col-sm-10">
             <input type="text" class="form-control" name="FlightNo" id="FlightNo">
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row mt-4">
         <label for="Origin" class="col-sm-2 col-form-label">Origin</label>
         <div class="col-sm-10">
             <!-- <input type="text" class="form-control" name="" id=""> -->
-            <select name="Origin" id="Origin">
+            <select name="Origin" id="Origin" class="btn btn-secondary btn-block">
                 <% for(let i=0; i < airportCodes.length; i++) { %> 
                     <option><%= airportCodes[i] %> </option>
                 <% } %> 
@@ -26,11 +26,11 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row mt-4 mb-5">
         <label for="Destination" class="col-sm-2 col-form-label">Destination</label>
         <div class="col-sm-10">
             <!-- <input type="text" class="form-control" name="" id=""> -->
-            <select name="Destination" id="Destination">
+            <select name="Destination" id="Destination" class="btn btn-secondary btn-block">
                 <% for(let i=0; i < airportCodes.length; i++) { %> 
                     <option><%= airportCodes[i] %> </option>
                 <% } %> 
@@ -38,5 +38,5 @@
         </div>
     </div>
 
-    <button type="submit">Add</button>
+    <button type="submit" class="link link-btn btn btn-outline-primary btn-lg btn-block">Add</button>
 </form>
