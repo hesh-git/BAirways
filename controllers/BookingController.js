@@ -1,7 +1,7 @@
 const Passenger = require("../models/Booking");
 
 const add_passenger_details_get = (req, res) => {
-    res.render('passengerDetails', {title: 'PassengerDetails'});
+    res.render('passengerDetails', {title: 'PassengerDetails', no_children: 3, no_adults: 2});
 }
 
 const add_passenger_details_post = (req, res) => {
