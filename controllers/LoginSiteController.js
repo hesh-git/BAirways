@@ -25,7 +25,7 @@ const login_post = (req,res,next) => {
         
         authModel.getPwrdByID(id, con, function(err,result, fields){
             if(err) throw err;
-            console.log(result);
+            //console.log(result);
             if(result.length && result[0].password == password){
                 authModel.updateLastLog(id,con, function(err,result,fields){
                     if (err) throw err;   
@@ -40,8 +40,35 @@ const login_post = (req,res,next) => {
       });
   }
 
+  const signup_post = (req,res,next) => {
+        const data = req.body;
+        const dbCon = req.dbCon;
+
+        const fName = data.fName;
+        const lName = data.lName;
+        const email = data.email;
+        const password = data.password;
+        const conPassword = data.conPassword;
+        const contact = data.contact;
+
+        
+
+        //userModel.getUserByEmail(email,dbCon,function(err,result, fields){
+            //if(result == []){
+                userModel.addUser(fName,lName,email,password,contact,dbCon,function(err,result, fields){
+                    console.log(result);
+                    if(err)
+                        throw err
+                    res.send('User entered');
+                })
+            //}
+        //})
+
+  }
+
 module.exports = {
     login_page,
     signup_page,
-    login_post
+    login_post,
+    signup_post
 }

@@ -8,6 +8,7 @@ const updateLastLog = (id,dbCon,callback) => {
     dbCon.query(sql,[new Date(),id],callback);
 }
 
+
 module.exports = {
     getPwrdByID,
     updateLastLog
