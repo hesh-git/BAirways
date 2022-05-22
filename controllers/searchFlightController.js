@@ -3,7 +3,7 @@
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
-    res.render('searchFlights', {title : 'Search Flight'});
+    res.render('searchFlights', {title : 'Search Flight', layout: './layouts/flightsearch_layout'});
 }
 
 const searchFlight_post = (req, res) => {
