@@ -2,11 +2,11 @@ const userModel = require('../models/userModel');
 const authModel = require('../models/autheticationModel');
 
 const login_page = (req,res) => {
-    res.render('login', {title: 'Login Page'})
+    res.render('login', {title: 'Login Page', layout: './layouts/auth_layout'})
 }
 
 const signup_page = (req,res) => {
-    res.render('signup', {title: 'Signup Page'})
+    res.render('signup', {title: 'Signup Page', layout: './layouts/auth_layout'})
 }
 
 const login_post = (req,res,next) => {
