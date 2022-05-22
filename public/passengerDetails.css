@@ -1,6 +1,5 @@
 body {
     font-family: "Karla", sans-serif;
-    background-image: url("./images/bg-image.svg");
     background: linear-gradient(150deg,rgb(101, 113, 223), rgb(192, 245, 251), rgb(101, 113, 223));
     min-height: 100vh;
     line-height: 1.9;
