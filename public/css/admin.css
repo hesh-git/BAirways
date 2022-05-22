@@ -1,0 +1,45 @@
+body {
+    background: #C1D9F8;
+    color: #112A53;
+    font-family: 'Nunito', sans-serif;
+}
+
+.link {
+    color: #3C94F8;
+}
+
+.link:hover {
+    color: #112A53;
+    text-decoration: none;
+}
+
+.main-title {
+    color: #0b2145;
+}
+
+.title {
+    color: #3C94F8;
+}
+
+.line-top {
+    border-top: 1px solid #af912f;
+}
+
+.line-right {
+    border-right: 1px solid #af912f;
+}
+
+.sub-title {
+    color: #af912f;
+    font-size: 1.2em;
+}
+
+.nav-link {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    font-size: 1.2em;
+}
+
+.link-btn:hover {
+    
+}
