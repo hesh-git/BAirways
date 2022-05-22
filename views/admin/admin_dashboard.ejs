@@ -1,0 +1,42 @@
+<h1 class="main-title pt-3 pb-3">Dashboard</h1>
+<h2 class="text-center title pb-5">Today Schedule - <% const today=new Date(); const date=today.getFullYear() + '-' +
+        (today.getMonth() + 1) + '-' + today.getDate(); %>
+        <%= date %>
+</h2>
+<div>
+    <div class="row">
+        <div class="col-2 sub-title">Flight</div>
+        <div class="col-2 sub-title">From</div>
+        <div class="col-2 sub-title">Duration</div>
+        <div class="col-2 sub-title">To</div>
+        <div class="col-2 sub-title">People</div>
+        <div class="col-2 sub-title">Status</div>
+    </div>
+    <hr class="line-top">
+    <!-- for one schedule of a flight-->
+    <div class="row">
+        <div class="col-2">
+            FlightNo
+        </div>
+        <div class="col-2">
+            <div>08:00</div>
+            <div>Indonesia</div>
+        </div>
+        <div class="col-2">
+            <div>7h 30m</div>
+            <hr class="line-top">
+            <div></div>
+        </div>
+        <div class="col-2">
+            <div>08:00</div>
+            <div>Indonesia</div>
+        </div>
+        <div class="col-2">200</div>
+        <div class="col-2">Ongoing</div>
+    </div>
+    <hr class="line-top">
+</div>
+
+<div class="text-center mt-5">
+    <a href="/admin/add-schedule" class="link link-btn btn btn-outline-primary btn-lg btn-block">Add New</a>
+</div>
