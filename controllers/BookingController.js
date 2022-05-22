@@ -1,7 +1,7 @@
 const Passenger = require("../models/Booking");
 
 const add_passenger_details_get = (req, res) => {
-    res.render('passengerDetails', {title: 'PassengerDetails', no_children: 3, no_adults: 2, flight_shedule_id:1});
+    res.render('passengerDetails', {title: 'PassengerDetails', layout: './layouts/layout', no_children: 3, no_adults: 2, flight_shedule_id:1});
 }
 
 const add_passenger_details_post = (req, res) => {
@@ -52,7 +52,7 @@ const add_passenger_details_post = (req, res) => {
 }
 
 const add_guest_details_get = (req, res) => {
-    res.render('passengerDetails', {title: 'GuestDetails', no_children: 3, no_adults: 2, flight_shedule_id:1});
+    res.render('passengerDetails', {title: 'GuestDetails', layout: './layouts/layout', no_children: 3, no_adults: 2, flight_shedule_id:1});
 }
 
 module.exports ={
