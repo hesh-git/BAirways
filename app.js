@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+//const expressLayouts = require('express-ejs-layouts');
 const morgan =require('morgan');
+
+
+const searchFlightRoutes = require('./routes/searchFlight-routes');
 
 const bookingRoutes = require('./routes/BookingRoutes')
 
@@ -14,6 +18,7 @@ const session = require('express-session');
 const loginRoutes = require('./routes/Auth');
 
 
+
 //express app
 const app = express(); 
 
@@ -22,6 +27,7 @@ app.use(session({
     resave : false,
     saveUninitialized : true
   }));
+
 
 //db connect
 const PORT = process.env.PORT;
@@ -43,6 +49,10 @@ connection.getConnection((err, mclient) => {
 });  
 
 
+app.use(function(req, res, next){
+    req.dbCon = dbCon;
+    next();
+})
 
 //view engine
 app.set('view engine', 'ejs');
@@ -64,6 +74,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 
 
+app.use(searchFlightRoutes.routes);
 app.use(bookingRoutes);
 
 // admin site routes
@@ -75,6 +86,7 @@ app.use(express.json());
 app.use('/', loginRoutes);
 app.use('/register', loginRoutes);
 app.use('/auth', loginRoutes);
+
 
 
 
