@@ -27,7 +27,7 @@ const addUser = (fName,lName,email,password,contact, dbCon,callback) =>{
                 throw err
             }
             var travellerID = result.insertId;
-            var sql_rtraveller = 'INSERT INTO `registeredtraveller` (`UserID`,`TravellerID`,`CategoryID`,`FirstName`,`LastName`,`ContactNumber`) VALUES (?,?,?,?,?,?)';
+            var sql_rtraveller = 'INSERT INTO `registeredtraveller` (`UserID`,`TravellerID`,`CatagoryID`,`FirstName`,`LastName`,`ContactNumber`) VALUES (?,?,?,?,?,?)';
             dbCon.query(sql_rtraveller,[userID,travellerID,1,fName,lName,contact], callback);
 
         })
