@@ -1,6 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const morgan =require('morgan');
+
+const bookingRoutes = require('./routes/BookingRoutes')
+
 const adminRoutes = require('./routes/AdminRoutes');
 const expressLayouts = require('express-ejs-layouts');
 
@@ -45,6 +48,7 @@ connection.getConnection((err, mclient) => {
 app.set('view engine', 'ejs');
 
 
+
 // layouts
 app.use(expressLayouts);
 
@@ -53,10 +57,14 @@ app.use(function(req, res, next) {
     next()
   })
 
+
 //middleware
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
+
+
+app.use(bookingRoutes);
 
 // admin site routes
 app.use('/admin', adminRoutes);
@@ -67,5 +75,6 @@ app.use(express.json());
 app.use('/', loginRoutes);
 app.use('/register', loginRoutes);
 app.use('/auth', loginRoutes);
+
 
 
