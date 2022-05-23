@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', adminSiteController.dashboard);
 
 router.get('/add_schedule', adminSiteController.add_schedule_get);
+router.post('/add_schedule', adminSiteController.add_schedule_post);
 
 // add a airport
 router.get('/add_airport', adminSiteController.add_airport_get);
