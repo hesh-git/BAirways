@@ -4,6 +4,12 @@ const save = (data, dbCon, callback) => {
     dbCon.query(sql, [data.ID, data.ModelID], callback);
 }
 
+const get_all_AircraftID = (dbCon, callback) => {
+    let sql = 'SELECT `ID` FROM `Aircraft`';
+    dbCon.query(sql, callback);
+}
+
 module.exports = {
-    save
+    save,
+    get_all_AircraftID
 }

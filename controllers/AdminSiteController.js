@@ -3,13 +3,61 @@ const AircraftModel = require("../models/AircraftModel");
 const Aircraft = require("../models/Aircraft");
 const AirportLocationModel = require("../models/AirportLocation");
 const FlightModel = require("../models/Flight");
+const FlightSchedule = require("../models/FlightSchedule");
 
 const dashboard = (req, res) => {
     res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', layout: './layouts/admin_layout'});
 }
 
 const add_schedule_get = (req, res) => {
-    res.render('./admin/add_schedule', {title: 'Add | Flight Schedule', layout: './layouts/admin_layout'});
+
+    const dbCon = req.dbCon;
+    
+
+    // get all flights : need to limit
+    FlightModel.get_all_flightNo(dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        const flightNoList = []
+        
+        result.forEach((value, index, array) => {
+            flightNoList.push(value["FlightNo"]);
+        });
+
+        Aircraft.get_all_AircraftID(dbCon, (err, result, fields) => {
+            if(err) throw err;
+
+            const aircraftIDList = []
+
+            result.forEach((value, index, array) => {
+                aircraftIDList.push(value["ID"]);
+            })
+
+            res.render('./admin/add_schedule', {title: 'Add | Flight Schedule', flightNoList: flightNoList, aircraftIDList: aircraftIDList, layout: './layouts/admin_layout'});
+
+        })
+        
+        
+    })
+
+    }
+
+const add_schedule_post = (req, res) => {
+    const data = req.body; // data about adding flight schedule
+    const dbCon = req.dbCon; // database connection
+
+    // details of newly adding flight schedule
+    FlightNo = data.FlightNo;
+    AircraftID = data.AircraftID; 
+    StateID = 1 // for newly adding flight schedules state is future (stateID = 1)
+    StartTime = data.StartTime;
+    EndTime = data.EndTime;
+
+    FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, StartTime, EndTime, dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        res.redirect("/admin/add_schedule");
+    })
 }
 
 // add a airport
@@ -138,7 +186,7 @@ const add_flight_get = (req, res) => {
         })
 
         res.render('./admin/add_flight', {title: 'Add | Flight', airportCodes: airportCodes, layout: './layouts/admin_layout'});
-    })
+    });
 
 
     
@@ -163,6 +211,7 @@ const add_flight_post = (req, res) => {
 module.exports = {
     dashboard,
     add_schedule_get,
+    add_schedule_post,
     add_airport_get,
     add_airport_post,
     add_aircraft_get,

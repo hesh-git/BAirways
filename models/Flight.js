@@ -10,6 +10,12 @@ const save = (FlightNo, Origin, Destination, dbCon, callback) => {
     })
 }
 
+const get_all_flightNo = (dbCon, callback) => {
+    let sql = 'SELECT `FlightNo` FROM `Flight`';
+    dbCon.query(sql, callback);
+}
+
 module.exports = {
-    save
+    save,
+    get_all_flightNo
 }
