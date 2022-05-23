@@ -7,6 +7,6 @@ router.get('/passengerDetails', BookingController.add_passenger_details_get);
 router.post('/passengerDetails', BookingController.add_passenger_details_post);
 
 router.get('/guestDetails', BookingController.add_guest_details_get);
-// router.post('/guestDetails', BookingController.add_guest_details_post);
+router.post('/guestDetails', BookingController.add_guest_details_post);
 
 module.exports = router;
