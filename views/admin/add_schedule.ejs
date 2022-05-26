@@ -19,18 +19,34 @@
     </div>
 
     <div class="form-group row mt-4">
-        <label for="startTime" class="col-sm-2 col-form-label">Start Time</label>
+        <label for="DepartureDate" class="col-sm-2 col-form-label">Departure Date</label>
         <div class="col-sm-10">
-            <input type="datetime-local" name="StartTime" class="form-control" id="startTime" required>
+            <input type="date" name="DepartureDate" class="form-control" id="DepartureDate" required>
         </div>
     </div>
 
     <div class="form-group row mt-4">
-        <label for="endTime" class="col-sm-2 col-form-label">End Time</label>
+        <label for="DepartureTime" class="col-sm-2 col-form-label">Departure Time</label>
         <div class="col-sm-10">
-            <input type="datetime-local" name="EndTime" class="form-control" id="endTime" required>
+            <input type="time" name="DepartureTime" class="form-control" id="DepartureTime" required>
         </div>
     </div>
+
+    <div class="form-group row mt-4">
+        <label for="ArrivalDate" class="col-sm-2 col-form-label">Arrival Date</label>
+        <div class="col-sm-10">
+            <input type="date" name="ArrivalDate" class="form-control" id="ArrivalDate" required>
+        </div>
+    </div>
+
+    <div class="form-group row mt-4">
+        <label for="ArrivalTime" class="col-sm-2 col-form-label">Arrival Time</label>
+        <div class="col-sm-10">
+            <input type="time" name="ArrivalTime" class="form-control" id="ArrivalTime" required>
+        </div>
+    </div>
+
+
 
     <button type="submit" class="mt-5 link link-btn btn btn-outline-primary btn-lg btn-block">Add</button>
 </form>
