@@ -50,10 +50,12 @@ const add_schedule_post = (req, res) => {
     FlightNo = data.FlightNo;
     AircraftID = data.AircraftID; 
     StateID = 1 // for newly adding flight schedules state is future (stateID = 1)
-    StartTime = data.StartTime;
-    EndTime = data.EndTime;
+    DepartureDate = data.DepartureDate;
+    DepartureTime = data.DepartureTime;
+    ArrivalDate = data.ArrivalDate;
+    ArrivalTime = data.ArrivalTime;
 
-    FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, StartTime, EndTime, dbCon, (err, result, fields) => {
+    FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
         if(err) throw err;
 
         res.redirect("/admin/add_schedule");
