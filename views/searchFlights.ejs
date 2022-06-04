@@ -1,0 +1,122 @@
+
+  <body class="py-5">
+    <div class="container rounded shadow-sm">
+      <h2 class="title text-center py-3">Book Your Flight</h2>
+      <form action="/searchFlight" method="POST">
+        <!-- <div class="row">
+          
+          <div class="col-md-2 pe-0 col-sm-12">
+            <div class="btn radio-btn mb-3">
+              <label class="radio">
+                <input type="radio" value="a" id="book" name="book" checked /> Roundtrip
+                <span></span>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2 pe-0 col-sm-12">
+            <div class="btn radio-btn mb-3">
+              <label class="radio">
+                <input type="radio" value="a" id="book" name="book" /> One way
+                <span></span>
+              </label>
+            </div>
+          </div> -->
+
+        <div class="row">
+          <div class="col-md-6 col-12 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">FLYING FROM</p>
+              <!-- <input
+                class="inputbox"
+                placeholder="City or Airport"
+                name="Ffrom"
+                id="Ffrom"
+                type="text"
+              /> -->
+              <select name="Ffrom" id="Ffrom">
+                <% for(let i=0; i< airportNames.length; i++){ %>
+                    <option><%= airportNames[i] %> </option>
+                <%} %>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 col-12 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">FLYING TO</p>
+              <!-- <input
+                class="inputbox"
+                placeholder="City or Airport"
+                type="text"
+                name="Fto"
+                id="Fto"
+              /> -->
+              <select name="Ffrom" id="Ffrom">
+                <% for(let i=0; i< airportNames.length; i++){ %>
+                    <option><%= airportNames[i] %> </option>
+                <%} %>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-12 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">DEPARTING</p>
+              <input class="inputbox textmuted" type="date" name="departing" id="departing"/>
+            </div>
+          </div>
+          <div class="col-md-6 col-12 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">RETURNING</p>
+              <input class="inputbox textmuted" type="date" name="returning" id="returning" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">ADULTS(18+)</p>
+              <select class="border-0 outline-none" name="adults">
+                <option value="" hidden selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">CHILDREN(0-17)</p>
+              <select class="border-0 outline-none" name="children">
+                <option value="" hidden selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="form-control d-flex flex-column">
+              <p class="h-blue">TRAVEL CLASS</p>
+              <select class="border-0 outline-none" name="travelClass">
+                <option value="" hidden selected>Class</option>
+                <option value="1">Economy</option>
+                <option value="2">Premium</option>
+                <option value="3">Business</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary form-control text-center">
+          Search Now
+        </button>
+      </form>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    ></script>
+    <script type="text/javascript" src=""></script>
+    <script type="text/javascript" src=""></script>
+    <script type="text/Javascript"></script>
+  </body>
