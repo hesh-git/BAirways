@@ -3,7 +3,24 @@
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
-    res.render('searchFlights', {title : 'Search Flight', layout: './layouts/flightsearch_layout'});
+    const con = req.dbCon;
+
+    //Get all the Airports cords with their names
+    FlightSearchModel.getAirports(con, (err, result, fields) => {
+        if (err) throw err;
+
+        const airportCodes = [];
+        const airportNames = [];
+
+        result.forEach((value, index, array) => {
+            airportCodes.push(value["AirportCode"]);
+            airportNames.push(value["Name"]);
+        })
+
+        res.render('searchFlights', {title : 'Search Flight', airportCodes: airportCodes, airportNames : airportNames,layout: './layouts/flightsearch_layout'});
+    })
+
+    
 }
 
 const searchFlight_post = (req, res) => {
@@ -11,19 +28,19 @@ const searchFlight_post = (req, res) => {
     const con = req.dbCon; //get database connection from the request
     
     // const book = req.body.book;
-    const Ffrom = req.body.Ffrom;
-    const Fto = req.body.Fto;
-    const departing = req.body.departing;
-    const returning = req.body.returning;
-    const adults = req.body.adults;
-    const children = req.body.children;
-    const travelClass = req.body.travelClass;
+    const Ffrom = data.Ffrom;
+    const Fto = data.Fto;
+    const departing = data.departing;
+    const returning = data.returning;
+    const adults = data.adults;
+    const children = data.children;
+    const requireSeats = adults + children;
+    const travelClass = data.travelClass;
     
-    FlightSearchModel.getFlightByOrigin(Ffrom , con, function(error, results, fields){
+    FlightSearchModel.searchFlight(Ffrom, Fto, departing, returning, requireSeats, travelClass, con, function(error, results, fields){
         console.log(results);
         if (error) throw error;
-
-        
+        res.send('Searching for Flights');
     });
 }
 
