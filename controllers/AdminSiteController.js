@@ -32,35 +32,58 @@ const dashboard = (req, res) => {
             if(err) throw err;
 
             const state_list = {}; // states as key=>value paires
-            const flights_list = {}; // flights as key=>value paires
+            
 
             states.forEach((value, index, array) => {
                 state_list[value["ID"]] = value["NAME"];
             });
 
+            FlightModel.get_all_flightNo(dbCon, (err, flight_details, fields) => {
+                if(err) throw err;
+
+                const flights_list = {}; // flights as key=>value paires
+
+                flight_details.forEach((value, index, array) => {
+                    flights_list[value["FlightNo"]] = {"Origin": value["Origin"], "Destination": value["Destination"]};
+                });
+
+                schedules.forEach((value, index, array) => {
+                    value["State"] = state_list[value["StateID"]];
+                    value['Origin'] = flights_list[value["FlightNo"]]["Origin"];
+                    value['Destination'] = flights_list[value["FlightNo"]]["Destination"];
+
+                    const DepartureDate = value["DepartureDate"];
+                    const DepartureTime = value["DepartureTime"].split(":");
+                    const ArrivalDate = value["ArrivalDate"];
+                    const ArrivalTime = value["ArrivalTime"].split(":");
+
+                    let days = (ArrivalDate.getTime()- DepartureDate.getTime()) / (1000 * 3600 * 24);
+                    let hours = ArrivalTime[0] - DepartureTime[0];
+                    let minutes = ArrivalTime[1] - DepartureTime[0];
+
+
+                    if(hours < 0) {
+                        days -= 1;
+                        hours = 24 + hours;
+                    }
+
+                    if(minutes < 0) {
+                        hours -= 1;
+                        minutes = 60 + minutes;
+                    }
+                    
+                    value["duration_days"] = days;
+                    value["duration_hours"] = hours;
+                    value["duration_minutes"] = minutes;
+                });
+
+                res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', schedules: schedules, layout: './layouts/admin_layout'});
+            })
+
             
 
-            schedules.forEach((value, index, array) => {
-                value["State"] = state_list[value["StateID"]];
-                // const flightDetails = get_flightDetails(value["FlightNo"], dbCon);
-                // console.log(flightDetails);
-                // console.log(flightDetails);
-                var results = {};
-                FlightModel.get_flightDetails(value["FlightNo"], dbCon, (err, result) => {
-                    // results = result;
-                    // console.log(results);
-                    if(err) throw err;
-                    console.log(result);
-                     
-                });
-                // console.log(results);
-                // value["Origin"] = flightDetails["Origin"];
-                // value["Destination"] = flightDetails["Destination"];
-                // value["Duration"] = value["ArrivalDate"] + value["ArrivalTime"] - (value["DepartureDate"] + value["DepartureTime"]);
-            });
-
-            // console.log(schedules);
-            res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', schedules: schedules, layout: './layouts/admin_layout'});
+            
+            
             
         })
     })
