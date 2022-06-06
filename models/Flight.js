@@ -15,7 +15,18 @@ const get_all_flightNo = (dbCon, callback) => {
     dbCon.query(sql, callback);
 }
 
+const get_flightDetails = (FlightNo, dbCon, callback) => {
+    let sql = "SELECT * FROM `Flight` WHERE `FlightNo` = ?";
+    dbCon.query(sql, [FlightNo], (err, result, fields) => {
+        if(err) throw err;
+
+        return callback(null, result);
+    })
+    // console.log(results);
+}
+
 module.exports = {
     save,
-    get_all_flightNo
+    get_all_flightNo,
+    get_flightDetails
 }
