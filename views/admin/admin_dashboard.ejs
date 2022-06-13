@@ -14,27 +14,30 @@
     </div>
     <hr class="line-top">
     <!-- for one schedule of a flight-->
-    <div class="row">
-        <div class="col-2">
-            FlightNo
+    <% for(let i = 0; i < schedules.length; i++) {%> 
+        <div class="row">
+            <div class="col-2">
+                <div><%= schedules[i].FlightNo %> </div>
+                <div><%= schedules[i].AircraftID %> </div>
+            </div>
+            <div class="col-2">
+                <div><%= schedules[i].DepartureTime %> </div>
+                <div><%= schedules[i].Origin  %> </div>
+            </div>
+            <div class="col-2">
+                <div><%= schedules[i].duration_days  %>d <%= schedules[i].duration_hours %>h <%= schedules[i].duration_minutes %>min   </div>
+                <hr class="line-top">
+                <div></div>
+            </div>
+            <div class="col-2">
+                <div><%= schedules[i].ArrivalTime %> </div>
+                <div><%= schedules[i].Destination %> </div>
+            </div>
+            <div class="col-2"><%= schedules[i].NoPassengers %> </div>
+            <div class="col-2"><%= schedules[i].State %> </div>
         </div>
-        <div class="col-2">
-            <div>08:00</div>
-            <div>Indonesia</div>
-        </div>
-        <div class="col-2">
-            <div>7h 30m</div>
-            <hr class="line-top">
-            <div></div>
-        </div>
-        <div class="col-2">
-            <div>08:00</div>
-            <div>Indonesia</div>
-        </div>
-        <div class="col-2">200</div>
-        <div class="col-2">Ongoing</div>
-    </div>
-    <hr class="line-top">
+        <hr class="line-top">
+    <% } %> 
 </div>
 
 <div class="text-center mt-5">

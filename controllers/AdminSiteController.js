@@ -5,9 +5,92 @@ const AirportLocationModel = require("../models/AirportLocation");
 const FlightModel = require("../models/Flight");
 const FlightSchedule = require("../models/FlightSchedule");
 
-const dashboard = (req, res) => {
-    res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', layout: './layouts/admin_layout'});
+const get_flightDetails = (FlightNo, dbCon) => {
+    let details = [];
+    FlightModel.get_flightDetails(FlightNo, dbCon, (err, result, fields) => {
+        if(err) throw err;
+        // console.log(result);
+        // return result;
+        details.push(result[0])
+        console.log(details);
+        // details["Origin"] = result[0]["Origin"];
+        // details["Destination"] = result[0]["Destination"];
+    });
+    console.log(details);
+    return details;
 }
+
+const dashboard = (req, res) => {
+    const dbCon = req.dbCon;
+
+    const today = new Date(); // get today date
+
+    FlightSchedule.get_schedules_for_day(today, dbCon, (err, schedules, fields) => {
+        if(err) throw err;
+
+        FlightSchedule.get_all_states(dbCon, (err, states, fields) => {
+            if(err) throw err;
+
+            const state_list = {}; // states as key=>value paires
+            
+
+            states.forEach((value, index, array) => {
+                state_list[value["ID"]] = value["NAME"];
+            });
+
+            FlightModel.get_all_flightNo(dbCon, (err, flight_details, fields) => {
+                if(err) throw err;
+
+                const flights_list = {}; // flights as key=>value paires
+
+                flight_details.forEach((value, index, array) => {
+                    flights_list[value["FlightNo"]] = {"Origin": value["Origin"], "Destination": value["Destination"]};
+                });
+
+                schedules.forEach((value, index, array) => {
+                    value["State"] = state_list[value["StateID"]];
+                    value['Origin'] = flights_list[value["FlightNo"]]["Origin"];
+                    value['Destination'] = flights_list[value["FlightNo"]]["Destination"];
+
+                    const DepartureDate = value["DepartureDate"];
+                    const DepartureTime = value["DepartureTime"].split(":");
+                    const ArrivalDate = value["ArrivalDate"];
+                    const ArrivalTime = value["ArrivalTime"].split(":");
+
+                    let days = (ArrivalDate.getTime()- DepartureDate.getTime()) / (1000 * 3600 * 24);
+                    let hours = ArrivalTime[0] - DepartureTime[0];
+                    let minutes = ArrivalTime[1] - DepartureTime[0];
+
+
+                    if(hours < 0) {
+                        days -= 1;
+                        hours = 24 + hours;
+                    }
+
+                    if(minutes < 0) {
+                        hours -= 1;
+                        minutes = 60 + minutes;
+                    }
+                    
+                    value["duration_days"] = days;
+                    value["duration_hours"] = hours;
+                    value["duration_minutes"] = minutes;
+                });
+
+                res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', schedules: schedules, layout: './layouts/admin_layout'});
+            })
+
+            
+
+            
+            
+            
+        })
+    })
+    
+}
+
+
 
 const add_schedule_get = (req, res) => {
 
@@ -219,5 +302,6 @@ module.exports = {
     add_aircraft_get,
     add_aircraft_post,
     add_flight_get,
-    add_flight_post
+    add_flight_post,
+    get_flightDetails
 }
