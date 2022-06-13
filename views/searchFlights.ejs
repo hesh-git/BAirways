@@ -39,7 +39,7 @@
                 //class="btn //btn-secondary //btn-block"
                 >
                 <% for(let i=0; i < airportNames.length; i++) { %> 
-                    <option><%= airportNames[i] %> </option>
+                    <option value="<%= airportCodes[i] %>"><%= airportNames[i] %> </option>
                 <% } %> 
             </select>
             </div>
@@ -110,11 +110,11 @@
             <div class="form-control d-flex flex-column">
               <p class="h-blue">TRAVEL CLASS</p>
               <select class="border-0 outline-none" name="travelClass">
-                <option value="" hidden selected>Class</option>
-                <option value="1">Economy</option>
-                <option value="2">Premium</option>
-                <option value="3">Business</option>
+                <% for(let i=0; i < travelClasses.length; i++) { %> 
+                  <option value="<%= travelClasses[i].ID %>"><%= travelClasses[i].Name %> </option>
+              <% } %> 
               </select>
+
             </div>
           </div>
         </div>
