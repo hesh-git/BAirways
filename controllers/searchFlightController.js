@@ -3,7 +3,24 @@
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
-    res.render('searchFlights', {title : 'Search Flight', layout: './layouts/flightsearch_layout'});
+    const con = req.dbCon;
+
+    //Get all airport codes with their names
+    FlightSearchModel.getAirports(con, (err, result, fields) => {
+        if (err) throw err;
+
+        const airportCodes = [];
+        const airportNames = [];
+        console.log(result);
+        result.forEach((value, index, array) => {
+            airportCodes.push(value["AirportCode"]);
+            airportNames.push(value["Name"]);
+        })
+
+        res.render('searchFlights', {title : 'Search For a Flight', airportCodes : airportCodes, airportNames : airportNames, layout: './layouts/flightsearch_layout'});
+    })
+
+    
 }
 
 const searchFlight_post = (req, res) => {
@@ -33,6 +50,7 @@ const searchFlight_post = (req, res) => {
 
 module.exports = {
     searchFlight_get,
-    searchFlight_post
+    searchFlight_post,
+
 }
 

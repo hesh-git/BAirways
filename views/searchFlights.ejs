@@ -26,25 +26,43 @@
           <div class="col-md-6 col-12 mb-4">
             <div class="form-control d-flex flex-column">
               <p class="h-blue">FLYING FROM</p>
-              <input
+              <!-- <select
                 class="inputbox"
                 placeholder="City or Airport"
                 name="Ffrom"
                 id="Ffrom"
                 type="text"
-              />
+              > -->
+              <select 
+                name="Ffrom"
+                id="Ffrom" 
+                //class="btn //btn-secondary //btn-block"
+                >
+                <% for(let i=0; i < airportNames.length; i++) { %> 
+                    <option><%= airportNames[i] %> </option>
+                <% } %> 
+            </select>
             </div>
           </div>
           <div class="col-md-6 col-12 mb-4">
             <div class="form-control d-flex flex-column">
               <p class="h-blue">FLYING TO</p>
-              <input
+              <!-- <input
                 class="inputbox"
                 placeholder="City or Airport"
                 type="text"
                 name="Fto"
                 id="Fto"
-              />
+              /> -->
+              <select 
+              name="Fto"
+              id="Fto" 
+              //class="btn //btn-secondary //btn-block"
+              >
+              <% for(let i=0; i < airportNames.length; i++) { %> 
+                  <option><%= airportNames[i] %> </option>
+              <% } %> 
+          </select>
             </div>
           </div>
         </div>
@@ -52,7 +70,7 @@
           <div class="col-md-6 col-12 mb-4">
             <div class="form-control d-flex flex-column">
               <p class="h-blue">DEPARTING</p>
-              <select class="border-0 outline-none" name="departing" id="departing">
+              <input class="inputbox textmuted" type="date" name="departing" id="departing" />
                 
               </select>
               <!-- <input class="inputbox textmuted" type="date" name="departing" id="departing"/> -->
