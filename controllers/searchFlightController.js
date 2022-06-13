@@ -17,8 +17,22 @@ const searchFlight_get = (req, res) => {
             airportNames.push(value["Name"]);
         })
 
-        res.render('searchFlights', {title : 'Search For a Flight', airportCodes : airportCodes, airportNames : airportNames, layout: './layouts/flightsearch_layout'});
+        FlightSearchModel.getAllClasses(con, (err, result, fields) => {
+            if (err) throw err;
+            const travelClasses =  [];
+            result.forEach((value,index,array) => {
+                const travelClass = {
+                    'ID' : value['ID'],
+                    'Name' : value['Name']
+                }
+                travelClasses.push(travelClass);
+            })
+            res.render('searchFlights', {title : 'Search For a Flight', airportCodes : airportCodes, airportNames : airportNames, travelClasses : travelClasses, layout: './layouts/flightsearch_layout'});
+        })
+
+        
     })
+
 
     
 }
@@ -28,15 +42,10 @@ const searchFlight_post = (req, res) => {
     const con = req.dbCon; //get database connection from the request
     
     // const book = req.body.book;
-    const Ffrom = req.body.Ffrom;
-    const Fto = req.body.Fto;
-    const departing = req.body.departing;
-    const returning = req.body.returning;
-    const adults = req.body.adults;
-    const children = req.body.children;
-    const travelClass = req.body.travelClass;
+
+    console.log(data);
     
-    FlightSearchModel.getFlightByOrigin(Ffrom , con, function(error, results, fields){
+    FlightSearchModel.getFlightByOrigin(data , con, function(error, results, fields){
         console.log(results);
         if (error) throw error;
 
