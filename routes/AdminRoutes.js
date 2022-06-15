@@ -23,4 +23,8 @@ router.post('/add_aircraft', adminSiteController.add_aircraft_post);
 router.get('/add_flight', adminSiteController.add_flight_get);
 router.post('/add_flight', adminSiteController.add_flight_post);
 
+// add travel class price 
+router.get("/add_price", adminSiteController.add_price_get);
+router.post("/add_price", adminSiteController.add_price_post);
+
 module.exports = router;

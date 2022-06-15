@@ -4,6 +4,8 @@ const Aircraft = require("../models/Aircraft");
 const AirportLocationModel = require("../models/AirportLocation");
 const FlightModel = require("../models/Flight");
 const FlightSchedule = require("../models/FlightSchedule");
+const FlightSearchModel = require("../models/FlightSearchModel");
+const TravelClassPriceModel = require("../models/TravelClassPriceModel");
 
 const get_flightDetails = (FlightNo, dbCon) => {
     let details = [];
@@ -293,6 +295,58 @@ const add_flight_post = (req, res) => {
 
 }
 
+const add_price_get = (req, res) => {
+    const dbCon  = req.dbCon;
+
+    FlightModel.get_all_flightNo(dbCon, (err, FlightDetails, fields) => {
+        if(err) throw err;
+
+        Aircraft.get_all_AircraftID(dbCon, (err, aircraftIDs, fields) => {
+
+            FlightSearchModel.getAllClasses(dbCon, (err, classDetails, fields) => {
+
+                const FlightNos = [];
+                FlightDetails.forEach((value, index, array) => {
+                    FlightNos.push(value["FlightNo"]);
+                });
+
+                const AircraftIDs = [];
+                aircraftIDs.forEach((value, index, array) => {
+                    AircraftIDs.push(value["ID"]);
+                });
+
+                const TravelClasses = [];
+                classDetails.forEach((value, index, array) => {
+                    const travelClass = {
+                        'ID': value['ID'],
+                        'Name': value["Name"]
+                    }
+                    TravelClasses.push(travelClass);
+                });
+
+
+                res.render('./admin/add_travel_clz_price', {title: 'Add | Price', FlightNums : FlightNos, AircraftIDs : AircraftIDs, TravelClasses: TravelClasses, layout: './layouts/admin_layout'});
+            })
+        })
+    })
+}
+
+add_price_post = (req, res) => {
+    const data = req.body;
+    const dbCon = req.dbCon;
+
+    const TravelClassID = data.TravelClassID;
+    const FlightNo = data.FlightNo;
+    const AircraftID = data.AircraftID;
+    const Price = data.Price;
+
+    TravelClassPriceModel.add_price(TravelClassID, FlightNo, AircraftID, Price, dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        res.redirect('/admin/add_price');
+    })
+}
+
 module.exports = {
     dashboard,
     add_schedule_get,
@@ -303,5 +357,7 @@ module.exports = {
     add_aircraft_post,
     add_flight_get,
     add_flight_post,
-    get_flightDetails
+    get_flightDetails,
+    add_price_get,
+    add_price_post
 }
