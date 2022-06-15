@@ -6,8 +6,10 @@ const getFlightByOrigin = function(data, con, callback) {
     const adults = data.adults;
     const children = data.children;
     const travelClass = data.travelClass;
-    var sql = 'SELECT '
-    con.query(sql,[data.book, data.Ffrom, data.Fto, data.departing, data.returning, data.adults,  data.children, data.travelClass], callback);
+    console.log(Ffrom,Fto,departing,travelClass,parseInt(adults)+parseInt(children));
+    const total_passengers = parseInt(adults)+parseInt(children);
+    var sql = 'SELECT * FROM `FlightSchedule` `FS` join `State` `S` join `Aircraft` `A` join `AircraftModel` `AM` join `Flight` `F` join `TravelClassPrice` `TCP` join `TravelClass` `TC` on `FS`.`StateID` = `S`.`ID` and `A`.`ID` = `FS`.`AircraftID` and `A`.`ModelID` = `AM`.`ID` and  `F`.`FlightNo` = `FS`.`FlightNo` and `TCP`.`FlightNo` = `FS`.`FlightNo` and `TCP`.`AircraftID` = `FS`.`AircraftID` and `TCP`.`TravelClassID` = `TC`.`ID` where `origin` = ? and `destination` = ? and `DepartureDate` = ? and `TravelClassID` = ? and `AvailableNoSeats` >= ?;'
+    con.query(sql,[Ffrom,Fto,departing,travelClass,total_passengers], callback);
 }
 
 const getAirports = function(con,callback){

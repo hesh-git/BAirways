@@ -43,12 +43,32 @@ const searchFlight_post = (req, res) => {
     
     // const book = req.body.book;
 
-    console.log(data);
-    
-    FlightSearchModel.getFlightByOrigin(data , con, function(error, results, fields){
-        console.log(results);
-        if (error) throw error;
 
+    
+    FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
+
+        if (error) throw error;
+        const availableFlightDetails = [];
+        result.forEach((value,index,array) => {
+            console.log(value)
+            const availableFlightDetail = {
+                'FFromCode' : value['Origin'],
+                'FToCode' : value['Destination'],
+                'DepartureTime' : value['DepartureTime'],
+                'ArrivalTime' : value['ArrivalTime'],
+                'DepartureDate' : value['DepartureDate'],
+                'ArrivalDate' : value['ArrivalDate'],
+                'AirCraftID' : value['AircraftID'],
+                'AirCraftModel' : value['ModelName'],
+                'Price' : value['Price']
+
+
+            }
+            availableFlightDetails.push(availableFlightDetail);
+        })
+        
+
+        res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, layout : './layouts/schedule_layout'});
         
     });
 }
@@ -60,6 +80,7 @@ const searchFlight_post = (req, res) => {
 module.exports = {
     searchFlight_get,
     searchFlight_post,
+    
 
 }
 

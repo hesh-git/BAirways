@@ -142,6 +142,7 @@ const add_schedule_post = (req, res) => {
 
     FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
         if(err) throw err;
+        console.log("In the add flight schedule")
 
         res.redirect("/admin/add_schedule");
     })

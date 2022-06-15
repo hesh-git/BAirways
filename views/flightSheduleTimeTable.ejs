@@ -1,10 +1,12 @@
 <body class="flight-result">
     <h2 class="text-center py-5">Select Your Departure Flights</h2>
     <div class="container">
+        <% for (let i=0; i<availableFlightDetails.length; i++){ %>
+        
         <div class="row p-3" id="result-row">
         
             <div class="col-3">
-                <div class="time-head">14:30 BAQ</div>
+                <div class="time-head"><%= availableFlightDetails[i].DepartureTime %> <%= availableFlightDetails[i].FFromCode %></div>
                 <div class>21/05/2022</div>
                 <div>Barranquilla</div>
                 <div class="flight">AA 1124 Airbus A319</div>
@@ -26,6 +28,7 @@
                 </a>
             </div>
         </div>
+        <% } %>
     </div>
 </div>
 </body>

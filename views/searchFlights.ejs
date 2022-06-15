@@ -39,7 +39,7 @@
                 //class="btn //btn-secondary //btn-block"
                 >
                 <% for(let i=0; i < airportNames.length; i++) { %> 
-                    <option value="<%= airportCodes[i] %>"><%= airportNames[i] %> </option>
+                    <option value="<%= airportCodes[i] %>"><%= airportNames[i] %></option>
                 <% } %> 
             </select>
             </div>
@@ -60,7 +60,7 @@
               //class="btn //btn-secondary //btn-block"
               >
               <% for(let i=0; i < airportNames.length; i++) { %> 
-                  <option><%= airportNames[i] %> </option>
+                  <option value="<%= airportCodes[i] %>"><%= airportNames[i] %></option>
               <% } %> 
           </select>
             </div>
@@ -89,9 +89,9 @@
               <p class="h-blue">ADULTS(18+)</p>
               <select class="border-0 outline-none" name="adults">
                 <option value="" hidden selected>0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
               </select>
             </div>
           </div>
@@ -100,9 +100,9 @@
               <p class="h-blue">CHILDREN(0-17)</p>
               <select class="border-0 outline-none" name="children">
                 <option value="" hidden selected>0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
               </select>
             </div>
           </div>
