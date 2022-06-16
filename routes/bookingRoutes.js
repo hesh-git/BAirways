@@ -9,4 +9,10 @@ router.post('/passengerDetails', BookingController.add_passenger_details_post);
 router.get('/guestDetails', BookingController.add_guest_details_get);
 router.post('/guestDetails', BookingController.add_guest_details_post);
 
+router.get('/payment', BookingController.add_payment_get);
+
+router.get('/beforePayment', BookingController.before_payment_get);
+
+
+
 module.exports = router;
