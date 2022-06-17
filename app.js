@@ -1,22 +1,24 @@
 require('dotenv').config();
-const express = require('express');
+const express = require('express')
 //const expressLayouts = require('express-ejs-layouts');
-const morgan =require('morgan');
+const morgan =require('morgan')
+
+const flash = require('express-flash')
 
 
-const searchFlightRoutes = require('./routes/searchFlight-routes');
+const searchFlightRoutes = require('./routes/searchFlight-routes')
 
 const bookingRoutes = require('./routes/BookingRoutes')
 
-const adminRoutes = require('./routes/AdminRoutes');
-const expressLayouts = require('express-ejs-layouts');
+const adminRoutes = require('./routes/AdminRoutes')
+const expressLayouts = require('express-ejs-layouts')
 
-const path = require('path');
+const path = require('path')
 const mysql = require('mysql');
 const bodyParser=require('body-parser');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const loginRoutes = require('./routes/Auth');
-
 
 
 //express app
@@ -56,7 +58,6 @@ app.use(function(req, res, next){
 
 //view engine
 app.set('view engine', 'ejs');
-
 
 
 // layouts
