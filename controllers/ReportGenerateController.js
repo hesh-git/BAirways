@@ -1,5 +1,6 @@
 const FlightModel = require("../models/Flight");
 const AirportLocationModel = require("../models/AirportLocation");
+const ReportModel = require("../models/ReportModel");
 
 const passenger_details_get = (req, res) => {
     const dbCon = req.dbCon;
