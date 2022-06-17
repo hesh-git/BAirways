@@ -1,0 +1,2 @@
+CREATE VIEW `revenue_details` AS SELECT `A`.`ModelID`, `AM`.`ModelName`, sum(`A`.`Revenue`) `TotalRevenue` 
+FROM `Aircraft` `A` JOIN `AircraftModel` `AM` ON `A`.`ModelID` = `AM`.`ID` GROUP BY `AM`.`ID`;
