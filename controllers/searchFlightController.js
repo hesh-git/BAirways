@@ -60,7 +60,8 @@ const searchFlight_post = (req, res) => {
                 'ArrivalDate' : value['ArrivalDate'],
                 'AirCraftID' : value['AircraftID'],
                 'AirCraftModel' : value['ModelName'],
-                'Price' : value['Price']
+                'Price' : value['Price'],
+                'TravellClass' : value['Name']
 
 
             }
@@ -69,7 +70,7 @@ const searchFlight_post = (req, res) => {
         
 
         res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, layout : './layouts/schedule_layout'});
-        
+
     });
 }
 
