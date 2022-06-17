@@ -1,0 +1,30 @@
+<form action="/admin/passenger_statistics" method="POST">
+
+    <div class="form-group row">
+        <label for="FromDate" class="col-sm-2 col-form-label">From </label>
+        <div class="col-sm-10">
+            <input type="date" class="form-control" name="FromDate" id="FromDate">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="ToDate" class="col-sm-2 col-form-label">To </label>
+        <div class="col-sm-10">
+            <input type="date" class="form-control" name="ToDate" id="ToDate">
+        </div>
+    </div>
+
+    <div class="form-group row mt-4 mb-5">
+        <label for="Destination" class="col-sm-2 col-form-label">Destination</label>
+        <div class="col-sm-10">
+            <select name="Destination" id="Destination" class="btn btn-secondary btn-block">
+                <% for(let i=0; i < airportCodes.length; i++) { %> 
+                    <option><%= airportCodes[i] %> </option>
+                <% } %> 
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="mt-5 link link-btn btn btn-outline-primary btn-lg btn-block">Generate</button>
+
+</form>
