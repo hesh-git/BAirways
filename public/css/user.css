@@ -1,0 +1,49 @@
+body{
+    background: #C1D9F8;
+    color: #112A53;
+    font-family: 'Nunito', sans-serif;
+    margin-top: 20px;
+}
+
+.main{
+    padding: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.topbar{
+    background-color: teal;
+}
+
+.sidebar{
+    background-color: #333;
+    color: white;
+    height: 100%;
+}
+
+.sidebar a{
+    
+    margin-left: 10px;
+    display: block;
+    color: white;
+    padding-bottom: 10px;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.content{
+    background-color: whitesmoke;
+}
+
+nav flex-column{
+    
+}
+
+.nav-item{
+
+}
