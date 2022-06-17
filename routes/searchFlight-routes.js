@@ -9,6 +9,7 @@ router.post('/searchFlight', searchFlightController.searchFlight_post);
 
 router.get('/flightTimeTable', flightSheduleTimeTableController.flightTimeTable_get);
 
+
 module.exports = {
     routes : router
 }

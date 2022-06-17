@@ -1,5 +1,10 @@
 require('dotenv').config();
-const express = require('express')
+
+const moment = require("moment");
+const express = require('express');
+
+
+
 //const expressLayouts = require('express-ejs-layouts');
 const morgan =require('morgan')
 
@@ -30,6 +35,10 @@ app.use(session({
     saveUninitialized : true
   }));
 
+app.use((req, res, next)=>{
+    res.locals.moment = moment;
+    next();
+});
 
 //db connect
 const PORT = process.env.PORT;
