@@ -241,20 +241,45 @@ const add_aircraft_post = (req, res) => {
     const dbCon = req.dbCon;
 
     AircraftModel.set_database(dbCon);
+
+    console.log(data);
+    const eco_numRows = parseInt(data.eco_numRows);
+    const eco_numCols = parseInt(data.eco_numCols);
+    const busi_numRows = parseInt(data.busi_numRows);
+    const busi_numCols = parseInt(data.busi_numCols);
+    const plat_numRows = parseInt(data.plat_numRows);
+    const plat_numCols = parseInt(data.plat_numCols);
+    const SeatingCapacity = eco_numRows * eco_numCols + busi_numRows * busi_numCols + plat_numCols * plat_numRows;
+    data.SeatingCapacity = SeatingCapacity;
     // save aircraft model data to database
     AircraftModel.save(data, dbCon, (err, result, fields) => {
         if(err) throw err;
 
         const NoOfAircrafts = data.NoOfAircrafts; // number of aircrafts for user entered model
-
+        const modelId = result.insertId;
         // save aircraft ids to database
         for(let i = 0; i < NoOfAircrafts; i++){
             console.log(data["id"+i])
-            Aircraft.save({'ID': data["id"+i], 'ModelID': result.insertId}, dbCon, (err, result, fields) => {
+            Aircraft.save({'ID': data["id"+i], 'ModelID': modelId}, dbCon, (err, result, fields) => {
                 if(err) throw err
 
             });
         }
+
+        // save seat capacity of economy class
+        AircraftModel.save_seat_capacity(modelId, 1, 0, eco_numRows, eco_numCols, dbCon, (err, result, fields) => {
+            if(err) throw err;
+        });
+
+        // save seat capactiy of 
+        AircraftModel.save_seat_capacity(modelId, 2, eco_numRows, busi_numRows, busi_numCols, dbCon, (err, result, fields) => {
+            if(err) throw err;
+        });
+
+        AircraftModel.save_seat_capacity(modelId, 3, busi_numRows + eco_numRows, plat_numRows, plat_numCols, dbCon, (err, result, fields) => {
+            if(err) throw err;
+        });
+
         res.redirect('/admin/add_aircraft');
     })
 }
@@ -347,6 +372,8 @@ add_price_post = (req, res) => {
         res.redirect('/admin/add_price');
     })
 }
+
+
 
 module.exports = {
     dashboard,
