@@ -111,9 +111,15 @@ const add_guest_details_post =(req, res) => {
 
 }
 
+const select_seat_get = (req, res) => {
+    res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', rows: 5, columns: 10});
+}
+
+
 module.exports ={
     add_passenger_details_get,
     add_passenger_details_post,
     add_guest_details_get,
-    add_guest_details_post
+    add_guest_details_post,
+    select_seat_get
 }

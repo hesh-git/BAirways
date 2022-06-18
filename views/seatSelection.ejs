@@ -1,0 +1,24 @@
+<div class="container text-center "> 
+    <div class="cont text-center">
+        <% for(let j=0; j < (rows); j++) { %>
+            <div>
+            <% for(let i=0; i < (columns); i++) { %>
+            
+                <div class="form-group form-check form-check-inline box-cont">
+                    <label class="container text-center">
+                        <input type="checkbox" name="<%= j %><%= i %>" value="<%= j %><%= i %>" class="text-center">
+                        <span class="checkmark"> <%= j %><%= i %> </span>
+                    </label>
+                    <!-- <input type="checkbox" name="<%= i,j %>" value="<%= i,j %>" class="seat-box available"> 
+                    <span class="checkmark"></span> -->
+                </div>
+            
+            
+                
+            <% } %>
+        </div>
+        <% } %>
+    </div>   
+        
+
+</div>
