@@ -173,6 +173,7 @@ const select_seat_get = (req, res) => {
 
 
     })
+}
 
 const add_payment_get =(req, res ) => {
     res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
@@ -191,5 +192,5 @@ module.exports ={
     add_guest_details_post,
     select_seat_get,
     add_payment_get,
-    before_payment_get
+    before_payment_get,
 }
