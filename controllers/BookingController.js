@@ -1,4 +1,4 @@
-const Passenger = require("../models/Booking");
+const Booking = require("../models/Booking");
 
 const add_passenger_details_get = (req, res) => {
     res.render('passengerDetails', {title: 'PassengerDetails', layout: './layouts/layout', no_adults: 1, no_children: 1,  flight_shedule_id:1});
@@ -15,7 +15,7 @@ const add_passenger_details_post = (req, res) => {
     const TravelClassID = 1;
     const BookingStateID = 1;
 
-    Passenger.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
+    Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
         if(err)
             throw err
         const BookingID = result.insertId;
@@ -25,7 +25,7 @@ const add_passenger_details_post = (req, res) => {
             let DateOfBirth = data['DateOfBirthP'+i];
             let FirstName = data['FirstNameP'+i];
             let LastName = data['LastNameP'+i];
-            Passenger.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+            Booking.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                 if(err)
                     throw err
             })
@@ -36,7 +36,7 @@ const add_passenger_details_post = (req, res) => {
             let DateOfBirth = data['DateOfBirthC'+i];
             let FirstName = data['FirstNameC'+i];
             let LastName = data['LastNameC'+i];
-            Passenger.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+            Booking.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                 if(err)
                     throw err
                 
@@ -65,18 +65,18 @@ const add_guest_details_post =(req, res) => {
     const TravelClassID = 1;
     const BookingStateID = 1;
 
-    Passenger.addTraveller(dbCon, function(err, result, fileld){
+    Booking.addTraveller(dbCon, function(err, result, fileld){
         if(err)
             throw err
         
         const TravellerID = result.insertId;
 
-        Passenger.addGuest(TravellerID, data['FirstName'], data['LastName'], data['Email'], data['ContactNumber'], dbCon, function(err, result, fields){
+        Booking.addGuest(TravellerID, data['FirstName'], data['LastName'], data['Email'], data['ContactNumber'], dbCon, function(err, result, fields){
             if (err)
                 throw err    
         })
 
-        Passenger.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
+        Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
             if(err)
                 throw err
             const BookingID = result.insertId;
@@ -86,7 +86,7 @@ const add_guest_details_post =(req, res) => {
                 let DateOfBirth = data['DateOfBirthP'+i];
                 let FirstName = data['FirstNameP'+i];
                 let LastName = data['LastNameP'+i];
-                Passenger.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+                Booking.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                     if(err)
                         throw err
                 })
@@ -111,9 +111,20 @@ const add_guest_details_post =(req, res) => {
 
 }
 
+const add_payment_get =(req, res ) => {
+    res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
+}
+
+const before_payment_get = (req, res) => {
+    res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout'})
+}
+
+
 module.exports ={
     add_passenger_details_get,
     add_passenger_details_post,
     add_guest_details_get,
-    add_guest_details_post
+    add_guest_details_post,
+    add_payment_get,
+    before_payment_get
 }

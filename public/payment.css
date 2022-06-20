@@ -1,0 +1,98 @@
+body{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(150deg,rgb(101, 113, 223), rgb(192, 245, 251), rgb(101, 113, 223));
+    font-size: 0.8rem;
+}
+.pay-card{
+    max-width: 1000px;
+    margin: 2vh;
+}
+
+.pay-body{
+    padding: 5rem 5rem 5rem 5rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+@media(max-width:768px){
+    .pay-body{
+        padding: 1rem 1rem 1rem 1rem;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }  
+}
+.cus-row{
+    margin: 0;
+}
+
+.icons{
+    margin-left: auto;
+}
+.payment-form .in-span{
+    color: rgb(179, 179, 179);
+}
+.payment-form{
+    padding: 2vh 0;
+}
+.pay-input{
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    padding: 1vh;
+    margin-bottom: 4vh;
+    outline: none;
+    width: 100%;
+    background-color: rgb(247, 247, 247);
+}
+.pay-input:focus::-webkit-input-placeholder
+{
+      color:transparent;
+}
+.header{
+    font-size: 1.5rem;
+}
+
+.pay-image{
+    width: 2rem;
+}
+
+.cvv{
+    padding-right: 0;
+}
+
+.exp{
+    padding-left: 0;
+}
+
+.pay-btn{
+    background-color: rgb(23, 4, 189);
+    border-color: rgb(23, 4, 189);
+    color: white;
+    width: 100%;
+    font-size: 0.7rem;
+    margin: 4vh 0 1.5vh 0;
+    padding: 1.5vh;
+    border-radius: 0;
+    text-transform: uppercase;
+}
+.pay-btn:focus{
+    box-shadow: none;
+    outline: none;
+    box-shadow: none;
+    color: white;
+    -webkit-box-shadow: none;
+    transition: none; 
+}
+.pay-btn:hover{
+    color: white;
+    background-color: rgb(18, 3, 157);
+    border-color: rgb(13, 1, 118);
+    color: white;
+}
+
+#cvv{
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.575) , rgba(255, 255, 255, 0.541)), url("https://img.icons8.com/material-outlined/24/000000/help.png");
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: center;
+} 
