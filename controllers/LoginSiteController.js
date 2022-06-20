@@ -52,7 +52,15 @@ const login_post = (req,res,next) => {
                         authModel.updateLastLog(id,con, function(err,result,fields){
                             if (err) throw err;   
                             req.session.email = email;
-                            res.send('Email and password matched. Logged');
+                            authModel.getTravellerID(id,con,function(err,result,fields){
+                                if (err) throw err; 
+                                //console.log(result[0].TravellerID);
+                                const travellerID = result[0].TravellerID;
+                                const token = createToken(travellerID, 'traveller'); 
+                                res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
+                            })
+                            console.log('Email and password matched. Logged')
+                            //res.send('Email and password matched. Logged');
                         })
                     }else{
                     req.session.flag = 4;
