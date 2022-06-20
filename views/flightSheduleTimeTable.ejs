@@ -13,7 +13,7 @@
                 <div class="col-3">
                     <div class="time-head"><%= availableFlightDetails[i].DepartureTime %> <%= availableFlightDetails[i].FFromCode %></div>
                     <div class><%= moment(availableFlightDetails[i].DepartureDate).format('Do MMMM, YYYY') %></div>
-                    <div>Barranquilla</div>
+                    <div><%= airportCodesandNames[availableFlightDetails[i].FFromCode] %></div>
                     <div class="flight"><%= availableFlightDetails[i].AirCraftID %> <%= availableFlightDetails[i].ModelName %></div>
                 </div>
                 
@@ -21,12 +21,12 @@
                 <div class="col-3">
                     <div class="time-head"><%= availableFlightDetails[i].ArrivalTime %> <%= availableFlightDetails[i].FToCode %></div>
                     <div class><%=  moment(availableFlightDetails[i].ArrivalDate).format('Do MMMM, YYYY') %>  %></div>
-                    <div>Ahamadabad</div>
+                    <div><%= airportCodesandNames[availableFlightDetails[i].FToCode] %></div>
                     <div class="flight"><%= availableFlightDetails[i].AirCraftID %> <%= availableFlightDetails[i].ModelName %></div>
                 </div>
                 
                 <div class="col-4">
-                    <a class="select-flight">
+                    <a class="select-flight" href="">
                         <span><%= availableFlightDetails[i].TravellClass %></span>
                         <span><%= "LKR" %> <%= availableFlightDetails[i].Price %></span>
                         <span>Total price for all passengers</span> 
