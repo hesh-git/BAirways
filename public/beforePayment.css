@@ -1,0 +1,40 @@
+.cont{
+    width: 40%;
+    background-color: aliceblue;
+    padding: 3rem;
+    border-radius: 5px;
+
+}
+
+@media(max-width:768px){
+    .cont{
+        width: 80%;
+    }
+}
+
+
+.pay-now-btn{
+    padding: 13px 20px 12px;
+    background-color: #6C63FF;
+    width: 100%;
+    border-radius: 4px;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #fff;
+    /* margin-bottom: 24px; */
+}
+
+.pay-now-btn:hover{
+    border: 1px solid #000;
+    background-color: transparent;
+    color: #6C63FF;
+}
+
+.details{
+    font-size: 16px;
+}
+
+.header{
+    font-weight: bold;
+}

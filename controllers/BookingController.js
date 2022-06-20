@@ -111,6 +111,7 @@ const add_guest_details_post =(req, res) => {
 
 }
 
+
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
     const ScheduleId = 3;
@@ -172,6 +173,14 @@ const select_seat_get = (req, res) => {
 
 
     })
+
+const add_payment_get =(req, res ) => {
+    res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
+}
+
+const before_payment_get = (req, res) => {
+    res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout'})
+
 }
 
 
@@ -180,5 +189,7 @@ module.exports ={
     add_passenger_details_post,
     add_guest_details_get,
     add_guest_details_post,
-    select_seat_get
+    select_seat_get,
+    add_payment_get,
+    before_payment_get
 }

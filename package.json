@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cookie-parser": "^1.4.6",
     "db-migrate": "^0.11.13",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "password-hash": "^1.2.2",
     "sync-sql": "^1.0.2",
     "util": "^0.12.4",
     "uuid": "^8.3.2"
