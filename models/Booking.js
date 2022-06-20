@@ -25,10 +25,40 @@ const addGuest = (TravelerID, FirstName, LastName, Email, ContactNumber, dbCon, 
     dbCon.query(sql_guest,[TravelerID, FirstName, LastName, Email, ContactNumber], callback);
 }
 
+const getCapacitybyTravelClass = (ScheduleId, TravelClassID, dbCon, callback) =>{
+    var sql_capacity = 'SELECT `NumRows`, `NumCols` From `FlightSchedule` `FS` JOIN `Aircraft` `A` JOIN `SeatingCapacity` `SC` on FS.AircraftID = A.ID AND A.ModelID = SC.ModelID where FS.ID=? AND SC.TravelClassID=?';
+    dbCon.query(sql_capacity,[ScheduleId, TravelClassID], callback);
+}
+
+const getCapacity = (ScheduleId, dbCon, callback) =>{
+    var sql_capacity = 'SELECT `NumRows`, `NumCols`, `TravelClassID` From `FlightSchedule` `FS` JOIN `Aircraft` `A` JOIN `SeatingCapacity` `SC` on FS.AircraftID = A.ID AND A.ModelID = SC.ModelID where FS.ID=?';
+    dbCon.query(sql_capacity,[ScheduleId], callback);
+}
+
+const getSeatsbyState = (ScheduleID, TravelClassID, SeatStateID, dbCon, callback) => {
+    var sql_seats = 'SELECT `SeatNo` from `Seat` `S` JOIN `FlightSchedule` `FS` on S.AircraftID = FS.AircraftID where FS.ID=? AND S.TravelClassID=? AND S.SeatStateID=?';
+    dbCon.query(sql_seats, [ScheduleID,TravelClassID, SeatStateID], callback);
+}
+
+const getSeatsbyTravelClass = (ScheduleID, TravelClassID, dbCon, callback) => {
+    var sql_seats = 'SELECT `SeatNo`, `SeatStateID` from `Seat` `S` JOIN `FlightSchedule` `FS` on S.AircraftID = FS.AircraftID where FS.ID=? AND S.TravelClassID=?';
+    dbCon.query(sql_seats, [ScheduleID,TravelClassID], callback);
+}
+
+const getSeats = (ScheduleID, dbCon, callback) => {
+    var sql_seats = 'SELECT `SeatNo`, `TravelClassID`, `SeatStateID` from `Seat` `S` JOIN `FlightSchedule` `FS` on S.AircraftID = FS.AircraftID where FS.ID=?';
+    dbCon.query(sql_seats, [ScheduleID], callback);
+}
+
 module.exports = {
     save,
     addPassenger,
     addBooking,
     addTraveller, 
-    addGuest
+    addGuest,
+    getCapacity,
+    getCapacitybyTravelClass,
+    getSeats,
+    getSeatsbyState,
+    getSeatsbyTravelClass
 }

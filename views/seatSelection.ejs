@@ -1,0 +1,50 @@
+<div class="container text-center "> 
+    
+
+
+    <div class="cont text-center">
+
+        <div class="row display">
+            <div class="col-4 dis-col text-center">
+                <span class="checkmark checkmark-booked"></span> 
+                <label class="dis-label">Booked</label>
+                
+            </div>
+
+            <div class="col-4 dis-col text-center">
+                <span class=" checkmark checkmark"></span> 
+                <Label class="dis-label">Avalibale</Label>
+            </div>
+
+            <div class="col-4 dis-col text-center">
+                <span class=" checkmark checkmark-selected"></span> 
+                <label class="dis-label">Selected</label>
+            </div>
+        </div>
+        
+        <!-- <h1> <%= seat_cap[Object.keys(seat_cap)[0]]; %> </h1> -->
+        <% for(let j=0; j < seat_cap[Object.keys(seat_cap)[0]]; j++) { %>
+            <div>
+            <% for(let i=0; i < seat_cap[Object.keys(seat_cap)[1]]; i++) { 
+                let seatNo = (j + 10).toString(36) + (i+1); %>
+
+                <div class="form-group form-check form-check-inline box-cont">
+                    <label class="container text-center">
+                        <% if(booked_seats.includes(seatNo)) { %>
+                            <input type="checkbox" disabled name= <%= seatNo %> value= <%= seatNo %> class="text-center">
+                            <span class=" checkmark checkmark-booked"> <%= seatNo %> </span>
+                        <% } else { %>
+                            <input type="checkbox" name= <%= seatNo %> value= <%= seatNo %> class="text-center">
+                            <span class="checkmark"> <%= seatNo %> </span>
+                        <% } %>
+                    </label>
+                </div>
+            
+            
+                
+            <% } %>
+        </div>
+        <% } %>
+    </div>   
+   
+</div>
