@@ -2,8 +2,7 @@ const userModel = require('../models/userModel');
 const authModel = require('../models/autheticationModel');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require("express-validator");
-
-
+const passwordHash = require('password-hash');
 const maxValidity = 3*24*60*60; //validity period of jwt
 
 const createToken = (id,userType) => {
@@ -47,21 +46,21 @@ const login_post = (req,res,next) => {
                 authModel.getPwrdByID(id, con, function(err,result, fields){
                     if(err) throw err;
                     //console.log(result);
-                    if(result.length && result[0].password == password){
+                    const hashedPassword = result[0].password;
+                    const comparison = passwordHash.verify(password,hashedPassword);
+                    if(result.length && comparison){
                         authModel.updateLastLog(id,con, function(err,result,fields){
                             if (err) throw err;   
                             req.session.email = email;
-                            res.send('Logged');
+                            res.send('Email and password matched. Logged');
                         })
                     }else{
                     req.session.flag = 4;
-                    res.send('Not logged');
+                    res.send('Email and password do not match. Not logged');
                     }
                 });
               });
         }
-    
-
   }
 
   const signup_post = (req,res,next) => {
@@ -74,6 +73,7 @@ const login_post = (req,res,next) => {
         const password = data.password;
         const conPassword = data.conPassword;
         const contact = data.contact;
+        const encryptedPassword = passwordHash.generate(password);
 
         const errors = validationResult(req)
         if(!errors.isEmpty()) {
@@ -84,19 +84,31 @@ const login_post = (req,res,next) => {
                  title: 'Signup Page', layout: './layouts/auth_layout',alert
             })
         }
-        else{        
-            userModel.addUser(fName,lName,email,password,contact,dbCon,function(err,result, fields){
-            if(err)
-                throw err
-            
-            const token = createToken(result.insertId, 'traveller'); 
-            res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
-            //res.send('User entered');
-            //res.status(201).json({user: result.insertId});
-            //console.log(result)   
-            
-        })}
-
+        else{  
+            userModel.getUserByEmail(email,dbCon,function(err,result,fields){
+                if (err) {
+                    throw err
+                }else if(result != 'undefined'){
+                    alert = {
+                        "msg": 'Email already in use'
+                    }
+                    res.render('signup', {
+                        title: 'Signup Page', layout: './layouts/auth_layout',alert: alert
+                   })
+                }else{
+                    userModel.addUser(fName,lName,email,encryptedPassword,contact,dbCon,function(err,result, fields){
+                        if(err)
+                            throw err
+                        const token = createToken(result.insertId, 'traveller'); 
+                        res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
+                        res.send('User entered');
+                        //res.status(201).json({user: result.insertId});
+                        //console.log(result)   
+                        
+                    })
+                }
+            })     
+        }
   }
 
 module.exports = {
