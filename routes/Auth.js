@@ -42,10 +42,9 @@ router.post(
     check("conPassword", "Passwords do not match").custom(
       (value, { req }) => value === req.body.password
     ),
-    check("mobile", "Mobile number should contains 10 digits")
+    check("contact", "Mobile number should contain only numbers")
       .isInt()
-      .exists()
-      .isLength({ min: 10, max: 10 }),
+      .exists(),
   ],
   loginSiteController.signup_post
 );
