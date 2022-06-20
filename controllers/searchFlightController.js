@@ -49,6 +49,9 @@ const searchFlight_post = (req, res) => {
 
         if (error) throw error;
         const availableFlightDetails = [];
+
+        
+
         result.forEach((value,index,array) => {
             console.log(value)
             const availableFlightDetail = {
@@ -67,9 +70,25 @@ const searchFlight_post = (req, res) => {
             }
             availableFlightDetails.push(availableFlightDetail);
         })
+
+                
+        FlightSearchModel.getAirports(con, (err, result, fields) => {
+            if (err) throw err;
+    
+            const airportCodesandNames = {
+
+            };
+           
+            console.log(result);
+            result.forEach((value, index, array) => {
+                airportCodesandNames[value['AirportCode']] = value['Name'];
+            
+            })
+            res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, airportCodesandNames : airportCodesandNames, layout : './layouts/schedule_layout'});
+        });
         
 
-        res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, layout : './layouts/schedule_layout'});
+        // res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, airportCodesandNames : airportCodesandNames, layout : './layouts/schedule_layout'});
 
     });
 }
