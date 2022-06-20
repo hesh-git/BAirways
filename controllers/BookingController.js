@@ -1,4 +1,4 @@
-const Passenger = require("../models/Booking");
+const Booking = require("../models/Booking");
 
 const add_passenger_details_get = (req, res) => {
     res.render('passengerDetails', {title: 'PassengerDetails', layout: './layouts/layout', no_adults: 1, no_children: 1,  flight_shedule_id:1});
@@ -15,7 +15,7 @@ const add_passenger_details_post = (req, res) => {
     const TravelClassID = 1;
     const BookingStateID = 1;
 
-    Passenger.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
+    Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
         if(err)
             throw err
         const BookingID = result.insertId;
@@ -25,7 +25,7 @@ const add_passenger_details_post = (req, res) => {
             let DateOfBirth = data['DateOfBirthP'+i];
             let FirstName = data['FirstNameP'+i];
             let LastName = data['LastNameP'+i];
-            Passenger.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+            Booking.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                 if(err)
                     throw err
             })
@@ -36,7 +36,7 @@ const add_passenger_details_post = (req, res) => {
             let DateOfBirth = data['DateOfBirthC'+i];
             let FirstName = data['FirstNameC'+i];
             let LastName = data['LastNameC'+i];
-            Passenger.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+            Booking.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                 if(err)
                     throw err
                 
@@ -65,18 +65,18 @@ const add_guest_details_post =(req, res) => {
     const TravelClassID = 1;
     const BookingStateID = 1;
 
-    Passenger.addTraveller(dbCon, function(err, result, fileld){
+    Booking.addTraveller(dbCon, function(err, result, fileld){
         if(err)
             throw err
         
         const TravellerID = result.insertId;
 
-        Passenger.addGuest(TravellerID, data['FirstName'], data['LastName'], data['Email'], data['ContactNumber'], dbCon, function(err, result, fields){
+        Booking.addGuest(TravellerID, data['FirstName'], data['LastName'], data['Email'], data['ContactNumber'], dbCon, function(err, result, fields){
             if (err)
                 throw err    
         })
 
-        Passenger.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
+        Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
             if(err)
                 throw err
             const BookingID = result.insertId;
@@ -86,7 +86,7 @@ const add_guest_details_post =(req, res) => {
                 let DateOfBirth = data['DateOfBirthP'+i];
                 let FirstName = data['FirstNameP'+i];
                 let LastName = data['LastNameP'+i];
-                Passenger.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+                Booking.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                     if(err)
                         throw err
                 })
@@ -97,7 +97,7 @@ const add_guest_details_post =(req, res) => {
                 let DateOfBirth = data['DateOfBirthC'+i];
                 let FirstName = data['FirstNameC'+i];
                 let LastName = data['LastNameC'+i];
-                Passenger.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
+                Booking.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
                     if(err)
                         throw err
                     
@@ -112,7 +112,66 @@ const add_guest_details_post =(req, res) => {
 }
 
 const select_seat_get = (req, res) => {
-    res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', rows: 5, columns: 10});
+    const dbCon = req.dbCon;
+    const ScheduleId = 3;
+    const TravelClassId = 1;
+    
+    Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
+        const seat_cap = {};
+    
+        // seatCapacity.forEach((value, index, array) => {
+        //     seat_cap.NumRows = value.NumRows;
+        //     seat_cap.NumCols = value.NumCols;
+        // });
+
+        seat_cap[0] = seatCapacity[0]["NumRows"];
+        seat_cap[1] = seatCapacity[0]["NumCols"];
+
+        // Booking.getSeats(ScheduleId, dbCon, (err, seatStates, fields) => {
+
+        //     const eco_booked_seats = [];
+        //     const busi_booked_seats = [];
+        //     const plat_booked_seats =[];
+
+        //     seatStates.forEach((value, index, array) => {
+        //         if(value["SeatStateID"] == 3) { // only booked seats
+        //             if(value["TravelClassID"] == 1){
+        //                 eco_booked_seats.push(value.SeatNo);
+        //             } else if(value["TravelClassID"] == 2){
+        //                 busi_booked_seats.push(value.SeatNo);
+        //             } else if(value["TravelClassID"] == 3){
+        //                 plat_booked_seats.push(value.SeatNo);
+        //             }        
+        //         }
+                
+        //     })
+
+        //     console.log(seat_cap);
+        //     res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', seat_cap: seat_cap, eco_booked_seats: eco_booked_seats, busi_booked_seats: busi_booked_seats, plat_booked_seats: plat_booked_seats});
+            
+            
+        // });
+
+        Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
+
+            const booked_seats = [];
+
+            seatStates.forEach((value, index, array) => {
+                if(value["SeatStateID"] == 3) { // only booked seats
+                    booked_seats.push(value.SeatNo);    
+                }
+                
+            })
+            console.log(booked_seats);
+
+            res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', seat_cap: seat_cap, booked_seats: booked_seats});
+            
+            
+        });
+        
+
+
+    })
 }
 
 

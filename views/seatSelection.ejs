@@ -1,16 +1,43 @@
 <div class="container text-center "> 
+    
+
+
     <div class="cont text-center">
-        <% for(let j=0; j < (rows); j++) { %>
+
+        <div class="row display">
+            <div class="col-4 dis-col text-center">
+                <span class="checkmark checkmark-booked"></span> 
+                <label class="dis-label">Booked</label>
+                
+            </div>
+
+            <div class="col-4 dis-col text-center">
+                <span class=" checkmark checkmark"></span> 
+                <Label class="dis-label">Avalibale</Label>
+            </div>
+
+            <div class="col-4 dis-col text-center">
+                <span class=" checkmark checkmark-selected"></span> 
+                <label class="dis-label">Selected</label>
+            </div>
+        </div>
+        
+        <!-- <h1> <%= seat_cap[Object.keys(seat_cap)[0]]; %> </h1> -->
+        <% for(let j=0; j < seat_cap[Object.keys(seat_cap)[0]]; j++) { %>
             <div>
-            <% for(let i=0; i < (columns); i++) { %>
-            
+            <% for(let i=0; i < seat_cap[Object.keys(seat_cap)[1]]; i++) { 
+                let seatNo = (j + 10).toString(36) + (i+1); %>
+
                 <div class="form-group form-check form-check-inline box-cont">
                     <label class="container text-center">
-                        <input type="checkbox" name="<%= j %><%= i %>" value="<%= j %><%= i %>" class="text-center">
-                        <span class="checkmark"> <%= j %><%= i %> </span>
+                        <% if(booked_seats.includes(seatNo)) { %>
+                            <input type="checkbox" disabled name= <%= seatNo %> value= <%= seatNo %> class="text-center">
+                            <span class=" checkmark checkmark-booked"> <%= seatNo %> </span>
+                        <% } else { %>
+                            <input type="checkbox" name= <%= seatNo %> value= <%= seatNo %> class="text-center">
+                            <span class="checkmark"> <%= seatNo %> </span>
+                        <% } %>
                     </label>
-                    <!-- <input type="checkbox" name="<%= i,j %>" value="<%= i,j %>" class="seat-box available"> 
-                    <span class="checkmark"></span> -->
                 </div>
             
             
@@ -19,6 +46,5 @@
         </div>
         <% } %>
     </div>   
-        
-
+   
 </div>
