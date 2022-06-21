@@ -27,4 +27,34 @@
 
     <button type="submit" class="mt-5 link link-btn btn btn-outline-primary btn-lg btn-block">Generate</button>
 
+    <% if (typeof FromDate != 'undefined' && ToDate != undefined && Destination != undefined) { %>
+        <div class="mt-5">
+            <div class="row">
+                <h3 class="col-4">From Date:</h3>
+                <h4 class="col-8"><%= FromDate %></h4>
+            </div>
+
+            <div class="row">
+                <h3 class="col-4">To Date:</h3>
+                <h4 class="col-8"><%= ToDate %></h4>
+            </div>
+
+            <div class="row">
+                <h3 class="col-4">Destination:</h3>
+                <h4 class="col-8"><%= Destination %></h4>
+            </div>
+
+            <div class="row">
+                <h3 class="col-4">Number of Passengers:</h3>
+                <% if(num_passengers == 0 || num_passengers == undefined) { %>
+                    <h4 class="col-8">No Passengers</h4>
+                <%} else {%>
+                <h4 class="col-8"><%= num_passengers %></h4>
+                <% }%> 
+            </div>
+            
+            
+            
+        </div>
+    <% } %> 
 </form>

@@ -4,8 +4,11 @@
         <div class="col-sm-10">
             <!-- <input type="text" class="form-control" name="" id=""> -->
             <select name="Origin" id="Origin" class="btn btn-secondary btn-block">
-                <% for(let i=0; i < airportCodes.length; i++) { %> 
-                    <option><%= airportCodes[i] %> </option>
+                <% for(let i=0; i < airportCodes.length; i++) { 
+                    if (typeof Origin != 'undefined') { 
+                        var selected = (airportCodes[i] == Origin) ? "selected" : "";
+                    } %> 
+                    <option <%= selected %>><%= airportCodes[i] %> </option>
                 <% } %> 
             </select>
         </div>
@@ -16,12 +19,46 @@
         <div class="col-sm-10">
             <!-- <input type="text" class="form-control" name="" id=""> -->
             <select name="Destination" id="Destination" class="btn btn-secondary btn-block">
-                <% for(let i=0; i < airportCodes.length; i++) { %> 
-                    <option><%= airportCodes[i] %> </option>
+                <% for(let i=0; i < airportCodes.length; i++) { 
+                    if (typeof Destination != 'undefined') { 
+                        var selected = (airportCodes[i] == Destination) ? "selected" : "";
+                    } %> 
+                    <option <%= selected %>><%= airportCodes[i] %> </option>
                 <% } %> 
             </select>
         </div>
     </div>
 
     <button type="submit" class="link link-btn btn btn-outline-primary btn-lg btn-block">Generate</button>
+
+    <% if(typeof Origin != 'undefined' && Destination != undefined) {%> 
+        <div class="mt-5">
+            <div class="row">
+                <h3 class="col-4">Origin:</h3>
+                <h4 class="col-8"><%= Origin %></h4>
+            </div>
+            <div class="row">
+                <h3 class="col-4">Destination:</h3>
+                <h4 class="col-8"><%= Destination %></h4>
+            </div>
+            <div class="row mt-5">
+                <div class="col-4 sub-title">FlightScheduleID</div>
+                <div class="col-4 sub-title">Flight State</div>
+                <div class="col-4 sub-title">Total Number of Passengers</div>
+            </div>
+            <hr class="line-top">
+
+            <% if(typeof flight_statistics == 'undefined' || flight_statistics.length == 0) { %>
+                <h4 class="text-center">No Past Flights to display</h4>
+            <% } else {
+                    for(let i = 0; i < flight_statistics.length; i++) { %>
+                        <div class="row">
+                            <div class="col-4"><%= flight_statistics[i]["FlightScheduleID"] %></div>
+                            <div class="col-4"><%= flight_statistics[i]["FlightState"] %></div>
+                            <div class="col-4"><%= flight_statistics[i]["TotalNumPassengers"] %></div>
+                        </div>
+                        <hr class="line-top">
+            <% }} %>
+        </div>
+    <% } %>
 </form>

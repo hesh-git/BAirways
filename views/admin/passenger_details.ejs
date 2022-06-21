@@ -3,12 +3,65 @@
     <div class="form-group row mt-5">
         <label for="FlightNo" class="col-sm-2 col-form-label">Flight Number</label>
         <select name="FlightNo" id="flightNo" class="col-sm-10 custom-select">
-            <% for(let i = 0; i < flightNoList.length; i++){ %>
-                <option><%= flightNoList[i] %></option>
+            <% for(let i = 0; i < flightNoList.length; i++){ 
+                if (typeof FlightNo != 'undefined') {
+                    var selected = (flightNoList[i] == FlightNo) ? "selected" : "";
+                } %>
+                <option <%= selected %>><%= flightNoList[i] %></option>
             <% } %> 
         </select>
     </div>
 
     <button type="submit" class="mt-5 link link-btn btn btn-outline-primary btn-lg btn-block">Generate</button>
+
+    <% if (typeof FlightNo != 'undefined' && adults != undefined) { %> 
+        <h2 class="mt-5 mb-5">Adults Details</h2>
+
+        <div class="row">
+        <div class="col-2 sub-title">Booking ID</div>
+        <div class="col-2 sub-title">Seat No</div>
+        <div class="col-2 sub-title">Gender</div>
+        <div class="col-2 sub-title">First Name</div>
+        <div class="col-2 sub-title">Last Name</div>
+        <div class="col-2 sub-title">Date of Birth</div>
+        </div>
+        <hr class="line-top">
+
+        <% for(let i = 0; i < adults.length; i++) { %>
+            <div class="row">
+                <div class="col-2"><%= adults[i]["BookingID"] %></div>
+                <div class="col-2"><%= adults[i]["SeatNo"] %></div>
+                <div class="col-2"><%= adults[i]["Gender"] %></div>
+                <div class="col-2"><%= adults[i]["FirstName"] %></div>
+                <div class="col-2"><%= adults[i]["LastName"] %></div>
+                <div class="col-2"><%= adults[i]["DateOfBirth"] %></div>
+            </div>
+            <hr class="line-top">
+    <% } } %>
+
+    <% if (typeof FlightNo != 'undefined' && children != undefined) { %> 
+        <h2 class="mt-5 mb-5">Children Details</h2>
+
+        <div class="row">
+        <div class="col-2 sub-title">Booking ID</div>
+        <div class="col-2 sub-title">Seat No</div>
+        <div class="col-2 sub-title">Gender</div>
+        <div class="col-2 sub-title">First Name</div>
+        <div class="col-2 sub-title">Last Name</div>
+        <div class="col-2 sub-title">Date of Birth</div>
+        </div>
+        <hr class="line-top">
+
+        <% for(let i = 0; i < adults.length; i++) { %>
+            <div class="row">
+                <div class="col-2"><%= children[i]["BookingID"] %></div>
+                <div class="col-2"><%= children[i]["SeatNo"] %></div>
+                <div class="col-2"><%= children[i]["Gender"] %></div>
+                <div class="col-2"><%= children[i]["FirstName"] %></div>
+                <div class="col-2"><%= children[i]["LastName"] %></div>
+                <div class="col-2"><%= children[i]["DateOfBirth"] %></div>
+            </div>
+            <hr class="line-top">
+    <% } } %>
 
 </form>
