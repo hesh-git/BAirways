@@ -114,44 +114,14 @@ const add_guest_details_post =(req, res) => {
 
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
-    const ScheduleId = 3;
+    const ScheduleId = 2;
     const TravelClassId = 1;
     
     Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
         const seat_cap = {};
-    
-        // seatCapacity.forEach((value, index, array) => {
-        //     seat_cap.NumRows = value.NumRows;
-        //     seat_cap.NumCols = value.NumCols;
-        // });
 
         seat_cap[0] = seatCapacity[0]["NumRows"];
         seat_cap[1] = seatCapacity[0]["NumCols"];
-
-        // Booking.getSeats(ScheduleId, dbCon, (err, seatStates, fields) => {
-
-        //     const eco_booked_seats = [];
-        //     const busi_booked_seats = [];
-        //     const plat_booked_seats =[];
-
-        //     seatStates.forEach((value, index, array) => {
-        //         if(value["SeatStateID"] == 3) { // only booked seats
-        //             if(value["TravelClassID"] == 1){
-        //                 eco_booked_seats.push(value.SeatNo);
-        //             } else if(value["TravelClassID"] == 2){
-        //                 busi_booked_seats.push(value.SeatNo);
-        //             } else if(value["TravelClassID"] == 3){
-        //                 plat_booked_seats.push(value.SeatNo);
-        //             }        
-        //         }
-                
-        //     })
-
-        //     console.log(seat_cap);
-        //     res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', seat_cap: seat_cap, eco_booked_seats: eco_booked_seats, busi_booked_seats: busi_booked_seats, plat_booked_seats: plat_booked_seats});
-            
-            
-        // });
 
         Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
 
@@ -173,16 +143,21 @@ const select_seat_get = (req, res) => {
 
 
     })
+};
+
+const select_seat_post = (req, res) => {
+    res.render("beforePayment", {title: 'Payment', layout: './layouts/payment_layout'});
+}
+
+const before_payment_get = (req, res) => {
+    res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout'})
 }
 
 const add_payment_get =(req, res ) => {
     res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
 }
 
-const before_payment_get = (req, res) => {
-    res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout'})
 
-}
 
 
 module.exports ={
@@ -193,4 +168,5 @@ module.exports ={
     select_seat_get,
     add_payment_get,
     before_payment_get,
+    select_seat_post
 }

@@ -76,6 +76,7 @@ body{
   .container input:checked ~ .checkmark {
     background-color:  rgb(77, 102, 211);
     border: solid rgb(131, 151, 236) 2px;
+    color: #fff;
   }
   
   /* Create the checkmark/indicator (hidden when not checked) */
@@ -106,6 +107,7 @@ body{
   .checkmark-booked{
     background-color: crimson;
     border: solid rgb(247, 53, 91) 2px;
+    color: #fff;
   }
 
   .display{
@@ -117,6 +119,7 @@ body{
   .checkmark-selected{
     background-color:  rgb(77, 102, 211);
     border: solid rgb(131, 151, 236) 2px;
+    
   }
 
   .dis-col{
@@ -125,7 +128,19 @@ body{
     padding-left: 0;
   }
 
-  .dis-label{
-   
-  }
-  
+  .sub-btn{
+    padding: 13px 20px 12px;
+    background-color: #6C63FF;
+    width: 40%;
+    border-radius: 4px;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #fff;
+}
+
+.sub-btn:hover{
+  border: 1px solid #000;
+  background-color: transparent;
+  color: #6C63FF;
+}
