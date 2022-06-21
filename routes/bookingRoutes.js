@@ -13,6 +13,7 @@ router.get('/seat-selection', BookingController.select_seat_get);
 router.post('/seat-selection', BookingController.select_seat_post);
 
 router.get('/payment', BookingController.add_payment_get);
+// router.post('/payment', BookingController.add_payment_post);
 
 router.get('/beforePayment', BookingController.before_payment_get);
 

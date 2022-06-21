@@ -50,6 +50,24 @@ const getSeats = (ScheduleID, dbCon, callback) => {
     dbCon.query(sql_seats, [ScheduleID], callback);
 }
 
+const updateSeatState = (SeatNo, dbCon, callback) => {
+    var sql_update_state = 'UPDATE `seat` SET `SeatStateId` = 2 WHERE `seatno` = ? ';
+    dbCon.query(sql_update_state, [SeatNo], callback);
+}
+
+const getAvailableCapacity = (SheduleID, dbCon, callback) => {
+    var sql_availbale_seat = 'SELECT `AvailableNoSeats` FROM `FlightSchedule` WHERE `ID`= ? ';
+    dbCon.query(sql_availbale_seat, [SheduleID], callback);
+
+}
+
+const updateAvailableNoSeats =  (AvailableSeatNo, SheduleID, dbCon, callback) => {
+    var sql_update_state = 'UPDATE `FlightSchedule` SET `AvailableNoSeats` = ? WHERE `ID` = ? ';
+    dbCon.query(sql_update_state, [AvailableSeatNo, SheduleID], callback);
+}
+
+
+
 module.exports = {
     save,
     addPassenger,
@@ -60,5 +78,9 @@ module.exports = {
     getCapacitybyTravelClass,
     getSeats,
     getSeatsbyState,
-    getSeatsbyTravelClass
+    getSeatsbyTravelClass,
+    updateSeatState,
+    getAvailableCapacity,
+    updateAvailableNoSeats
+    
 }

@@ -114,7 +114,7 @@ const add_guest_details_post =(req, res) => {
 
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
-    const ScheduleId = 2;
+    const ScheduleId = 3;
     const TravelClassId = 1;
     
     Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
@@ -133,7 +133,7 @@ const select_seat_get = (req, res) => {
                 }
                 
             })
-            console.log(booked_seats);
+
 
             res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', seat_cap: seat_cap, booked_seats: booked_seats});
             
@@ -146,6 +146,37 @@ const select_seat_get = (req, res) => {
 };
 
 const select_seat_post = (req, res) => {
+    const data = req.body;
+    const dbCon = req.dbCon;
+    const ScheduleId = 3;
+    // for (let i=0; i < Object.keys(data).length; i++){
+    //     console.log(ob[keys]);
+    // } 
+
+    const seat_array = Object.values(data);
+    console.log(seat_array);
+
+    for (let i=0; i < seat_array.length; i++){
+        console.log(seat_array[i]);
+        Booking.updateSeatState(seat_array[i], dbCon, function(err, result, fileld){
+            if(err) throw err;
+        })
+    }; 
+    
+    // Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
+    //     if(err) throw err;
+
+    //     const available_seats_current = (result[0]["AvailableNoSeats"]);
+    //     console.log(available_seats_current);
+    //     const available_seats_new = available_seats_current - seat_array.length;
+    //     console.log(available_seats_new);
+
+    //     Booking.updateAvailableNoSeats(available_seats_new, ScheduleId, dbCon, function(err, result, fileld){
+    //             if(err) throw err;
+    //         });
+
+    // });
+    
     res.render("beforePayment", {title: 'Payment', layout: './layouts/payment_layout'});
 }
 
@@ -157,6 +188,10 @@ const add_payment_get =(req, res ) => {
     res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
 }
 
+// const add_payment_post = (req, res) => {
+//     res.render(window.close());
+// }
+
 
 
 
@@ -167,6 +202,7 @@ module.exports ={
     add_guest_details_post,
     select_seat_get,
     add_payment_get,
+    // add_payment_post,
     before_payment_get,
     select_seat_post
 }

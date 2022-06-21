@@ -10,7 +10,7 @@
                 </div>
             </div>
 
-            <form class="payment-form" target="" method="">
+            <form class="payment-form" target="/payment" method="post">
                 <span class="in-span">Cardholder's name:</span>
                 <input class="pay-input" placeholder="Linda Williams">
                 <span class="in-span">Card Number:</span>
@@ -24,8 +24,25 @@
                     </div>
                 </div>
 
-                <button class="btn pay-btn" type="submit">Confirm</button>
+                <button class="btn pay-btn" onclick="return closeWindow();">Confirm</button>
             </form>
+
+            <script type="text/javascript">
+                function closeWindow() {
+          
+                    // Open the new window 
+                    // with the URL replacing the
+                    // current page using the
+                    // _self value
+                    let new_window =
+                        open(location, '_self');
+          
+                    // Close this window
+                    new_window.close();
+          
+                    return false;
+                }
+            </script>
                                 
         </div>
     </div>
