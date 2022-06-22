@@ -13,15 +13,20 @@ const createToken = (id,userType) => {
 }
 
 const login_page = (req,res) => {
-    res.render('login', {title: 'Login Page', layout: './layouts/auth_layout'})
+    res.render('login', {title: 'User | Login', layout: './layouts/auth_layout'})
 }
 
 const admin_login_get = (req,res) => {
-    res.render('AdminLogin', {title: 'Admin Login Page', layout: './layouts/auth_layout'})
+    res.render('AdminLogin', {title: 'Admin | Login ', layout: './layouts/auth_layout'})
+}
+
+const admin_logout_get = (req,res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.redirect('/adminlogin');
 }
 
 const signup_page = (req,res) => {
-    res.render('signup', {title: 'Signup Page', layout: './layouts/auth_layout'})
+    res.render('signup', {title: 'User | Signup', layout: './layouts/auth_layout'})
 }
 
 const admin_login_post = (req,res,next) => {
@@ -55,16 +60,10 @@ const admin_login_post = (req,res,next) => {
                     authModel.updateLastLog(id,con, function(err,result,fields){
                         if (err) throw err;   
                         req.session.email = email;
-                        authModel.getAdminID(id,con,function(err,result,fields){
-                            if (err) throw err; 
-                            //console.log(result[0].AdminID);
-                            const adminID = result[0].AdminID;
-                            const token = createToken(adminID, 'admin'); 
-                            res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
+                        const token = createToken(id, 'admin'); 
+                        res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
                             //res.send("Email and password matched. Logged");
-                            res.redirect('/admin/dashboard');
-                        })
-                            
+                        res.redirect('/admin');        
                     })
                 }else{
                 req.session.flag = 4;
@@ -115,9 +114,6 @@ const login_post = (req,res,next) => {
                                 //res.send("Email and password matched. Logged");
                                 res.redirect('/searchFlight');
                             })
-                    
-                            
-                    
                         })
                     }else{
                     req.session.flag = 4;
@@ -153,7 +149,7 @@ const login_post = (req,res,next) => {
             userModel.getUserByEmail(email,dbCon,function(err,result,fields){
                 if (err) {
                     throw err
-                }else if(result != 'undefined'){
+                }else if(result == 'undefined'){
                     alert = {
                         "msg": 'Email already in use'
                     }
@@ -182,5 +178,6 @@ module.exports = {
     login_post,
     signup_post,
     admin_login_get,
-    admin_login_post
+    admin_login_post,
+    admin_logout_get
 }
