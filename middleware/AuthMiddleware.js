@@ -18,11 +18,10 @@ function parseCookies (request) {
 }
 
 const requireAuth = (req,res,next) =>{
-    console.log("requireAuth");
     const cookies = parseCookies(req);
     const token = cookies.jwt;
     
-    //check json web token exixts & is verified
+    //check json web token exists & is verified
     if(token){
         jwt.verify(token, 'B airways secret', (err, decodedToken) => {
             if(err){
@@ -38,6 +37,33 @@ const requireAuth = (req,res,next) =>{
     }
 }
 
+//check current user
+const checkUser = (req,res,next) =>{
+    const cookies = parseCookies(req);
+    const token = cookies.jwt;
+
+    //check json web token exists & is verified
+    if(token){
+        jwt.verify(token, 'B airways secret', (err, decodedToken) => {
+            if(err){
+                console.log(err.message);
+                req.user = null;
+                next();
+            }else{
+                console.log(decodedToken);
+                let userId = decodedToken.id;
+                let userType = decodedToken.userType; 
+                req.user = {id: userId, userType: userType};
+                next();
+            }
+        })
+    }else{
+        req.user = null;
+        next();
+    }
+}
+
 module.exports = {
-    requireAuth
+    requireAuth,
+    checkUser
 }

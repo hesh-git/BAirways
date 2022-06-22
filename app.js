@@ -24,7 +24,7 @@ const bodyParser=require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const loginRoutes = require('./routes/Auth');
-const {requireAuth} = require('./middleware/AuthMiddleware');
+const {requireAuth, checkUser} = require('./middleware/AuthMiddleware');
 
 
 //express app
@@ -84,11 +84,13 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 
+app.get('*',checkUser)
 
 app.use(searchFlightRoutes.routes);
 app.use(bookingRoutes);
 
 // admin site routes
+
 app.use('/admin',requireAuth, adminRoutes);
 
 app.use(express.json());
