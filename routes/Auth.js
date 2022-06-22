@@ -12,6 +12,12 @@ router.get("/", loginSiteController.login_page);
 
 router.get("/register", loginSiteController.signup_page);
 
+router.get("/adminlogin", loginSiteController.admin_login_get);
+
+router.get("/adminlogout", loginSiteController.admin_logout_get);
+
+router.post("/adminlogin", loginSiteController.admin_login_post);
+
 //POST request
 router.post(
   "/auth_login",

@@ -8,8 +8,14 @@ const updateLastLog = (id,dbCon,callback) => {
     dbCon.query(sql,[new Date(),id],callback);
 }
 
+const getTravellerID = (id,dbCon,callback) => {
+    var sql = 'select TravellerID from authentication join registeredtraveller on authentication.UserID = registeredtraveller.UserID where authentication.UserID = ? limit 1';
+    dbCon.query(sql,id,callback);
+}
+
 
 module.exports = {
     getPwrdByID,
-    updateLastLog
+    updateLastLog,
+    getTravellerID
 }
