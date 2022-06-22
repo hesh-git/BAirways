@@ -125,7 +125,7 @@ const add_schedule_get = (req, res) => {
         
     })
 
-    }
+}
 
 const add_schedule_post = (req, res) => {
     const data = req.body; // data about adding flight schedule
@@ -148,6 +148,31 @@ const add_schedule_post = (req, res) => {
     })
 }
 
+const update_schedule_get = (req, res) => {
+    const schedule_id = req.query.schedule_id;
+
+    // get all flights : need to limit
+    res.render('./admin/update_schedule', {title: 'Add | Flight Schedule', schedule_id: schedule_id, layout: './layouts/admin_layout'});
+
+}
+
+const update_schedule_post = (req, res) => {
+    const data = req.body; // data about adding flight schedule
+    const dbCon = req.dbCon; // database connection
+
+    // details of newly adding flight schedule
+    DepartureDate = data.DepartureDate;
+    DepartureTime = data.DepartureTime;
+    ArrivalDate = data.ArrivalDate;
+    ArrivalTime = data.ArrivalTime;
+    schedule_id = data.schedule_id;
+
+    FlightSchedule.update_flight_schedule(schedule_id, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        res.redirect("/admin");
+    });
+}
 // add a airport
 const add_airport_get = (req, res) => {
     res.render('./admin/add_airport', {title: 'Add | Airport', layout: './layouts/admin_layout'});
@@ -387,5 +412,7 @@ module.exports = {
     add_flight_post,
     get_flightDetails,
     add_price_get,
-    add_price_post
+    add_price_post,
+    update_schedule_get,
+    update_schedule_post
 }

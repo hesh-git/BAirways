@@ -36,6 +36,9 @@
             <div class="col-2"><%= schedules[i].NoPassengers %> </div>
             <div class="col-2"><%= schedules[i].State %> </div>
         </div>
+        <div class="text-center">
+            <a href="/admin/update_schedule?schedule_id=<%= schedules[i].ID %>" class="link link-btn btn btn-outline-info">UPDATE</a>
+        </div>
         <hr class="line-top">
     <% } %> 
 </div>
