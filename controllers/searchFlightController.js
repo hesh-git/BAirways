@@ -3,7 +3,7 @@
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
-    console.log(req.user);
+    //console.log(req.user);
     const con = req.dbCon;
 
     //Get all airport codes with their names

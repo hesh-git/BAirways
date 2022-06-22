@@ -23,7 +23,7 @@ const get_flightDetails = (FlightNo, dbCon) => {
 }
 
 const dashboard = (req, res) => {
-    console.log(req.user);
+    
     const dbCon = req.dbCon;
 
     const today = new Date(); // get today date
