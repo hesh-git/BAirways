@@ -114,7 +114,7 @@ const add_guest_details_post =(req, res) => {
 
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
-    const ScheduleId = 3;
+    const ScheduleId = 2;
     const TravelClassId = 1;
     
     Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
@@ -148,22 +148,24 @@ const select_seat_get = (req, res) => {
 const select_seat_post = (req, res) => {
     const data = req.body;
     const dbCon = req.dbCon;
-    const ScheduleId = 3;
+    const ScheduleId = 2;
+    const stateID = 2;
     // for (let i=0; i < Object.keys(data).length; i++){
     //     console.log(ob[keys]);
     // } 
 
     const seat_array = Object.values(data);
-    console.log(seat_array);
+    // console.log(seat_array);
 
     for (let i=0; i < seat_array.length; i++){
-        console.log(seat_array[i]);
-        Booking.updateSeatState(seat_array[i], dbCon, function(err, result, fileld){
+        // console.log(seat_array[i]);
+        Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
             if(err) throw err;
         })
     }; 
 
-    // res.session = 
+    req.session.seat_array = seat_array;
+    
     
     // Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
     //     if(err) throw err;
@@ -185,8 +187,12 @@ const select_seat_post = (req, res) => {
 const before_payment_get = (req, res) => { 
     const dbCon = req.dbCon;
     const TravelClassID =1;
-    const ScheduleId = 3;
+    const ScheduleId = 2;
     const RegisteredTravellerID = 1;
+
+    const sess = req.session;
+    const seat_array = sess.seat_array;
+    console.log(seat_array, "this is session variable");
 
     Booking.getTravelClassPrice(TravelClassID, ScheduleId, dbCon, function(err, result, fileld){
         if(err) throw err;
@@ -201,10 +207,64 @@ const before_payment_get = (req, res) => {
 
             const discounted_seat = travel_class_price - (travel_class_price*discount_percentage)/100;
             console.log(discounted_seat);
+
+            const subtotal = seat_array.length *  travel_class_price;
+            console.log(subtotal, "subtotal");
+            sess.subtotal = subtotal;
+
+            const tot_discount = subtotal * discount_percentage /100;
+            console.log(tot_discount, "total discount");
+            sess.tot_discount = tot_discount;
+
+            const tot_to_pay = subtotal - tot_discount;
+            console.log(tot_to_pay, "total to pay");
+
+            res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout', subtotal: subtotal, tot_discount: tot_discount, tot_to_pay: tot_to_pay});
+
         });
+    });    
+}
+
+
+const before_payment_post = (req, res) => {
+    const dbCon = req.dbCon;
+    const BookingID = 35;
+    const ScheduleId = 2;
+    const stateID = 3;
+    const sess = req.session;
+    const subtotal = sess.subtotal;
+    const tot_discount = sess.tot_discount;
+    const seat_array = sess.seat_array;
+
+    Booking.completeBooking(tot_discount, subtotal, BookingID, dbCon, function(err, result, fileld){
+        if(err) throw err;
+
+        Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
+            if(err) throw err;
+
+            const available_seats_current = (result[0]["AvailableNoSeats"]);
+            console.log(available_seats_current);
+            const available_seats_new = available_seats_current - seat_array.length;
+            console.log(available_seats_new);
+
+            Booking.updateAvailableNoSeats(available_seats_new, ScheduleId, dbCon, function(err, result, fileld){
+                if(err) throw err;
+
+                for (let i=0; i < seat_array.length; i++){
+                    // console.log(seat_array[i]);
+                    Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
+                        if(err) throw err;
+                    })
+                };     
+
+            });
+
+    });
+        res.send('Booking Completed');
     });
 
-    res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout'})
+    
+    
 }
 
 const add_payment_get =(req, res ) => {
@@ -227,5 +287,6 @@ module.exports ={
     add_payment_get,
     // add_payment_post,
     before_payment_get,
+    before_payment_post,
     select_seat_post
 }

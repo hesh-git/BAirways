@@ -50,9 +50,9 @@ const getSeats = (ScheduleID, dbCon, callback) => {
     dbCon.query(sql_seats, [ScheduleID], callback);
 }
 
-const updateSeatState = (SeatNo, dbCon, callback) => {
-    var sql_update_state = 'UPDATE `seat` SET `SeatStateId` = 2 WHERE `seatno` = ? ';
-    dbCon.query(sql_update_state, [SeatNo], callback);
+const updateSeatState = (stateID, SeatNo, dbCon, callback) => {
+    var sql_update_state = 'UPDATE `seat` SET `SeatStateId` = ? WHERE `seatno` = ? ';
+    dbCon.query(sql_update_state, [stateID, SeatNo], callback);
 }
 
 const getAvailableCapacity = (SheduleID, dbCon, callback) => {
@@ -78,6 +78,11 @@ const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
 
 }
 
+const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, dbCon, callback) => {
+    var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2 WHERE `ID` = ?';
+    dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID], callback)
+}
+
 
 
 module.exports = {
@@ -95,6 +100,7 @@ module.exports = {
     getAvailableCapacity,
     updateAvailableNoSeats,
     getTravelClassPrice,
-    getDiscountPercentage
+    getDiscountPercentage,
+    completeBooking
     
 }
