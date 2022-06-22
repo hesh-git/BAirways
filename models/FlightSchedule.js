@@ -14,6 +14,15 @@ const add_flight_schedule = (FlightNo, AircraftID, StateID, DepartureDate, Depar
     
 }
 
+const update_flight_schedule = (schedule_id, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, callback) => {
+
+
+        const sql = "UPDATE `FlightSchedule` SET `DepartureDate` = ?, `DepartureTime` = ?, `ArrivalDate` = ?, `ArrivalTime` = ? WHERE `ID` = ?";
+
+        dbCon.query(sql, [DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, schedule_id], callback);
+    
+}
+
 const get_schedules_for_day = (Date, dbCon, callback) => {
     const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
 
@@ -29,5 +38,6 @@ const get_all_states = (dbCon, callback) => {
 module.exports = {
     add_flight_schedule,
     get_schedules_for_day,
-    get_all_states
+    get_all_states,
+    update_flight_schedule
 }
