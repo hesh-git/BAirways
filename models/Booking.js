@@ -66,6 +66,18 @@ const updateAvailableNoSeats =  (AvailableSeatNo, SheduleID, dbCon, callback) =>
     dbCon.query(sql_update_state, [AvailableSeatNo, SheduleID], callback);
 }
 
+const getTravelClassPrice = (TravelClassID, FlightScheduleID, dbCon, callback) => {
+    var sql_travel_class_price = 'SELECT * FROM `TravelClassPrice` `TCP` JOIN `FlightSchedule` `FS` ON `TCP`.`FlightNo` = `FS`.`FlightNo` AND `TCP`.`AircraftID` = `FS`.`AircraftID` WHERE `TCP`.`TravelClassID` = ? AND `FS`.`ID` = ?';
+    dbCon.query(sql_travel_class_price, [TravelClassID, FlightScheduleID], callback);
+
+}
+
+const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
+    var sql_dis_per = 'SELECT * FROM `Category` `C` JOIN `RegisteredTraveller` `RT` ON `C`.`ID` = `RT`.`CatagoryID` WHERE `RT`.`ID` = ?';
+    dbCon.query(sql_dis_per, [RegisteredTravellerID], callback);
+
+}
+
 
 
 module.exports = {
@@ -81,6 +93,8 @@ module.exports = {
     getSeatsbyTravelClass,
     updateSeatState,
     getAvailableCapacity,
-    updateAvailableNoSeats
+    updateAvailableNoSeats,
+    getTravelClassPrice,
+    getDiscountPercentage
     
 }

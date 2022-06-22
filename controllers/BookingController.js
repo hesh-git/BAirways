@@ -162,6 +162,8 @@ const select_seat_post = (req, res) => {
             if(err) throw err;
         })
     }; 
+
+    // res.session = 
     
     // Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
     //     if(err) throw err;
@@ -177,10 +179,31 @@ const select_seat_post = (req, res) => {
 
     // });
     
-    res.render("beforePayment", {title: 'Payment', layout: './layouts/payment_layout'});
+    res.redirect("/beforePayment")
 }
 
-const before_payment_get = (req, res) => {
+const before_payment_get = (req, res) => { 
+    const dbCon = req.dbCon;
+    const TravelClassID =1;
+    const ScheduleId = 3;
+    const RegisteredTravellerID = 1;
+
+    Booking.getTravelClassPrice(TravelClassID, ScheduleId, dbCon, function(err, result, fileld){
+        if(err) throw err;
+        const travel_class_price = (result[0]["Price"]);
+        console.log(travel_class_price);
+
+        Booking.getDiscountPercentage(RegisteredTravellerID, dbCon, function(err, result, fileld){
+            if(err) throw err;
+
+            const discount_percentage = (result[0]["Discount"]);
+            console.log(discount_percentage);
+
+            const discounted_seat = travel_class_price - (travel_class_price*discount_percentage)/100;
+            console.log(discounted_seat);
+        });
+    });
+
     res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout'})
 }
 
