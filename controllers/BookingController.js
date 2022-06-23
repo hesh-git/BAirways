@@ -44,7 +44,7 @@ const add_passenger_details_post = (req, res) => {
             })
         }
 
-        res.send('Passengers Added');
+        res.redirect("/seat-selection");
 
     })
 
@@ -62,6 +62,7 @@ const add_guest_details_post =(req, res) => {
 
     const no_adults = 1;
     const no_children = 0;
+    const NumPassengers = no_adults + no_children;
     const FlightScheduleID = 1;
     const TravelClassID = 1;
     const BookingStateID = 1;
@@ -78,7 +79,7 @@ const add_guest_details_post =(req, res) => {
                 throw err    
         })
 
-        Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
+        Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID,NumPassengers, dbCon, function(err, result, fileld){
             if(err)
                 throw err
             const BookingID = result.insertId;
@@ -106,7 +107,7 @@ const add_guest_details_post =(req, res) => {
                 })
             }
     
-            res.send('Guest Details Added');
+            res.redirect("/seat-selection");
     
         })
     })
