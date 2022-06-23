@@ -238,7 +238,10 @@ const before_payment_post = (req, res) => {
     const tot_discount = sess.tot_discount;
     const seat_array = sess.seat_array;
 
-    Booking.completeBooking(tot_discount, subtotal, BookingID, dbCon, function(err, result, fileld){
+    const bookingDate = new Date();
+    const bookingTime = bookingDate.getTime();
+
+    Booking.completeBooking(tot_discount, subtotal, BookingID, bookingDate, bookingTime, dbCon, function(err, result, fileld){
         if(err) throw err;
 
         Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
