@@ -116,7 +116,7 @@ const add_guest_details_post =(req, res) => {
 
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
-    const ScheduleId = 5;
+    const ScheduleId = 7;
     const TravelClassId = 1;
     
     Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
@@ -150,7 +150,7 @@ const select_seat_get = (req, res) => {
 const select_seat_post = (req, res) => {
     const data = req.body;
     const dbCon = req.dbCon;
-    const ScheduleId = 5;
+    const ScheduleId = 7;
     const stateID = 2;
     // for (let i=0; i < Object.keys(data).length; i++){
     //     console.log(ob[keys]);
@@ -189,7 +189,7 @@ const select_seat_post = (req, res) => {
 const before_payment_get = (req, res) => { 
     const dbCon = req.dbCon;
     const TravelClassID =1;
-    const ScheduleId = 5;
+    const ScheduleId = 7;
     const RegisteredTravellerID = 1;
 
     const sess = req.session;
@@ -230,8 +230,8 @@ const before_payment_get = (req, res) => {
 
 const before_payment_post = (req, res) => {
     const dbCon = req.dbCon;
-    const BookingID = 35;
-    const ScheduleId = 5;
+    const BookingID = 37;
+    const ScheduleId = 7;
     const stateID = 3;
     const sess = req.session;
     const subtotal = sess.subtotal;
@@ -239,9 +239,12 @@ const before_payment_post = (req, res) => {
     const seat_array = sess.seat_array;
 
     const bookingDate = new Date();
-    const bookingTime = bookingDate.getTime();
+    const bookingTime = bookingDate.getHours() + ":" + bookingDate.getMinutes() + ":" + bookingDate.getSeconds();
 
-    Booking.completeBooking(tot_discount, subtotal, BookingID, bookingDate, bookingTime, dbCon, function(err, result, fileld){
+    console.log(bookingDate);
+    console.log(bookingTime);
+
+    Booking.completeBooking(tot_discount, subtotal, BookingID, bookingDate, bookingTime,dbCon, function(err, result, fileld){
         if(err) throw err;
 
         Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
