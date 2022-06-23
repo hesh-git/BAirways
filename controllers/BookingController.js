@@ -10,12 +10,13 @@ const add_passenger_details_post = (req, res) => {
 
     const no_adults = 1;
     const no_children = 1;
+    const NumPassengers = no_adults + no_children;
     const FlightScheduleID = 1;
     const TravellerID = 1;
     const TravelClassID = 1;
     const BookingStateID = 1;
 
-    Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, dbCon, function(err, result, fileld){
+    Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, NumPassengers, dbCon, function(err, result, fileld){
         if(err)
             throw err
         const BookingID = result.insertId;
@@ -64,6 +65,7 @@ const add_guest_details_post =(req, res) => {
     const FlightScheduleID = 1;
     const TravelClassID = 1;
     const BookingStateID = 1;
+    
 
     Booking.addTraveller(dbCon, function(err, result, fileld){
         if(err)
