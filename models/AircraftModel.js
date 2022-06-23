@@ -4,21 +4,22 @@ const set_database = (db) => {
     dbCon = db;
 }
 
-const save = (data, dbCon1, callback) => {
+const save = (data, dbCon, callback) => {
     let sql = 'INSERT INTO `aircraftmodel`(`ModelName`, `SeatingCapacity`, `NoOfAircrafts`) VALUES (?,?,?)';
     dbCon.query(sql, [data.ModelName, data.SeatingCapacity, data.NoOfAircrafts], callback);
 }
 
-const save_seat_capacity = (ModelID, TravelClassID, RowStart, NumRows, NumCols, dbCon, callback) => {
+const save_seat_capacity = (ModelID, TravelClassID, NumRows, NumCols, dbCon, callback) => {
     let sql = "INSERT INTO `SeatingCapacity`(`ModelID`, `TravelClassID`, `NumRows`, `NumCols`) VALUES (?,?,?,?)";
     dbCon.query(sql, [ModelID, TravelClassID, NumRows, NumCols], (err, result, fields) => {
         if(err) throw err;
     });
 }
 
-const get_seat_cap_details = (FlightScheduleID, TravelClassID, dbCon, callback) => {
-    let sql = "SELECT `NumRows`, `NumCols` WHERE `FlightSchedule` `FS` JOIN `Aircraft` `A` JOIN `SeatingCapacity` `SC` ON `FS`.`AircraftID` = `A`.`ID` AND `A`.`ModelID` = `SC`.`ModelID` WHERE `FS`.`ID` = ? AND `SC`.`TravelClassID`= ?";
-    dbCon.query(sql, [FlightScheduleID, TravelClassID], callback);
+const get_seat_cap_details = (FlightScheduleID, dbCon, callback) => {
+    console.log(FlightScheduleID);
+    let sql = "SELECT `SC`.`NumRows`, `SC`.`NumCols`, `SC`.`TravelClassID` FROM `FlightSchedule` `FS` JOIN `Aircraft` `A` JOIN `SeatingCapacity` `SC` ON `FS`.`AircraftID` = `A`.`ID` AND `A`.`ModelID` = `SC`.`ModelID` WHERE `FS`.`ID` = ?";
+    dbCon.query(sql, [FlightScheduleID], callback);
 }
 
 const add_seats_to_seat = (FlightScheduleID, TravelClassID, RowStart, NumRows, NumCols, dbCon, callback) => {
