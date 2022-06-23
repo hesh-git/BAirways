@@ -114,7 +114,7 @@ const add_guest_details_post =(req, res) => {
 
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
-    const ScheduleId = 2;
+    const ScheduleId = 6;
     const TravelClassId = 1;
     
     Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
@@ -148,7 +148,7 @@ const select_seat_get = (req, res) => {
 const select_seat_post = (req, res) => {
     const data = req.body;
     const dbCon = req.dbCon;
-    const ScheduleId = 2;
+    const ScheduleId = 6;
     const stateID = 2;
     // for (let i=0; i < Object.keys(data).length; i++){
     //     console.log(ob[keys]);
@@ -187,7 +187,7 @@ const select_seat_post = (req, res) => {
 const before_payment_get = (req, res) => { 
     const dbCon = req.dbCon;
     const TravelClassID =1;
-    const ScheduleId = 2;
+    const ScheduleId = 6;
     const RegisteredTravellerID = 1;
 
     const sess = req.session;
@@ -229,7 +229,7 @@ const before_payment_get = (req, res) => {
 const before_payment_post = (req, res) => {
     const dbCon = req.dbCon;
     const BookingID = 35;
-    const ScheduleId = 2;
+    const ScheduleId = 6;
     const stateID = 3;
     const sess = req.session;
     const subtotal = sess.subtotal;
