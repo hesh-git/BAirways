@@ -24,7 +24,11 @@ const bodyParser=require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const loginRoutes = require('./routes/Auth');
+
+const userRoutes = require('./routes/UserRoutes');
+
 const {requireAuth, checkUser} = require('./middleware/AuthMiddleware');
+
 
 
 //express app
@@ -99,6 +103,7 @@ app.use(express.json());
 app.use('/', loginRoutes);
 app.use('/register', loginRoutes);
 app.use('/auth', loginRoutes);
+app.use('/user', userRoutes);
 
 
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %> 
+    <link rel="stylesheet" href="/css/user.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-3">
+            <%- include('../partials/user_sidebar.ejs') %> 
+        </div>
+        <div class="col-9">
+            <%- body %> 
+        </div>
+        </div>
+    </div>
+</body>
+</html>
