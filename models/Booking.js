@@ -4,9 +4,9 @@ const save = (data, dbCon, callback) => {
     dbCon.query(sql, [1, 1, 1, data.Gender, data.FirstName, data.LastName, data.DateOfBirth], callback);
 }
 
-const addBooking = (FlightScheduleID, TravellerID, TravelClassID, BookingStateID, dbCon, callback) => {
-    var sql_booking = 'INSERT INTO `Booking` (`FlightScheduleID`, `TravellerID`,`TravelClassID`, `BookingStateID`) VALUES (?,?,?,?)';
-    dbCon.query(sql_booking, [FlightScheduleID,TravellerID,TravelClassID,BookingStateID], callback);
+const addBooking = (FlightScheduleID, TravellerID, TravelClassID, BookingStateID, NumPassengers, dbCon, callback) => {
+    var sql_booking = 'INSERT INTO `Booking` (`FlightScheduleID`, `TravellerID`,`TravelClassID`, `BookingStateID`, `NumPassengers`, `Bookingdate`, `BookingTime`) VALUES (?,?,?,?,?,?,?)';
+    dbCon.query(sql_booking, [FlightScheduleID,TravellerID,TravelClassID,BookingStateID, NumPassengers, null, null], callback);
 }
 
 const addPassenger = ( BookingID, TypeID, Gender, FirstName, LastName, DateOfBirth, dbCon, callback) => {
