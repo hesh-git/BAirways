@@ -1,4 +1,5 @@
 //searchFlights for booking 
+const { check, validationResult } = require("express-validator");
 
 const FlightSearchModel = require("../models/FlightSearchModel");
 
@@ -43,7 +44,14 @@ const searchFlight_post = (req, res) => {
     const con = req.dbCon; //get database connection from the request
     
     // const book = req.body.book;
-
+    const errors = validationResult(req)
+    if (!errors.isEmpty()){
+        const alert = errors.array()[0]
+        console.log(alert)
+        res.render('searchFlight', {
+             title: 'searchFlight', layout: './layouts/flightsearch_layout',alert
+        })  
+    }
 
     
     FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
