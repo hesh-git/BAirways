@@ -7,7 +7,7 @@ const UserModel = require("../models/userModel");
 const view_profile_get = (req, res) => {
     const con = req.dbCon;
 
-    const TravellerID = 4;
+    const TravellerID = req.user.id;
     ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
         if (err) throw err;
         console.log(result);
@@ -27,7 +27,7 @@ const view_profile_get = (req, res) => {
 const view_dashboard_get = (req, res) =>{ 
     const dbCon = req.dbCon;
 
-    const TravellerID = 4;
+    const TravellerID = req.user.id;
 
     UserDashboardModel.view_dashboard_get(TravellerID, dbCon, (err, schedules1, fields) => {
         if(err) throw err;
@@ -91,7 +91,7 @@ const view_dashboard_get = (req, res) =>{
 const view_edit_profile_get = (req,res) => {
     const con = req.dbCon;
 
-    const TravellerID = 4;
+    const TravellerID = req.user.id;
     ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
         if (err) throw err;
         console.log(result);
