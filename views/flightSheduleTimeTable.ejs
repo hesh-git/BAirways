@@ -1,34 +1,40 @@
 <body class="flight-result">
     <h2 class="text-center py-5">Select Your Departure Flights</h2>
     <div class="container">
-        <% for (let i=0; i<availableFlightDetails.length; i++){ %>
-        
-        <div class="row p-3" id="result-row">
-        
-            <div class="col-3">
-                <div class="time-head"><%= availableFlightDetails[i].DepartureTime %> <%= availableFlightDetails[i].FFromCode %></div>
-                <div class>21/05/2022</div>
-                <div>Barranquilla</div>
-                <div class="flight">AA 1124 Airbus A319</div>
-            </div>
+        <% if (availableFlightDetails.length == 0) { %>
+            <h5 class="text-center no-flights">Sorry! No Flights Available for your requirement</h5>
+        <% } else { %>
             
-            <div class="col-2"></div>
-            <div class="col-3">
-                <div class="time-head">02:15 AMD</div>
-                <div class>20/05/2022</div>
-                <div>Ahamadabad</div>
-                <div class="flight">QR 0534 Airbus A320</div>
-            </div>
+        
+            <% for (let i=0; i<availableFlightDetails.length; i++){ %>
             
-            <div class="col-4">
-                <a class="select-flight">
-                    <span>Economy Class</span>
-                    <span>455 USD</span>
-                    <span>Total price for all passengers</span> 
-                </a>
+            <div class="row p-3 mt-4" id="result-row">
+            
+                <div class="col-3">
+                    <div class="time-head"><%= availableFlightDetails[i].DepartureTime %> <%= availableFlightDetails[i].FFromCode %></div>
+                    <div class><%= moment(availableFlightDetails[i].DepartureDate).format('Do MMMM, YYYY') %></div>
+                    <div><%= airportCodesandNames[availableFlightDetails[i].FFromCode] %></div>
+                    <div class="flight"><%= availableFlightDetails[i].AirCraftID %> <%= availableFlightDetails[i].ModelName %></div>
+                </div>
+                
+                <div class="col-2"></div>
+                <div class="col-3">
+                    <div class="time-head"><%= availableFlightDetails[i].ArrivalTime %> <%= availableFlightDetails[i].FToCode %></div>
+                    <div class><%=  moment(availableFlightDetails[i].ArrivalDate).format('Do MMMM, YYYY') %>  %></div>
+                    <div><%= airportCodesandNames[availableFlightDetails[i].FToCode] %></div>
+                    <div class="flight"><%= availableFlightDetails[i].AirCraftID %> <%= availableFlightDetails[i].ModelName %></div>
+                </div>
+                
+                <div class="col-4">
+                    <a class="select-flight" href="">
+                        <span><%= availableFlightDetails[i].TravellClass %></span>
+                        <span><%= "LKR" %> <%= availableFlightDetails[i].Price %></span>
+                        <span>Total price for all passengers</span> 
+                    </a>
+                </div>
             </div>
-        </div>
-        <% } %>
+            <% } %>
+    <% } %>
     </div>
 </div>
 </body>

@@ -23,6 +23,7 @@ const get_flightDetails = (FlightNo, dbCon) => {
 }
 
 const dashboard = (req, res) => {
+    
     const dbCon = req.dbCon;
 
     const today = new Date(); // get today date
@@ -125,7 +126,7 @@ const add_schedule_get = (req, res) => {
         
     })
 
-    }
+}
 
 const add_schedule_post = (req, res) => {
     const data = req.body; // data about adding flight schedule
@@ -148,6 +149,31 @@ const add_schedule_post = (req, res) => {
     })
 }
 
+const update_schedule_get = (req, res) => {
+    const schedule_id = req.query.schedule_id;
+
+    // get all flights : need to limit
+    res.render('./admin/update_schedule', {title: 'Add | Flight Schedule', schedule_id: schedule_id, layout: './layouts/admin_layout'});
+
+}
+
+const update_schedule_post = (req, res) => {
+    const data = req.body; // data about adding flight schedule
+    const dbCon = req.dbCon; // database connection
+
+    // details of newly adding flight schedule
+    DepartureDate = data.DepartureDate;
+    DepartureTime = data.DepartureTime;
+    ArrivalDate = data.ArrivalDate;
+    ArrivalTime = data.ArrivalTime;
+    schedule_id = data.schedule_id;
+
+    FlightSchedule.update_flight_schedule(schedule_id, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        res.redirect("/admin");
+    });
+}
 // add a airport
 const add_airport_get = (req, res) => {
     res.render('./admin/add_airport', {title: 'Add | Airport', layout: './layouts/admin_layout'});
@@ -241,20 +267,45 @@ const add_aircraft_post = (req, res) => {
     const dbCon = req.dbCon;
 
     AircraftModel.set_database(dbCon);
+
+    console.log(data);
+    const eco_numRows = parseInt(data.eco_numRows);
+    const eco_numCols = parseInt(data.eco_numCols);
+    const busi_numRows = parseInt(data.busi_numRows);
+    const busi_numCols = parseInt(data.busi_numCols);
+    const plat_numRows = parseInt(data.plat_numRows);
+    const plat_numCols = parseInt(data.plat_numCols);
+    const SeatingCapacity = eco_numRows * eco_numCols + busi_numRows * busi_numCols + plat_numCols * plat_numRows;
+    data.SeatingCapacity = SeatingCapacity;
     // save aircraft model data to database
     AircraftModel.save(data, dbCon, (err, result, fields) => {
         if(err) throw err;
 
         const NoOfAircrafts = data.NoOfAircrafts; // number of aircrafts for user entered model
-
+        const modelId = result.insertId;
         // save aircraft ids to database
         for(let i = 0; i < NoOfAircrafts; i++){
             console.log(data["id"+i])
-            Aircraft.save({'ID': data["id"+i], 'ModelID': result.insertId}, dbCon, (err, result, fields) => {
+            Aircraft.save({'ID': data["id"+i], 'ModelID': modelId}, dbCon, (err, result, fields) => {
                 if(err) throw err
 
             });
         }
+
+        // save seat capacity of economy class
+        AircraftModel.save_seat_capacity(modelId, 1, 0, eco_numRows, eco_numCols, dbCon, (err, result, fields) => {
+            if(err) throw err;
+        });
+
+        // save seat capactiy of 
+        AircraftModel.save_seat_capacity(modelId, 2, eco_numRows, busi_numRows, busi_numCols, dbCon, (err, result, fields) => {
+            if(err) throw err;
+        });
+
+        AircraftModel.save_seat_capacity(modelId, 3, busi_numRows + eco_numRows, plat_numRows, plat_numCols, dbCon, (err, result, fields) => {
+            if(err) throw err;
+        });
+
         res.redirect('/admin/add_aircraft');
     })
 }
@@ -348,6 +399,8 @@ add_price_post = (req, res) => {
     })
 }
 
+
+
 module.exports = {
     dashboard,
     add_schedule_get,
@@ -360,5 +413,7 @@ module.exports = {
     add_flight_post,
     get_flightDetails,
     add_price_get,
-    add_price_post
+    add_price_post,
+    update_schedule_get,
+    update_schedule_post
 }

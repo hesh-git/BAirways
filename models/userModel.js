@@ -32,7 +32,7 @@ const addUser = (fName,lName,email,password,contact, dbCon,callback) =>{
 
         })
     });
-    
+
 }
 
 module.exports= {

@@ -1,8 +1,10 @@
 //searchFlights for booking 
+const { check, validationResult } = require("express-validator");
 
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
+    //console.log(req.user);
     const con = req.dbCon;
 
     //Get all airport codes with their names
@@ -42,13 +44,23 @@ const searchFlight_post = (req, res) => {
     const con = req.dbCon; //get database connection from the request
     
     // const book = req.body.book;
-
+    const errors = validationResult(req)
+    if (!errors.isEmpty()){
+        const alert = errors.array()[0]
+        console.log(alert)
+        res.render('searchFlight', {
+             title: 'searchFlight', layout: './layouts/flightsearch_layout',alert
+        })  
+    }
 
     
     FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
 
         if (error) throw error;
         const availableFlightDetails = [];
+
+        
+
         result.forEach((value,index,array) => {
             console.log(value)
             const availableFlightDetail = {
@@ -60,16 +72,33 @@ const searchFlight_post = (req, res) => {
                 'ArrivalDate' : value['ArrivalDate'],
                 'AirCraftID' : value['AircraftID'],
                 'AirCraftModel' : value['ModelName'],
-                'Price' : value['Price']
+                'Price' : value['Price'],
+                'TravellClass' : value['Name']
 
 
             }
             availableFlightDetails.push(availableFlightDetail);
         })
+
+                
+        FlightSearchModel.getAirports(con, (err, result, fields) => {
+            if (err) throw err;
+    
+            const airportCodesandNames = {
+
+            };
+           
+            console.log(result);
+            result.forEach((value, index, array) => {
+                airportCodesandNames[value['AirportCode']] = value['Name'];
+            
+            })
+            res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, airportCodesandNames : airportCodesandNames, layout : './layouts/schedule_layout'});
+        });
         
 
-        res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, layout : './layouts/schedule_layout'});
-        
+        // res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, airportCodesandNames : airportCodesandNames, layout : './layouts/schedule_layout'});
+
     });
 }
 
