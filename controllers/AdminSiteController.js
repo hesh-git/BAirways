@@ -293,16 +293,16 @@ const add_aircraft_post = (req, res) => {
         }
 
         // save seat capacity of economy class
-        AircraftModel.save_seat_capacity(modelId, 1, 0, eco_numRows, eco_numCols, dbCon, (err, result, fields) => {
+        AircraftModel.save_seat_capacity(modelId, 1,  eco_numRows, eco_numCols, dbCon, (err, result, fields) => {
             if(err) throw err;
         });
 
         // save seat capactiy of 
-        AircraftModel.save_seat_capacity(modelId, 2, eco_numRows, busi_numRows, busi_numCols, dbCon, (err, result, fields) => {
+        AircraftModel.save_seat_capacity(modelId, 2, busi_numRows, busi_numCols, dbCon, (err, result, fields) => {
             if(err) throw err;
         });
 
-        AircraftModel.save_seat_capacity(modelId, 3, busi_numRows + eco_numRows, plat_numRows, plat_numCols, dbCon, (err, result, fields) => {
+        AircraftModel.save_seat_capacity(modelId, 3, plat_numRows, plat_numCols, dbCon, (err, result, fields) => {
             if(err) throw err;
         });
 
