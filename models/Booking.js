@@ -78,9 +78,9 @@ const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
 
 }
 
-const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, dbCon, callback) => {
-    var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2 WHERE `ID` = ?';
-    dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID], callback)
+const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, BookingDate, BookingTime, dbCon, callback) => {
+    var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2, `BookingDate` = ?, `BookingTime` = ?  WHERE `ID` = ?';
+    dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID, BookingDate, BookingTime], callback)
 }
 
 
