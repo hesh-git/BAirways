@@ -12,32 +12,32 @@
     </div>
     <hr class="line-top">
     <!-- for one schedule of a flight-->
-    <% for(let i = 0; i < schedules.length; i++) {%> 
+    <% for(let i = 0; i < schedules1.length; i++) {%> 
         <div class="row">
             <div class="col-2">
-                <div><%= schedules[i].FlightNo %> </div>
-                <div><%= schedules[i].AircraftID %> </div>
+                <div><%= schedules1[i].FlightNo %> </div>
+                <div><%= schedules1[i].AircraftID %> </div>
             </div>
             <div class="col-2">
-                <div><%= schedules[i].DepartureTime %> </div>
-                <div><%= schedules[i].Origin  %> </div>
+                <div><%= schedules1[i].DepartureTime %> </div>
+                <div><%= schedules1[i].Origin  %> </div>
             </div>
             <div class="col-2">
-                <div><%= schedules[i].duration_days  %>d <%= schedules[i].duration_hours %>h <%= schedules[i].duration_minutes %>min   </div>
+                <div><%= schedules1[i].duration_days  %>d <%= schedules1[i].duration_hours %>h <%= schedules1[i].duration_minutes %>min   </div>
                 <hr class="line-top">
                 <div></div>
             </div>
             <div class="col-2">
-                <div><%= schedules[i].ArrivalTime %> </div>
-                <div><%= schedules[i].Destination %> </div>
+                <div><%= schedules1[i].ArrivalTime %> </div>
+                <div><%= schedules1[i].Destination %> </div>
             </div>
-            <div class="col-2"><%= schedules[i].NoPassengers %> </div>
-            <div class="col-2"><%= schedules[i].State %> </div>
+            <div class="col-2"><%= schedules1[i].DateTime %> </div>
+            <div class="col-2"><%= schedules1[i].State %> </div>
         </div>
         <hr class="line-top">
     <% } %> 
 </div>
 
 <div class="text-center mt-5">
-    <a href="/searchFlights" class="link link-btn btn btn-outline-primary btn-lg btn-block">Add Booking</a>
+    <a href="/searchFlight" class="link link-btn btn btn-outline-primary btn-lg btn-block">Add Booking</a>
 </div>

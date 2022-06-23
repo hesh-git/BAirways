@@ -14,36 +14,85 @@ body{
     background-color: teal;
 }
 
-.sidebar{
-    background-color: #333;
-    color: white;
-    height: 100%;
-}
-
-.sidebar a{
-    
-    margin-left: 10px;
-    display: block;
-    color: white;
-    padding-bottom: 10px;
-    font-size: 15px;
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
     text-decoration: none;
 }
 
-.card{
-    position: relative;
-    display: flex;
-    flex-direction: column;
+.sidebar{
+    position: fixed;
+    background-color: #25529b;
+    color: white;
+    width: 300px;
+    height: 100%;
 }
 
-.content{
-    background-color: whitesmoke;
+.sidebar header{
+    font-size: 30px;
+    color: #C1D9F8;
+    text-align: center;
+    line-height: 70px;
+    background: rgb(14, 35, 78);
+    user-select: none;
 }
 
-nav flex-column{
-    
+.sidebar ul a{
+
+    display: block;
+    height: 100%;
+    width: 100%;
+    line-height: 65px;
+    font-size: 20px;
+    color: white;
+    padding-left: 40px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255, 255, 255, .1) ;
+    border-bottom: 1px solid black;
+    text-decoration: none;
+    transition: .4s;
 }
 
-.nav-item{
+ul li :hover a{
+    padding-left: 50px;
 
 }
+
+.sidebar ul a i{
+    margin-right: 16px;
+}
+
+
+
+/* body{
+margin-top:20px;
+} */
+
+.avatar{
+width:200px;
+height:200px;
+}		
+
+.btn-group{
+    margin-top: 50px;
+    align-items: center;  
+}
+
+input[type=button], input[type=submit]{
+    border-radius: 5px;
+    background-color: #315cd2;
+    width: 200px;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 20px 20px 20px 40px;
+    cursor: pointer;
+}
+
+.Psidebar{
+    height: 150px;
+    background-color: black;
+}
+

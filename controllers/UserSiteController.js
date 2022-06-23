@@ -1,5 +1,8 @@
 const ProfileModel = require("../models/ProfileModel");
 const UserDashboardModel = require("../models/UserDashboardModel");
+const FlightSchedule = require("../models/FlightSchedule");
+const FlightModel = require("../models/Flight");
+const UserModel = require("../models/userModel");
 
 const view_profile_get = (req, res) => {
     const con = req.dbCon;
@@ -13,14 +16,18 @@ const view_profile_get = (req, res) => {
                 'fName': result[0]['FirstName'],
                 'lName': result[0]['LastName'],
                 'email': result[0]['Email'],
-                'ContactNumber': result[0]['ContactNumber']
+                'ContactNumber': result[0]['ContactNumber'],
             }
             res.render('./reg_user/user_profile', {title: 'user | Profile',userDetail:userDetail, layout: './layouts/user_layout'});
         })
-        
+    }  
+    
 
-const view_dashboard_get = (req, res) => {
+
+const view_dashboard_get = (req, res) =>{ 
     const dbCon = req.dbCon;
+
+    const TravellerID = 4;
 
     UserDashboardModel.view_dashboard_get(TravellerID, dbCon, (err, schedules1, fields) => {
         if(err) throw err;
@@ -44,7 +51,7 @@ const view_dashboard_get = (req, res) => {
                     flights_list[value["FlightNo"]] = {"Origin": value["Origin"], "Destination": value["Destination"]};
                 });
 
-                schedules.forEach((value, index, array) => {
+                schedules1.forEach((value, index, array) => {
                     value["State"] = state_list[value["StateID"]];
                     value['Origin'] = flights_list[value["FlightNo"]]["Origin"];
                     value['Destination'] = flights_list[value["FlightNo"]]["Destination"];
@@ -74,19 +81,50 @@ const view_dashboard_get = (req, res) => {
                     value["duration_minutes"] = minutes;
                 });
 
-                res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', schedules: schedules, layout: './layouts/admin_layout'});
+                res.render('./reg_user/user_dashboard', {title: 'user | Dashboard',schedules1: schedules1, layout: './layouts/user_layout'});
             })
-    res.render('./reg_user/user_dashboard', {title: 'user | Dashboard', layout: './layouts/user_layout'});
+        })
+   
+    })
 }
 
-const edit_profile_get = (req, res) => {
+const view_edit_profile_get = (req,res) => {
+    const con = req.dbCon;
+
+    const TravellerID = 4;
+    ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
+        if (err) throw err;
+        console.log(result);
+            
+            const userDetail = {
+                'fName': result[0]['FirstName'],
+                'lName': result[0]['LastName'],
+                'email': result[0]['Email'],
+                'ContactNumber': result[0]['ContactNumber'],
+            }
+            res.render('./reg_user/user_editprofile', {title: 'user | Edit Profile',userDetail:userDetail, layout: './layouts/user_layout'});
+        })
+    }
+
+
+const view_edit_profile_post = (req, res) => {
+    const data= req.body;
+    const dbCon = req.dbCon;
+
+    FirstName = data.fName;
+    LastName = data.lName;
+    Email = data.email;
+
     
+
+
     res.render('./reg_user/user_editprofile', {title: 'user | Edit Profile', layout: './layouts/user_layout'});
 }
 
 module.exports = {
     view_profile_get,
     view_dashboard_get,
-    edit_profile_get
+    view_edit_profile_post,
+    view_edit_profile_get
 
 }
