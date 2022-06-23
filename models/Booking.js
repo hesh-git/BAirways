@@ -41,7 +41,7 @@ const getSeatsbyState = (ScheduleID, TravelClassID, SeatStateID, dbCon, callback
 }
 
 const getSeatsbyTravelClass = (ScheduleID, TravelClassID, dbCon, callback) => {
-    var sql_seats = 'SELECT `SeatNo`, `SeatStateID` from `Seat` `S` JOIN `FlightSchedule` `FS` on S.AircraftID = FS.AircraftID where FS.ID=? AND S.TravelClassID=?';
+    var sql_seats = 'SELECT `SeatNo`, `SeatStateID` from `Seat` `S` WHERE `FlightScheduleID` = ? AND TravelClassID=?';
     dbCon.query(sql_seats, [ScheduleID,TravelClassID], callback);
 }
 
@@ -80,8 +80,13 @@ const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
 
 const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, BookingDate, BookingTime, dbCon, callback) => {
     var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2, `BookingDate` = ?, `BookingTime` = ?  WHERE `ID` = ?';
-    dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID, BookingDate, BookingTime], callback)
+    dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingDate, BookingTime, BookingID], callback)
 }
+
+// const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, dbCon, callback) => {
+//     var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2 WHERE `ID` = ?';
+//     dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID], callback)
+// }
 
 
 
