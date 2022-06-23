@@ -1,50 +1,63 @@
 <div class="container text-center "> 
+    <form action="/seat-selection" method="POST">
+        <div class="cont ">
+
+            <div class="row display">
+                <div class="col-1"></div>
+                <div class="col-3 dis-col ">
+                    <span class=" checkmark checkmark-booked"></span> 
+                    <label class="dis-label">Booked</label>
+                    
+                </div>
+    
+                <div class="col-3 dis-col">
+                    <span class=" checkmark checkmark-available"></span> 
+                    <label class="dis-label">Avalibale</label>
+                </div>
+    
+                <div class="col-3 dis-col">
+                    <span class="checkmark checkmark-selected"></span> 
+                    <label class="dis-label">Selected</label>
+                </div>
+            </div>
+            <div class="col-2">
+
+            </div>
+            
+            
+            <!-- <h1> <%= seat_cap[Object.keys(seat_cap)[0]]; %> </h1> -->
+            <% for(let j=0; j < seat_cap[Object.keys(seat_cap)[0]]; j++) { %>
+                <div>
+                <% for(let i=0; i < seat_cap[Object.keys(seat_cap)[1]]; i++) { 
+                    let seatNo = (j + 10).toString(36) + (i+1); %>
+    
+                    <div class="form-group form-check form-check-inline box-cont">
+                        <label class="container text-center">
+                            <% if(booked_seats.includes(seatNo)) { %>
+                                <input type="checkbox" disabled name= <%= seatNo %> value= <%= seatNo %> class="text-center">
+                                <span class=" checkmark checkmark-booked"> <%= seatNo %> </span>
+                            <% } else { %>
+                                <input type="checkbox" name= <%= seatNo %> value= <%= seatNo %> class="text-center">
+                                <span class="checkmark"> <%= seatNo %> </span>
+                            <% } %>
+                        </label>
+                    </div>
+                
+                
+                    
+                <% } %>
+            </div>
+            <% } %>
+            
+            <button type="submit" class="btn btn-primary mt-5 sub-btn">Book Now</button>
+            
+        </div>  
+
+     
+    </form>
     
 
 
-    <div class="cont text-center">
-
-        <div class="row display">
-            <div class="col-4 dis-col text-center">
-                <span class="checkmark checkmark-booked"></span> 
-                <label class="dis-label">Booked</label>
-                
-            </div>
-
-            <div class="col-4 dis-col text-center">
-                <span class=" checkmark checkmark"></span> 
-                <Label class="dis-label">Avalibale</Label>
-            </div>
-
-            <div class="col-4 dis-col text-center">
-                <span class=" checkmark checkmark-selected"></span> 
-                <label class="dis-label">Selected</label>
-            </div>
-        </div>
-        
-        <!-- <h1> <%= seat_cap[Object.keys(seat_cap)[0]]; %> </h1> -->
-        <% for(let j=0; j < seat_cap[Object.keys(seat_cap)[0]]; j++) { %>
-            <div>
-            <% for(let i=0; i < seat_cap[Object.keys(seat_cap)[1]]; i++) { 
-                let seatNo = (j + 10).toString(36) + (i+1); %>
-
-                <div class="form-group form-check form-check-inline box-cont">
-                    <label class="container text-center">
-                        <% if(booked_seats.includes(seatNo)) { %>
-                            <input type="checkbox" disabled name= <%= seatNo %> value= <%= seatNo %> class="text-center">
-                            <span class=" checkmark checkmark-booked"> <%= seatNo %> </span>
-                        <% } else { %>
-                            <input type="checkbox" name= <%= seatNo %> value= <%= seatNo %> class="text-center">
-                            <span class="checkmark"> <%= seatNo %> </span>
-                        <% } %>
-                    </label>
-                </div>
-            
-            
-                
-            <% } %>
-        </div>
-        <% } %>
-    </div>   
+ 
    
 </div>

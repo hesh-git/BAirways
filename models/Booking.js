@@ -50,6 +50,41 @@ const getSeats = (ScheduleID, dbCon, callback) => {
     dbCon.query(sql_seats, [ScheduleID], callback);
 }
 
+const updateSeatState = (stateID, SeatNo, dbCon, callback) => {
+    var sql_update_state = 'UPDATE `seat` SET `SeatStateId` = ? WHERE `seatno` = ? ';
+    dbCon.query(sql_update_state, [stateID, SeatNo], callback);
+}
+
+const getAvailableCapacity = (SheduleID, dbCon, callback) => {
+    var sql_availbale_seat = 'SELECT `AvailableNoSeats` FROM `FlightSchedule` WHERE `ID`= ? ';
+    dbCon.query(sql_availbale_seat, [SheduleID], callback);
+
+}
+
+const updateAvailableNoSeats =  (AvailableSeatNo, SheduleID, dbCon, callback) => {
+    var sql_update_state = 'UPDATE `FlightSchedule` SET `AvailableNoSeats` = ? WHERE `ID` = ? ';
+    dbCon.query(sql_update_state, [AvailableSeatNo, SheduleID], callback);
+}
+
+const getTravelClassPrice = (TravelClassID, FlightScheduleID, dbCon, callback) => {
+    var sql_travel_class_price = 'SELECT * FROM `TravelClassPrice` `TCP` JOIN `FlightSchedule` `FS` ON `TCP`.`FlightNo` = `FS`.`FlightNo` AND `TCP`.`AircraftID` = `FS`.`AircraftID` WHERE `TCP`.`TravelClassID` = ? AND `FS`.`ID` = ?';
+    dbCon.query(sql_travel_class_price, [TravelClassID, FlightScheduleID], callback);
+
+}
+
+const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
+    var sql_dis_per = 'SELECT * FROM `Category` `C` JOIN `RegisteredTraveller` `RT` ON `C`.`ID` = `RT`.`CatagoryID` WHERE `RT`.`ID` = ?';
+    dbCon.query(sql_dis_per, [RegisteredTravellerID], callback);
+
+}
+
+const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, dbCon, callback) => {
+    var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2 WHERE `ID` = ?';
+    dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID], callback)
+}
+
+
+
 module.exports = {
     save,
     addPassenger,
@@ -60,5 +95,12 @@ module.exports = {
     getCapacitybyTravelClass,
     getSeats,
     getSeatsbyState,
-    getSeatsbyTravelClass
+    getSeatsbyTravelClass,
+    updateSeatState,
+    getAvailableCapacity,
+    updateAvailableNoSeats,
+    getTravelClassPrice,
+    getDiscountPercentage,
+    completeBooking
+    
 }

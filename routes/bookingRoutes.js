@@ -10,9 +10,11 @@ router.get('/guestDetails', BookingController.add_guest_details_get);
 router.post('/guestDetails', BookingController.add_guest_details_post);
 
 router.get('/seat-selection', BookingController.select_seat_get);
+router.post('/seat-selection', BookingController.select_seat_post);
 
 router.get('/payment', BookingController.add_payment_get);
+// router.post('/payment', BookingController.add_payment_post);
 
 router.get('/beforePayment', BookingController.before_payment_get);
-
+router.post('/beforePayment', BookingController.before_payment_post);
 module.exports = router;

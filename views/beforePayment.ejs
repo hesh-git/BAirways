@@ -1,27 +1,35 @@
 <div class="container cont">
 
+    <form action="/beforePayment" method="POST">
+
         <div class="header">Booking Invoice</div>
                         
         <hr>
         <div class="row lower py-1 details">
             <div class="col text-left">Subtotal</div>
-            <div class="col text-right">$ 46.98</div>
+            <div class="col text-right"> $ <%=subtotal %> </div>
         </div>
         <div class="row lower py-1 details">
             <div class="col text-left">Discount</div>
-            <div class="col text-right">$ 3.98</div>
+            <div class="col text-right">$ <%=tot_discount %></div>
         </div>
         <div class="row lower py-1 details">
             <div class="col text-left"><b>Total to pay</b></div>
-            <div class="col text-right"><b>$ 43.00</b></div>
+            <div class="col text-right"><b>$ <%=tot_to_pay %></b></div>
         </div>
 
         <!-- <hr> -->
         <div class="py-3"></div>
 
-        <a onclick="window.open('/payment', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');">
-            <button class="btn pay-now-btn">Pay Now</button>
+        <a class="btn pay-now-btn" onclick="window.open('/payment', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');">
+            Pay Now
         </a>
+
+
+
+        <button type="submit" class="btn pay-now-btn mt-3">Continue</button>
+
+    </form>
     
     
 </div>
