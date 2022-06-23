@@ -143,7 +143,32 @@ const add_schedule_post = (req, res) => {
 
     FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
         if(err) throw err;
-        console.log("In the add flight schedule")
+        
+        const flightScheduleID = result.insertId;
+
+        AircraftModel.get_seat_cap_details(flightScheduleID, dbCon, (err, seat_cap_details, fields) => {
+            if(err) throw err;
+
+            seat_capacities = {};
+            seat_cap_details.forEach((value, index, array) => {
+                seat_capacities[value["TravelClassID"]] = {
+                    "NumRows": value["NumRows"],
+                    "NumCols": value["NumCols"]
+                }
+            });
+
+            AircraftModel.add_seats_to_seat(flightScheduleID, 1, 0, seat_capacities[1]["NumRows"], seat_capacities[1]["NumCols"], dbCon, (err, result, fields) => {
+                if(err) throw err;
+            });
+
+            AircraftModel.add_seats_to_seat(flightScheduleID, 1, seat_capacities[1]["NumRows"], seat_capacities[2]["NumRows"], seat_capacities[2]["NumCols"], dbCon, (err, result, fields) => {
+                if(err) throw err;
+            });
+
+            AircraftModel.add_seats_to_seat(flightScheduleID, 1, seat_capacities[1]["NumRows"] + seat_capacities[2]["NumRows"], seat_capacities[3]["NumRows"], seat_capacities[3]["NumCols"], dbCon, (err, result, fields) => {
+                if(err) throw err;
+            });
+        })
 
         res.redirect("/admin/add_schedule");
     })
@@ -268,7 +293,7 @@ const add_aircraft_post = (req, res) => {
 
     AircraftModel.set_database(dbCon);
 
-    console.log(data);
+    console.log(data.plat_numCols);
     const eco_numRows = parseInt(data.eco_numRows);
     const eco_numCols = parseInt(data.eco_numCols);
     const busi_numRows = parseInt(data.busi_numRows);
@@ -293,16 +318,16 @@ const add_aircraft_post = (req, res) => {
         }
 
         // save seat capacity of economy class
-        AircraftModel.save_seat_capacity(modelId, 1, 0, eco_numRows, eco_numCols, dbCon, (err, result, fields) => {
+        AircraftModel.save_seat_capacity(modelId, 1,  eco_numRows, eco_numCols, dbCon, (err, result, fields) => {
             if(err) throw err;
         });
 
         // save seat capactiy of 
-        AircraftModel.save_seat_capacity(modelId, 2, eco_numRows, busi_numRows, busi_numCols, dbCon, (err, result, fields) => {
+        AircraftModel.save_seat_capacity(modelId, 2, busi_numRows, busi_numCols, dbCon, (err, result, fields) => {
             if(err) throw err;
         });
 
-        AircraftModel.save_seat_capacity(modelId, 3, busi_numRows + eco_numRows, plat_numRows, plat_numCols, dbCon, (err, result, fields) => {
+        AircraftModel.save_seat_capacity(modelId, 3, plat_numRows, plat_numCols, dbCon, (err, result, fields) => {
             if(err) throw err;
         });
 
