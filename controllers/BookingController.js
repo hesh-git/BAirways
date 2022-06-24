@@ -1,25 +1,47 @@
 const Booking = require("../models/Booking");
 
 const add_passenger_details_get = (req, res) => {
-    res.render('passengerDetails', {title: 'PassengerDetails', layout: './layouts/layout', no_adults: 1, no_children: 1,  flight_shedule_id:1});
+    const sess = req.session;
+
+    const no_adults = 1;
+    sess.no_adults = no_adults;
+
+    const no_children = 1;
+    sess.no_children = no_children;
+
+    const ScheduleId = 8;
+    sess.ScheduleId = ScheduleId;
+
+    const TravellerID = 16;
+    sess.TravellerID = TravellerID;
+
+    const TravelClassID = 1;
+    sess.TravelClassID = TravelClassID;
+
+    res.render('passengerDetails', {title: 'PassengerDetails', layout: './layouts/layout', no_adults: no_adults, no_children: no_children});
 }
 
 const add_passenger_details_post = (req, res) => {
     const data = req.body;
     const dbCon = req.dbCon;
+    const sess = req.session;
 
-    const no_adults = 1;
-    const no_children = 1;
+    const no_adults = sess.no_adults;
+    const no_children = sess.no_children;
     const NumPassengers = no_adults + no_children;
-    const FlightScheduleID = 1;
-    const TravellerID = 1;
-    const TravelClassID = 1;
+
+    const FlightScheduleID = sess.ScheduleId;
+    const TravellerID = sess.TravellerID;
+    const TravelClassID = sess.TravelClassID;
+    
     const BookingStateID = 1;
 
     Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, NumPassengers, dbCon, function(err, result, fileld){
         if(err)
             throw err
         const BookingID = result.insertId;
+        sess.BookingID = BookingID;
+
 
         for (let i=0; i < no_adults; i++){
             let Gender = data['GenderP'+i];
@@ -53,19 +75,35 @@ const add_passenger_details_post = (req, res) => {
 }
 
 const add_guest_details_get = (req, res) => {
-    res.render('guestDetails', {title: 'GuestDetails', layout: './layouts/layout',no_adults: 1, no_children: 0, flight_shedule_id:1});
+    const sess = req.session;
+
+    const no_adults = 1;
+    sess.no_adults = no_adults;
+
+    const no_children = 1;
+    sess.no_children = no_children;
+
+    const ScheduleId = 8;
+    sess.ScheduleId = ScheduleId;
+
+    const TravelClassID = 1;
+    sess.TravelClassID = TravelClassID;
+
+    res.render('guestDetails', {title: 'GuestDetails', layout: './layouts/layout',no_adults: no_adults, no_children: no_children});
 }
 
 const add_guest_details_post =(req, res) => {
     const data = req.body;
     const dbCon = req.dbCon;
+    const sess = req.session;
 
-    const no_adults = 1;
-    const no_children = 0;
+    const no_adults = sess.no_adults;
+    const no_children = sess.no_children;
     const NumPassengers = no_adults + no_children;
-    const FlightScheduleID = 1;
-    const TravelClassID = 1;
+    const FlightScheduleID = sess.ScheduleId;
+    const TravelClassID = sess.TravelClassID;
     const BookingStateID = 1;
+    
     
 
     Booking.addTraveller(dbCon, function(err, result, fileld){
@@ -73,6 +111,7 @@ const add_guest_details_post =(req, res) => {
             throw err
         
         const TravellerID = result.insertId;
+        sess.TravellerID = TravellerID;
 
         Booking.addGuest(TravellerID, data['FirstName'], data['LastName'], data['Email'], data['ContactNumber'], dbCon, function(err, result, fields){
             if (err)
@@ -83,6 +122,7 @@ const add_guest_details_post =(req, res) => {
             if(err)
                 throw err
             const BookingID = result.insertId;
+            sess.BookingID = BookingID;
     
             for (let i=0; i < no_adults; i++){
                 let Gender = data['GenderP'+i];
@@ -117,8 +157,10 @@ const add_guest_details_post =(req, res) => {
 
 const select_seat_get = (req, res) => {
     const dbCon = req.dbCon;
-    const ScheduleId = 7;
-    const TravelClassId = 1;
+    const sess = req.session;
+
+    const ScheduleId = sess.ScheduleId;
+    const TravelClassId = sess.TravelClassID;
     
     Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
         const seat_cap = {};
@@ -143,15 +185,15 @@ const select_seat_get = (req, res) => {
             
         });
         
-
-
     })
 };
 
 const select_seat_post = (req, res) => {
     const data = req.body;
     const dbCon = req.dbCon;
-    const ScheduleId = 7;
+    const sess = req.session;
+
+    const ScheduleId = sess.ScheduleId;
     const stateID = 2;
     // for (let i=0; i < Object.keys(data).length; i++){
     //     console.log(ob[keys]);
@@ -167,7 +209,7 @@ const select_seat_post = (req, res) => {
         })
     }; 
 
-    req.session.seat_array = seat_array;
+    sess.seat_array = seat_array;
     
     
     // Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
@@ -189,12 +231,13 @@ const select_seat_post = (req, res) => {
 
 const before_payment_get = (req, res) => { 
     const dbCon = req.dbCon;
-    const TravelClassID =1;
-    const ScheduleId = 7;
-    const RegisteredTravellerID = 1;
-
     const sess = req.session;
+
+    const TravelClassID =sess.TravelClassID;
+    const ScheduleId = sess.ScheduleId;
+    const RegisteredTravellerID = 1;
     const seat_array = sess.seat_array;
+
     console.log(seat_array, "this is session variable");
 
     Booking.getTravelClassPrice(TravelClassID, ScheduleId, dbCon, function(err, result, fileld){
@@ -231,10 +274,11 @@ const before_payment_get = (req, res) => {
 
 const before_payment_post = (req, res) => {
     const dbCon = req.dbCon;
-    const BookingID = 37;
-    const ScheduleId = 7;
-    const stateID = 3;
     const sess = req.session;
+
+    const ScheduleId = sess.ScheduleId;
+    const stateID = 3;
+    const BookingID = sess.BookingID;
     const subtotal = sess.subtotal;
     const tot_discount = sess.tot_discount;
     const seat_array = sess.seat_array;
@@ -250,13 +294,16 @@ const before_payment_post = (req, res) => {
 
         Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
             if(err) throw err;
-
+            console.log(result[0]["NoPassengers"], "NoPassengers");
             const available_seats_current = (result[0]["AvailableNoSeats"]);
+            const passengers_current = (result[0]["NoPassengers"]);
+            
+            const passengers_new = passengers_current + seat_array.length;
             console.log(available_seats_current);
             const available_seats_new = available_seats_current - seat_array.length;
             console.log(available_seats_new);
 
-            Booking.updateAvailableNoSeats(available_seats_new, ScheduleId, dbCon, function(err, result, fileld){
+            Booking.updateAvailableNoSeats(available_seats_new, passengers_new, ScheduleId, dbCon, function(err, result, fileld){
                 if(err) throw err;
 
                 for (let i=0; i < seat_array.length; i++){
@@ -264,12 +311,38 @@ const before_payment_post = (req, res) => {
                     Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
                         if(err) throw err;
                     })
-                };     
+                }; 
+                
+                Booking.getPassengers(BookingID, dbCon, function(err, passengers, fileld){
+                    if(err) throw err; 
+                    const passenger_list = [];
+
+                    console.log(result);
+                    passengers.forEach((value, index, array) => {
+                        passenger_list.push(value.ID);
+                    });
+                    console.log(passenger_list);
+
+                    for (let k=0; k < passenger_list.length; k++){
+                        const seatNo = seat_array[k];
+                        const ID = passenger_list[k];
+
+                        Booking.addSeatNumber(seatNo, ID, dbCon, function(err, result, fileld){
+                            if (err) throw err;
+                        });
+                    }
+
+                    res.send('Booking Completed'); 
+                
+                });
+
+                 
 
             });
 
     });
-        res.send('Booking Completed');
+        
+        // req.session.destroy();
     });
 
     

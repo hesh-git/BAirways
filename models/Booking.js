@@ -1,13 +1,14 @@
-const save = (data, dbCon, callback) => {
+// const save = (data, dbCon, callback) => {
     
-    let sql = 'INSERT INTO `passengerdetails`(`BookingID`, `TypeID`, `SeatNo`, `Gender`, `FirstName`, `LastName`, `dateOfBirth`) VALUES(?, ?, ?, ?, ?,?,?)';
-    dbCon.query(sql, [1, 1, 1, data.Gender, data.FirstName, data.LastName, data.DateOfBirth], callback);
-}
+//     let sql = 'INSERT INTO `passengerdetails`(`BookingID`, `TypeID`, `SeatNo`, `Gender`, `FirstName`, `LastName`, `dateOfBirth`) VALUES(?, ?, ?, ?, ?,?,?)';
+//     dbCon.query(sql, [1, 1, 1, data.Gender, data.FirstName, data.LastName, data.DateOfBirth], callback);
+// }
 
 const addBooking = (FlightScheduleID, TravellerID, TravelClassID, BookingStateID, NumPassengers, dbCon, callback) => {
     var sql_booking = 'INSERT INTO `Booking` (`FlightScheduleID`, `TravellerID`,`TravelClassID`, `BookingStateID`, `NumPassengers`, `Bookingdate`, `BookingTime`) VALUES (?,?,?,?,?,?,?)';
     dbCon.query(sql_booking, [FlightScheduleID,TravellerID,TravelClassID,BookingStateID, NumPassengers, null, null], callback);
 }
+
 
 const addPassenger = ( BookingID, TypeID, Gender, FirstName, LastName, DateOfBirth, dbCon, callback) => {
     var sql_passenger = 'INSERT INTO `passengerdetails` (`BookingID`, `TypeID`, `Gender`, `FirstName`, `LastName`, `DateOfBirth`) VALUES (?,?,?,?,?,?)';
@@ -56,14 +57,14 @@ const updateSeatState = (stateID, SeatNo, dbCon, callback) => {
 }
 
 const getAvailableCapacity = (SheduleID, dbCon, callback) => {
-    var sql_availbale_seat = 'SELECT `AvailableNoSeats` FROM `FlightSchedule` WHERE `ID`= ? ';
+    var sql_availbale_seat = 'SELECT `AvailableNoSeats`, `NoPassengers` FROM `FlightSchedule` WHERE `ID`= ? ';
     dbCon.query(sql_availbale_seat, [SheduleID], callback);
 
 }
 
-const updateAvailableNoSeats =  (AvailableSeatNo, SheduleID, dbCon, callback) => {
-    var sql_update_state = 'UPDATE `FlightSchedule` SET `AvailableNoSeats` = ? WHERE `ID` = ? ';
-    dbCon.query(sql_update_state, [AvailableSeatNo, SheduleID], callback);
+const updateAvailableNoSeats =  (AvailableSeatNo, NoPassengers, SheduleID, dbCon, callback) => {
+    var sql_update_state = 'UPDATE `FlightSchedule` SET `AvailableNoSeats` = ?, `NoPassengers` = ? WHERE `ID` = ? ';
+    dbCon.query(sql_update_state, [AvailableSeatNo, NoPassengers, SheduleID], callback);
 }
 
 const getTravelClassPrice = (TravelClassID, FlightScheduleID, dbCon, callback) => {
@@ -76,6 +77,16 @@ const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
     var sql_dis_per = 'SELECT * FROM `Category` `C` JOIN `RegisteredTraveller` `RT` ON `C`.`ID` = `RT`.`CatagoryID` WHERE `RT`.`ID` = ?';
     dbCon.query(sql_dis_per, [RegisteredTravellerID], callback);
 
+}
+
+const getPassengers = (BookingID, dbCon, callback) => {
+    var sql_pas = 'SELECT `ID` FROM `passengerdetails` WHERE `BookingID` = ?';
+    dbCon.query(sql_pas, [BookingID], callback);
+}
+
+const addSeatNumber = (SeatNo, ID, dbCon, callback) => {
+    var sql_add_seat_num = 'UPDATE `passengerdetails` SET `SeatNo`= ? WHERE `ID` = ?';
+    dbCon.query(sql_add_seat_num, [SeatNo, ID], callback);
 }
 
 const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, BookingDate, BookingTime, dbCon, callback) => {
@@ -91,7 +102,6 @@ const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, BookingDate
 
 
 module.exports = {
-    save,
     addPassenger,
     addBooking,
     addTraveller, 
@@ -106,6 +116,9 @@ module.exports = {
     updateAvailableNoSeats,
     getTravelClassPrice,
     getDiscountPercentage,
+    getPassengers,
+    addSeatNumber,
     completeBooking
+    
     
 }
