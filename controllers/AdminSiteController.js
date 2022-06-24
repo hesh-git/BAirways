@@ -161,11 +161,11 @@ const add_schedule_post = (req, res) => {
                 if(err) throw err;
             });
 
-            AircraftModel.add_seats_to_seat(flightScheduleID, 1, seat_capacities[1]["NumRows"], seat_capacities[2]["NumRows"], seat_capacities[2]["NumCols"], dbCon, (err, result, fields) => {
+            AircraftModel.add_seats_to_seat(flightScheduleID, 2, seat_capacities[1]["NumRows"], seat_capacities[2]["NumRows"], seat_capacities[2]["NumCols"], dbCon, (err, result, fields) => {
                 if(err) throw err;
             });
 
-            AircraftModel.add_seats_to_seat(flightScheduleID, 1, seat_capacities[1]["NumRows"] + seat_capacities[2]["NumRows"], seat_capacities[3]["NumRows"], seat_capacities[3]["NumCols"], dbCon, (err, result, fields) => {
+            AircraftModel.add_seats_to_seat(flightScheduleID, 3, seat_capacities[1]["NumRows"] + seat_capacities[2]["NumRows"], seat_capacities[3]["NumRows"], seat_capacities[3]["NumCols"], dbCon, (err, result, fields) => {
                 if(err) throw err;
             });
         })
