@@ -25,6 +25,11 @@ const admin_logout_get = (req,res) => {
     res.redirect('/adminlogin');
 }
 
+const user_logout_get = (req,res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.redirect('/');
+}
+
 const signup_page = (req,res) => {
     res.render('signup', {title: 'User | Signup', layout: './layouts/auth_layout'})
 }
@@ -112,7 +117,7 @@ const login_post = (req,res,next) => {
                                 const token = createToken(travellerID, 'traveller'); 
                                 res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
                                 //res.send("Email and password matched. Logged");
-                                res.redirect('/searchFlight');
+                                res.redirect('/user/profile');
                             })
                         })
                     }else{
@@ -179,5 +184,6 @@ module.exports = {
     signup_post,
     admin_login_get,
     admin_login_post,
-    admin_logout_get
+    admin_logout_get,
+    user_logout_get
 }

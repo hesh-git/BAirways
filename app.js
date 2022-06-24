@@ -103,7 +103,7 @@ app.use(express.json());
 app.use('/', loginRoutes);
 app.use('/register', loginRoutes);
 app.use('/auth', loginRoutes);
-app.use('/user', userRoutes);
+app.use('/user',requireAuth, userRoutes);
 
 
 
