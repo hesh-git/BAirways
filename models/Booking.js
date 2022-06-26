@@ -73,9 +73,9 @@ const getTravelClassPrice = (TravelClassID, FlightScheduleID, dbCon, callback) =
 
 }
 
-const getDiscountPercentage = (RegisteredTravellerID, dbCon, callback) => {
-    var sql_dis_per = 'SELECT * FROM `Category` `C` JOIN `RegisteredTraveller` `RT` ON `C`.`ID` = `RT`.`CatagoryID` WHERE `RT`.`ID` = ?';
-    dbCon.query(sql_dis_per, [RegisteredTravellerID], callback);
+const getDiscountPercentage = (TravellerID, dbCon, callback) => {
+    var sql_dis_per = 'SELECT * FROM `Category` `C` JOIN `RegisteredTraveller` `RT` ON `C`.`ID` = `RT`.`CatagoryID` WHERE `RT`.`TravellerID` = ?';
+    dbCon.query(sql_dis_per, [TravellerID], callback);
 
 }
 
@@ -87,6 +87,17 @@ const getPassengers = (BookingID, dbCon, callback) => {
 const addSeatNumber = (SeatNo, ID, dbCon, callback) => {
     var sql_add_seat_num = 'UPDATE `passengerdetails` SET `SeatNo`= ? WHERE `ID` = ?';
     dbCon.query(sql_add_seat_num, [SeatNo, ID], callback);
+}
+
+const getNoBookings = (TravellerID, dbCon, callback) => {
+    var sql_num_bookings = 'SELECT `NumBookings` FROM `registeredtraveller` WHERE `TravellerID`= ? ';
+    dbCon.query(sql_num_bookings, [TravellerID], callback);
+
+}
+
+const updateNoBooking =  (NumBookings, TravellerID, dbCon, callback) => {
+    var sql_upadate_num_bookings = 'UPDATE `registeredtraveller` SET `NumBookings` = ? WHERE `TravellerID` = ? ';
+    dbCon.query(sql_upadate_num_bookings, [NumBookings, TravellerID], callback);
 }
 
 const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, BookingDate, BookingTime, dbCon, callback) => {
@@ -118,6 +129,8 @@ module.exports = {
     getDiscountPercentage,
     getPassengers,
     addSeatNumber,
+    getNoBookings,
+    updateNoBooking,
     completeBooking
     
     

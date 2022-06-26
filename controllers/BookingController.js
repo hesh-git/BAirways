@@ -3,16 +3,19 @@ const Booking = require("../models/Booking");
 const add_passenger_details_get = (req, res) => {
     const sess = req.session;
 
+    const reg = true;
+    sess.reg = reg;
+
     const no_adults = 1;
     sess.no_adults = no_adults;
 
     const no_children = 1;
     sess.no_children = no_children;
 
-    const ScheduleId = 8;
+    const ScheduleId = 9;
     sess.ScheduleId = ScheduleId;
 
-    const TravellerID = 16;
+    const TravellerID = 4;
     sess.TravellerID = TravellerID;
 
     const TravelClassID = 1;
@@ -76,6 +79,9 @@ const add_passenger_details_post = (req, res) => {
 
 const add_guest_details_get = (req, res) => {
     const sess = req.session;
+
+    const reg = false;
+    sess.reg = reg;
 
     const no_adults = 1;
     sess.no_adults = no_adults;
@@ -234,9 +240,11 @@ const before_payment_get = (req, res) => {
     const sess = req.session;
 
     const TravelClassID =sess.TravelClassID;
+    const TravellerID = sess.TravellerID;
     const ScheduleId = sess.ScheduleId;
-    const RegisteredTravellerID = 1;
+    // const RegisteredTravellerID = 2;
     const seat_array = sess.seat_array;
+    const reg = sess.reg;
 
     console.log(seat_array, "this is session variable");
 
@@ -245,29 +253,70 @@ const before_payment_get = (req, res) => {
         const travel_class_price = (result[0]["Price"]);
         console.log(travel_class_price);
 
-        Booking.getDiscountPercentage(RegisteredTravellerID, dbCon, function(err, result, fileld){
-            if(err) throw err;
+        if (reg){
+            Booking.getDiscountPercentage(TravellerID, dbCon, function(err, result, fileld){
+                if(err) throw err;
+    
+                const discount_percentage = (result[0]["Discount"]);
+                console.log(discount_percentage);
+    
+                const discounted_seat = travel_class_price - (travel_class_price*discount_percentage)/100;
+                console.log(discounted_seat);
+    
+                const subtotal = seat_array.length *  travel_class_price;
+                console.log(subtotal, "subtotal");
+                sess.subtotal = subtotal;
+    
+                const tot_discount = subtotal * discount_percentage /100;
+                console.log(tot_discount, "total discount");
+                sess.tot_discount = tot_discount;
+    
+                const tot_to_pay = subtotal - tot_discount;
+                console.log(tot_to_pay, "total to pay");
+    
+                res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout', subtotal: subtotal, tot_discount: tot_discount, tot_to_pay: tot_to_pay});
+    
+            });
 
-            const discount_percentage = (result[0]["Discount"]);
-            console.log(discount_percentage);
-
-            const discounted_seat = travel_class_price - (travel_class_price*discount_percentage)/100;
-            console.log(discounted_seat);
-
+        } else {
             const subtotal = seat_array.length *  travel_class_price;
             console.log(subtotal, "subtotal");
             sess.subtotal = subtotal;
 
-            const tot_discount = subtotal * discount_percentage /100;
-            console.log(tot_discount, "total discount");
+            const tot_discount = 0;
             sess.tot_discount = tot_discount;
 
-            const tot_to_pay = subtotal - tot_discount;
-            console.log(tot_to_pay, "total to pay");
+            const tot_to_pay = subtotal;
 
             res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout', subtotal: subtotal, tot_discount: tot_discount, tot_to_pay: tot_to_pay});
 
-        });
+
+
+        }
+
+        // Booking.getDiscountPercentage(RegisteredTravellerID, dbCon, function(err, result, fileld){
+        //     if(err) throw err;
+
+        //     const discount_percentage = (result[0]["Discount"]);
+        //     console.log(discount_percentage);
+
+        //     const discounted_seat = travel_class_price - (travel_class_price*discount_percentage)/100;
+        //     console.log(discounted_seat);
+
+        //     const subtotal = seat_array.length *  travel_class_price;
+        //     console.log(subtotal, "subtotal");
+        //     sess.subtotal = subtotal;
+
+        //     const tot_discount = subtotal * discount_percentage /100;
+        //     console.log(tot_discount, "total discount");
+        //     sess.tot_discount = tot_discount;
+
+        //     const tot_to_pay = subtotal - tot_discount;
+        //     console.log(tot_to_pay, "total to pay");
+
+        //     res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout', subtotal: subtotal, tot_discount: tot_discount, tot_to_pay: tot_to_pay});
+
+        // });
     });    
 }
 
@@ -282,6 +331,8 @@ const before_payment_post = (req, res) => {
     const subtotal = sess.subtotal;
     const tot_discount = sess.tot_discount;
     const seat_array = sess.seat_array;
+    const reg = sess.reg;
+    const TravellerID = sess.TravellerID;
 
     const bookingDate = new Date();
     const bookingTime = bookingDate.getHours() + ":" + bookingDate.getMinutes() + ":" + bookingDate.getSeconds();
@@ -332,14 +383,24 @@ const before_payment_post = (req, res) => {
                         });
                     }
 
-                    res.send('Booking Completed'); 
-                
+                    if (reg) {
+                        Booking.getNoBookings(TravellerID, dbCon, function(err, result, fileld){
+                            if(err) throw err;
+
+                            const no_bookings_current = result[0]["NumBookings"];
+                            const no_bookings_new = no_bookings_current + 1;
+
+                            Booking.updateNoBooking(no_bookings_new, TravellerID, dbCon, function(err, result, fileld){
+                                if(err) throw err;
+                                res.send('Booking Completed - Registered traveller'); 
+
+                            });
+                        });
+                    }else{
+                        res.send('Booking Completed - Guset'); 
+                    }    
                 });
-
-                 
-
             });
-
     });
         
         // req.session.destroy();
