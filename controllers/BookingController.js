@@ -86,13 +86,13 @@ const add_guest_details_get = (req, res) => {
     const no_adults = 1;
     sess.no_adults = no_adults;
 
-    const no_children = 1;
+    const no_children = 0;
     sess.no_children = no_children;
 
-    const ScheduleId = 8;
+    const ScheduleId = 9;
     sess.ScheduleId = ScheduleId;
 
-    const TravelClassID = 1;
+    const TravelClassID = 2;
     sess.TravelClassID = TravelClassID;
 
     res.render('guestDetails', {title: 'GuestDetails', layout: './layouts/layout',no_adults: no_adults, no_children: no_children});
