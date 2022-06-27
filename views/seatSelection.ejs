@@ -26,7 +26,7 @@
             
             
             <!-- <h1> <%= seat_cap[Object.keys(seat_cap)[0]]; %> </h1> -->
-            <% for(let j=0; j < seat_cap[Object.keys(seat_cap)[0]]; j++) { %>
+            <% for(let j=intial_index; j < (intial_index + seat_cap[Object.keys(seat_cap)[0]]); j++) { %>
                 <div>
                 <% for(let i=0; i < seat_cap[Object.keys(seat_cap)[1]]; i++) { 
                     let seatNo = (j + 10).toString(36) + (i+1); %>

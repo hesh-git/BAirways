@@ -12,13 +12,13 @@ const add_passenger_details_get = (req, res) => {
     const no_children = 1;
     sess.no_children = no_children;
 
-    const ScheduleId = 9;
+    const ScheduleId = 13;
     sess.ScheduleId = ScheduleId;
 
     const TravellerID = 4;
     sess.TravellerID = TravellerID;
 
-    const TravelClassID = 1;
+    const TravelClassID = 3;
     sess.TravelClassID = TravelClassID;
 
     res.render('passengerDetails', {title: 'PassengerDetails', layout: './layouts/layout', no_adults: no_adults, no_children: no_children});
@@ -166,32 +166,54 @@ const select_seat_get = (req, res) => {
     const sess = req.session;
 
     const ScheduleId = sess.ScheduleId;
+    // const ScheduleId = 13;
     const TravelClassId = sess.TravelClassID;
+    // const TravelClassId = 3;
+
+    Booking.getCapacity(ScheduleId, dbCon, (err, result, fields) => {
+        if(err) throw err;
+
+        const rows = [];
+        rows.push(result[0]["NumRows"]);
+        rows.push(result[1]["NumRows"]); 
+        rows.push(result[2]["NumRows"]);
+
+        Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
+            if(err) throw err;
+            const seat_cap = {};
     
-    Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
-        const seat_cap = {};
+            seat_cap[0] = seatCapacity[0]["NumRows"];
+            seat_cap[1] = seatCapacity[0]["NumCols"];
+    
+            Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
+                if(err) throw err;
+    
+                const booked_seats = [];
+    
+                seatStates.forEach((value, index, array) => {
+                    if(value["SeatStateID"] == 3) { // only booked seats
+                        booked_seats.push(value.SeatNo);    
+                    }
+                    
+                })
 
-        seat_cap[0] = seatCapacity[0]["NumRows"];
-        seat_cap[1] = seatCapacity[0]["NumCols"];
-
-        Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
-
-            const booked_seats = [];
-
-            seatStates.forEach((value, index, array) => {
-                if(value["SeatStateID"] == 3) { // only booked seats
-                    booked_seats.push(value.SeatNo);    
+                var intial_index = 0;
+                if (TravelClassId == 1){
+                    intial_index = 0;
+                } else if (TravelClassId == 2){
+                    intial_index = rows[0];
+                } else if (TravelClassId == 3){
+                    intial_index = rows[0] + rows [1];
                 }
+    
+                res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', seat_cap: seat_cap, booked_seats: booked_seats, intial_index: intial_index});
                 
-            })
-
-
-            res.render('seatSelection', {title: 'Seat Selection', layout: './layouts/seat_select_layout', seat_cap: seat_cap, booked_seats: booked_seats});
-            
+                
+            });
             
         });
-        
-    })
+
+    });
 };
 
 const select_seat_post = (req, res) => {
