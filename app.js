@@ -38,7 +38,7 @@ app.use(session({
     secret : 'ABCDefg',
     resave : false,
     saveUninitialized : true,
-    cookie: { maxAge: 3*24*60*60 }
+    cookie: { maxAge: 3*24*60*60*1000 }
   }));
 
 app.use((req, res, next)=>{

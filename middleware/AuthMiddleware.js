@@ -25,10 +25,8 @@ const requireAuth = (req,res,next) =>{
     if(token){
         jwt.verify(token, 'B airways secret', (err, decodedToken) => {
             if(err){
-                console.log(err.message);
                 res.redirect('/');
             }else{
-                console.log(decodedToken);
                 next();
             }
         })
@@ -46,11 +44,9 @@ const checkUser = (req,res,next) =>{
     if(token){
         jwt.verify(token, 'B airways secret', (err, decodedToken) => {
             if(err){
-                console.log(err.message);
                 req.user = null;
                 next();
             }else{
-                console.log(decodedToken);
                 let userId = decodedToken.id;
                 let userType = decodedToken.userType; 
                 req.user = {id: userId, userType: userType};

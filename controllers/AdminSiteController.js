@@ -11,7 +11,6 @@ const get_flightDetails = (FlightNo, dbCon) => {
     let details = [];
     FlightModel.get_flightDetails(FlightNo, dbCon, (err, result, fields) => {
         if(err) throw err;
-        // console.log(result);
         // return result;
         details.push(result[0])
         
@@ -293,7 +292,6 @@ const add_aircraft_post = (req, res) => {
 
     AircraftModel.set_database(dbCon);
 
-    console.log(data.plat_numCols);
     const eco_numRows = parseInt(data.eco_numRows);
     const eco_numCols = parseInt(data.eco_numCols);
     const busi_numRows = parseInt(data.busi_numRows);
@@ -310,7 +308,6 @@ const add_aircraft_post = (req, res) => {
         const modelId = result.insertId;
         // save aircraft ids to database
         for(let i = 0; i < NoOfAircrafts; i++){
-            console.log(data["id"+i])
             Aircraft.save({'ID': data["id"+i], 'ModelID': modelId}, dbCon, (err, result, fields) => {
                 if(err) throw err
 

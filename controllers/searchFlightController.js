@@ -4,8 +4,11 @@ const { check, validationResult } = require("express-validator");
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
-    //console.log(req.user);
     const con = req.dbCon;
+    const is_guest = req.query.guest;
+    if(is_guest) {
+        res.cookie('jwt', '', {maxAge: 1});
+    }
 
     //Get all airport codes with their names
     FlightSearchModel.getAirports(con, (err, result, fields) => {
@@ -13,7 +16,6 @@ const searchFlight_get = (req, res) => {
 
         const airportCodes = [];
         const airportNames = [];
-        console.log(result);
         result.forEach((value, index, array) => {
             airportCodes.push(value["AirportCode"]);
             airportNames.push(value["Name"]);
@@ -47,7 +49,6 @@ const searchFlight_post = (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         const alert = errors.array()[0]
-        console.log(alert)
         res.render('searchFlight', {
              title: 'searchFlight', layout: './layouts/flightsearch_layout',alert
         })  
@@ -74,7 +75,6 @@ const searchFlight_post = (req, res) => {
         const availableFlightDetails = [];
 
         result.forEach((value,index,array) => {
-            console.log(value)
             const availableFlightDetail = {
                 'FlightScheduleID': value['FlightScheduleID'],
                 'FFromCode' : value['Origin'],

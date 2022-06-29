@@ -5,9 +5,9 @@ body{
     margin-top: 20px;
 }
 
-h3{
+/* h3{
     color: aliceblue;
-}
+} */
 
 .main{
     padding: 15px;
@@ -107,3 +107,21 @@ input[type=button], input[type=submit]{
     border-top: 1px solid #af912f;
 }
 
+.sub-title {
+    color: #af912f;
+    font-size: 1.2em;
+}
+
+/* .nav-link {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    font-size: 1.2em;
+} */
+
+.main-title {
+    color: #0b2145;
+}
+
+.title {
+    color: #3C94F8;
+}
