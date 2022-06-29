@@ -4,6 +4,11 @@
 //     dbCon.query(sql, [1, 1, 1, data.Gender, data.FirstName, data.LastName, data.DateOfBirth], callback);
 // }
 
+const get_travellerID = (ID, dbCon, callback) => {
+    const sql_traveller_id = "SELECT `T`.`ID` `ID` FROM `RegisteredTraveller` `RT` JOIN `Traveller` `T` ON `RT`.`TravellerID` = `T`.`ID` WHERE `RT`.`ID` = ?";
+    dbCon.query(sql_traveller_id, [ID], callback);
+}
+
 const addBooking = (FlightScheduleID, TravellerID, TravelClassID, BookingStateID, NumPassengers, dbCon, callback) => {
     var sql_booking = 'INSERT INTO `Booking` (`FlightScheduleID`, `TravellerID`,`TravelClassID`, `BookingStateID`, `NumPassengers`, `Bookingdate`, `BookingTime`) VALUES (?,?,?,?,?,?,?)';
     dbCon.query(sql_booking, [FlightScheduleID,TravellerID,TravelClassID,BookingStateID, NumPassengers, null, null], callback);
@@ -62,9 +67,21 @@ const getAvailableCapacity = (SheduleID, dbCon, callback) => {
 
 }
 
-const updateAvailableNoSeats =  (AvailableSeatNo, NoPassengers, SheduleID, dbCon, callback) => {
+const updateAvailableNoSeats =  (passenger_count, AvailableSeatNo, NoPassengers, SheduleID, TravelClassID, dbCon, callback) => {
     var sql_update_state = 'UPDATE `FlightSchedule` SET `AvailableNoSeats` = ?, `NoPassengers` = ? WHERE `ID` = ? ';
-    dbCon.query(sql_update_state, [AvailableSeatNo, NoPassengers, SheduleID], callback);
+    dbCon.query(sql_update_state, [AvailableSeatNo, NoPassengers, SheduleID], (err, result, fields) => {
+        if(err) throw err;
+
+        const sql_available_seat = "SELECT `AvailableNoSeats` FROM `AvailableSeats` WHERE `FlightScheduleID` = ? AND `TravelClassID` = ?";
+        dbCon.query(sql_available_seat, [SheduleID, TravelClassID], (err, result, fields) => {
+            if(err) throw err;
+
+            let no_seats = result[0]["AvailableNoSeats"];
+            no_seats -= passenger_count;
+            const sql_update_no_seats = "UPDATE `AvailableSeats` SET `AvailableNoSeats` = ? WHERE `FlightScheduleID` = ? AND `TravelClassID` = ?";
+            dbCon.query(sql_update_no_seats, [no_seats, SheduleID, TravelClassID], callback);
+        })
+    });
 }
 
 const getTravelClassPrice = (TravelClassID, FlightScheduleID, dbCon, callback) => {
@@ -131,7 +148,7 @@ module.exports = {
     addSeatNumber,
     getNoBookings,
     updateNoBooking,
-    completeBooking
-    
+    completeBooking,
+    get_travellerID
     
 }

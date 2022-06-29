@@ -145,7 +145,6 @@ const login_post = (req,res,next) => {
         if(!errors.isEmpty()) {
             // return res.status(422).jsonp(errors.array())
             const alert = errors.array()[0]
-            console.log(alert)
             res.render('signup', {
                  title: 'Signup Page', layout: './layouts/auth_layout',alert
             })
@@ -167,7 +166,7 @@ const login_post = (req,res,next) => {
                             throw err
                         const token = createToken(result.insertId, 'traveller'); 
                         res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
-                        res.send('User entered');
+                        res.redirect('/user/profile');
                         //res.status(201).json({user: result.insertId});
                         //console.log(result)   
                         
