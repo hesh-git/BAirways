@@ -432,6 +432,10 @@ const add_payment_get =(req, res ) => {
 //     res.render(window.close());
 // }
 
+const success_get = (req, res) => {
+    res.render('success', {title: 'Success', layout: './layouts/payment_layout'})
+}
+
 
 
 
@@ -444,5 +448,6 @@ module.exports ={
     before_payment_get,
     before_payment_post,
     select_seat_post,
+    success_get
     add_pass_details_get
 }

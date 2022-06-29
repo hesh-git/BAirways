@@ -19,4 +19,6 @@ router.get('/payment', BookingController.add_payment_get);
 
 router.get('/beforePayment', BookingController.before_payment_get);
 router.post('/beforePayment', BookingController.before_payment_post);
+
+router.get('/success', BookingController.success_get);
 module.exports = router;
