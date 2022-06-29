@@ -9,7 +9,13 @@ const get_all_AircraftID = (dbCon, callback) => {
     dbCon.query(sql, callback);
 }
 
+const get_AircraftIDs_with_price = (dbCon, callback) => {
+    const sql = "SELECT DISTINCT `AircraftID` `ID` FROM `TravelClassPrice`";
+    dbCon.query(sql, callback);
+}
+
 module.exports = {
     save,
-    get_all_AircraftID
+    get_all_AircraftID,
+    get_AircraftIDs_with_price
 }

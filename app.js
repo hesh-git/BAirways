@@ -37,7 +37,8 @@ const app = express();
 app.use(session({
     secret : 'ABCDefg',
     resave : false,
-    saveUninitialized : true
+    saveUninitialized : true,
+    cookie: { maxAge: 3*24*60*60 }
   }));
 
 app.use((req, res, next)=>{

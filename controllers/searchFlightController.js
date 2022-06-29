@@ -53,17 +53,30 @@ const searchFlight_post = (req, res) => {
         })  
     }
 
-    
+    // add flight search details to session
+    const  sess = req.session;
+    if(req.user == null) {
+        sess.reg = false;
+    } else {
+        sess.reg = true;
+    }
+
+    sess.origin = data.Ffrom;
+    sess.destination = data.Fto;
+    sess.departureDate = data.departing;
+    sess.no_adults = parseInt(data.adults);
+    sess.no_children = parseInt(data.children);
+    sess.TravelClassID = data.travelClass;
+
     FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
 
         if (error) throw error;
         const availableFlightDetails = [];
 
-        
-
         result.forEach((value,index,array) => {
             console.log(value)
             const availableFlightDetail = {
+                'FlightScheduleID': value['FlightScheduleID'],
                 'FFromCode' : value['Origin'],
                 'FToCode' : value['Destination'],
                 'DepartureTime' : value['DepartureTime'],
@@ -88,7 +101,6 @@ const searchFlight_post = (req, res) => {
 
             };
            
-            console.log(result);
             result.forEach((value, index, array) => {
                 airportCodesandNames[value['AirportCode']] = value['Name'];
             

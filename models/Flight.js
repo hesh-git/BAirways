@@ -17,6 +17,11 @@ const get_all_flightNo = (dbCon, callback) => {
     dbCon.query(sql, callback);
 }
 
+const get_flightNo_with_price = (dbCon, callback) => {
+    const sql = "SELECT DISTINCT `FlightNo` FROM `TravelClassPrice`";
+    dbCon.query(sql, callback);
+}
+
 const get_flightDetails = async (FlightNo, dbCon) => {
     const query = util.promisify(dbCon.query).bind(dbCon);
     let sql = "SELECT * FROM `Flight` WHERE `FlightNo` = ?";
@@ -42,5 +47,6 @@ const get_flightDetails = async (FlightNo, dbCon) => {
 module.exports = {
     save,
     get_all_flightNo,
-    get_flightDetails
+    get_flightDetails,
+    get_flightNo_with_price
 }
