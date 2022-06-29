@@ -19,6 +19,7 @@
                 <div><%= schedules1[i].AircraftID %> </div>
             </div>
             <div class="col-2">
+                <div><%= moment(schedules1[i].DepartureDate).format('Do MMMM, YYYY') %> </div>
                 <div><%= schedules1[i].DepartureTime %> </div>
                 <div><%= schedules1[i].Origin  %> </div>
             </div>
@@ -28,10 +29,11 @@
                 <div></div>
             </div>
             <div class="col-2">
+                <div><%= moment(schedules1[i].ArrivalDate).format('Do MMMM, YYYY') %> </div>
                 <div><%= schedules1[i].ArrivalTime %> </div>
                 <div><%= schedules1[i].Destination %> </div>
             </div>
-            <div class="col-2"><%= schedules1[i].DateTime %> </div>
+            <div class="col-2"><%= moment(schedules1[i].BookingDate).format('Do MMMM, YYYY') %> </div>
             <div class="col-2"><%= schedules1[i].State %> </div>
         </div>
         <hr class="line-top">

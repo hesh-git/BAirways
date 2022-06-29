@@ -42,14 +42,13 @@ const admin_login_post = (req,res,next) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
         const alert = errors.array()[0]
-        console.log(alert)
+        
         res.render('login', {
              title: 'Login Page', layout: './layouts/auth_layout',alert
         })
     }
     else{
         adminModel.getUserByEmail(email,con, function(err,result, fields){
-            console.log(result);
             if(err) throw err;
             if(!result.length){
               res.send('Not logged in');
@@ -58,7 +57,6 @@ const admin_login_post = (req,res,next) => {
             
             authModel.getPwrdByID(id, con, function(err,result, fields){
                 if(err) throw err;
-                //console.log(result);
                 const hashedPassword = result[0].password;
                 const comparison = passwordHash.verify(password,hashedPassword);
                 if(result.length && comparison){
@@ -71,8 +69,11 @@ const admin_login_post = (req,res,next) => {
                         res.redirect('/admin');        
                     })
                 }else{
-                req.session.flag = 4;
-                res.send('Email and password do not match. Not logged');
+                // req.session.flag = 4;
+                    const alert = {"msg": "Email and password do not match. Not logged"};
+                    res.render('login', {
+                        title: 'Login Page', layout: './layouts/auth_layout',alert
+                    });
                 }
             });
         })
@@ -87,45 +88,47 @@ const login_post = (req,res,next) => {
     const errors = validationResult(req)
         if(!errors.isEmpty()) {
             const alert = errors.array()[0]
-            console.log(alert)
             res.render('login', {
                  title: 'Login Page', layout: './layouts/auth_layout',alert
             })
         }
         else{
             userModel.getUserByEmail(email,con, function(err,result, fields){
-                console.log(result);
                 if(err) throw err;
-                if(!result.length){
-                  res.send('Not logged in');
-                }
-                var id = result[0].ID;
-                
-                authModel.getPwrdByID(id, con, function(err,result, fields){
-                    if(err) throw err;
-                    //console.log(result);
-                    const hashedPassword = result[0].password;
-                    const comparison = passwordHash.verify(password,hashedPassword);
-                    if(result.length && comparison){
-                        authModel.updateLastLog(id,con, function(err,result,fields){
-                            if (err) throw err;   
-                            req.session.email = email;
-                            authModel.getTravellerID(id,con,function(err,result,fields){
-                                if (err) throw err; 
-                                //console.log(result[0].TravellerID);
-                                const travellerID = result[0].TravellerID;
-                                const token = createToken(travellerID, 'traveller'); 
-                                res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
-                                //res.send("Email and password matched. Logged");
-                                res.redirect('/user/profile');
+                if(result.length == 0){
+                  const alert = {"msg": "You don't have an account.. please sign up"};
+                  res.render('login', {
+                    title: 'Login Page', layout: './layouts/auth_layout',alert
+                  });
+                } else {
+                    var id = result[0].ID;
+                    
+                    authModel.getPwrdByID(id, con, function(err,result, fields){
+                        if(err) throw err;
+                        const hashedPassword = result[0].password;
+                        const comparison = passwordHash.verify(password,hashedPassword);
+                        if(result.length && comparison){
+                            authModel.updateLastLog(id,con, function(err,result,fields){
+                                if (err) throw err;   
+                                req.session.email = email;
+                                authModel.getTravellerID(id,con,function(err,result,fields){
+                                    if (err) throw err; 
+                                    const RegisteredID = result[0].RegisteredID;
+                                    const token = createToken(RegisteredID, 'traveller'); 
+                                    res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
+                                    //res.send("Email and password matched. Logged");
+                                    res.redirect('/user/profile');
+                                })
                             })
-                        })
-                    }else{
-                    req.session.flag = 4;
-                    res.send('Email and password do not match. Not logged');
-                    }
-                });
-              });
+                        }   else{
+                            // req.session.flag = 4;
+                            const alert = {"msg": "Email and password do not match. Not logged"};
+                            res.render('login', {
+                                title: 'Login Page', layout: './layouts/auth_layout',alert
+                            });
+                        }
+                    });
+                }});
         }
   }
 
@@ -167,8 +170,7 @@ const login_post = (req,res,next) => {
                         const token = createToken(result.insertId, 'traveller'); 
                         res.cookie('jwt', token, {httpOnly: true, maxValidity: maxValidity*1000});
                         res.redirect('/user/profile');
-                        //res.status(201).json({user: result.insertId});
-                        //console.log(result)   
+                        //res.status(201).json({user: result.insertId});  
                         
                     })
                 }

@@ -1,7 +1,7 @@
-const view_dashboard_get = (TravellerID, dbCon, callback) => {
-    let user_sql = "SELECT * FROM `flightschedule` join `booking` on `booking`.`FlightScheduleID`= `flightschedule`.`ID` WHERE `booking`.`TravellerID` = ?";
+const view_dashboard_get = (RegisteredID, dbCon, callback) => {
+    let user_sql = "SELECT * FROM `flightschedule` `FS` join `booking` `BK` join `RegisteredTraveller` `RT` on `BK`.`FlightScheduleID`= `FS`.`ID` AND `BK`.`TravellerID` = `RT`.`TravellerID` WHERE `RT`.`ID` = ?";
 
-    dbCon.query(user_sql, TravellerID, callback);
+    dbCon.query(user_sql, RegisteredID, callback);
 }
 
 const get_states = (dbCon, callback) => {

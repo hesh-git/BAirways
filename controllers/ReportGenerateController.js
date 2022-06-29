@@ -34,7 +34,6 @@ const passenger_details_post = (req, res) => {
         });
         ReportModel.get_next_immediate_flight(FlightNo, dbCon, (err, flightID, fields) => {
             if(flightID === undefined || flightID.length == 0) {
-                console.log("in if")
                 res.render('./admin/passenger_details', {title: 'Passenger Details', flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
             } else {
                 const scheduleID = flightID[0].ID;

@@ -21,6 +21,7 @@
                 <div><%= schedules[i].AircraftID %> </div>
             </div>
             <div class="col-2">
+                <div><%= moment(schedules[i].DepartureDate).format('Do MMMM, YYYY') %> </div>
                 <div><%= schedules[i].DepartureTime %> </div>
                 <div><%= schedules[i].Origin  %> </div>
             </div>
@@ -30,6 +31,7 @@
                 <div></div>
             </div>
             <div class="col-2">
+                <div><%= moment(schedules[i].ArrivalDate).format('Do MMMM, YYYY') %> </div>
                 <div><%= schedules[i].ArrivalTime %> </div>
                 <div><%= schedules[i].Destination %> </div>
             </div>
@@ -37,7 +39,7 @@
             <div class="col-2"><%= schedules[i].State %> </div>
         </div>
         <div class="text-center">
-            <a href="/admin/update_schedule?schedule_id=<%= schedules[i].ID %>" class="link link-btn btn btn-outline-info">UPDATE</a>
+            <a href="/admin/update_schedule?schedule_id=<%= schedules[i].ID %>" class="link link-btn btn btn-info">UPDATE</a>
         </div>
         <hr class="line-top">
     <% } %> 

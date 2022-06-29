@@ -10,7 +10,6 @@ const view_profile_get = (req, res) => {
     const TravellerID = req.user.id;
     ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
         if (err) throw err;
-        console.log(result);
             
             const userDetail = {
                 'fName': result[0]['FirstName'],
@@ -27,9 +26,9 @@ const view_profile_get = (req, res) => {
 const view_dashboard_get = (req, res) =>{ 
     const dbCon = req.dbCon;
 
-    const TravellerID = req.user.id;
+    const RegisteredID = req.user.id;
 
-    UserDashboardModel.view_dashboard_get(TravellerID, dbCon, (err, schedules1, fields) => {
+    UserDashboardModel.view_dashboard_get(RegisteredID, dbCon, (err, schedules1, fields) => {
         if(err) throw err;
 
         FlightSchedule.get_all_states(dbCon, (err, states, fields) => {
@@ -94,7 +93,6 @@ const view_edit_profile_get = (req,res) => {
     const TravellerID = req.user.id;
     ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
         if (err) throw err;
-        console.log(result);
             
             const userDetail = {
                 'fName': result[0]['FirstName'],

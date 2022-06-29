@@ -9,7 +9,7 @@ const updateLastLog = (id,dbCon,callback) => {
 }
 
 const getTravellerID = (id,dbCon,callback) => {
-    var sql = 'select TravellerID from authentication join registeredtraveller on authentication.UserID = registeredtraveller.UserID where authentication.UserID = ? limit 1';
+    var sql = 'select `RT`.`ID` `RegisteredID` from authentication join `registeredtraveller` `RT` on authentication.UserID = `RT`.UserID where authentication.UserID = ? limit 1';
     dbCon.query(sql,id,callback);
 }
 
