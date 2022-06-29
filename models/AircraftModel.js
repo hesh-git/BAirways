@@ -37,6 +37,10 @@ const add_seats_to_seat = (FlightScheduleID, TravelClassID, RowStart, NumRows, N
 
         }
     }
+
+    const availableNoSeats = NumRows * NumCols;
+    const available_seat_sql = "INSERT INTO `AvailableSeats`(`FlightScheduleID`, `TravelClassID`, `AvailableNoSeats`) VALUES (?,?,?)";
+    dbCon.query(available_seat_sql, [FlightScheduleID, TravelClassID, availableNoSeats], callback);
 }
 module.exports = {
     save,

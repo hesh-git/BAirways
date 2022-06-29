@@ -14,11 +14,11 @@ const get_flightDetails = (FlightNo, dbCon) => {
         // console.log(result);
         // return result;
         details.push(result[0])
-        console.log(details);
+        
         // details["Origin"] = result[0]["Origin"];
         // details["Destination"] = result[0]["Destination"];
     });
-    console.log(details);
+
     return details;
 }
 
@@ -101,7 +101,7 @@ const add_schedule_get = (req, res) => {
     
 
     // get all flights : need to limit
-    FlightModel.get_all_flightNo(dbCon, (err, result, fields) => {
+    FlightModel.get_flightNo_with_price(dbCon, (err, result, fields) => {
         if(err) throw err;
 
         const flightNoList = []
@@ -110,7 +110,7 @@ const add_schedule_get = (req, res) => {
             flightNoList.push(value["FlightNo"]);
         });
 
-        Aircraft.get_all_AircraftID(dbCon, (err, result, fields) => {
+        Aircraft.get_AircraftIDs_with_price(dbCon, (err, result, fields) => {
             if(err) throw err;
 
             const aircraftIDList = []
@@ -415,12 +415,24 @@ add_price_post = (req, res) => {
     const TravelClassID = data.TravelClassID;
     const FlightNo = data.FlightNo;
     const AircraftID = data.AircraftID;
-    const Price = data.Price;
+    const Eco_Price = data.eco_price;
+    const Busi_Price = data.busi_price;
+    const Plat_Price = data.plat_price;
 
-    TravelClassPriceModel.add_price(TravelClassID, FlightNo, AircraftID, Price, dbCon, (err, result, fields) => {
+    TravelClassPriceModel.add_price(1, FlightNo, AircraftID, Eco_Price, dbCon, (err, result, fields) => {
         if(err) throw err;
 
-        res.redirect('/admin/add_price');
+        TravelClassPriceModel.add_price(2, FlightNo, AircraftID, Busi_Price, dbCon, (err, result, fields) => {
+            if(err) throw err;
+            
+            TravelClassPriceModel.add_price(3, FlightNo, AircraftID, Plat_Price, dbCon, (err, result, fields) => {
+                if(err) throw err;
+                
+                res.redirect('/admin/add_price');
+            })
+
+        })
+        
     })
 }
 
