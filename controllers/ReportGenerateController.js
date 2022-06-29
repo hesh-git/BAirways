@@ -53,7 +53,8 @@ const passenger_details_post = (req, res) => {
                     });
 
                     
-                
+                    console.log("adults: " ,adults);
+                    console.log("children:", children);
                     res.render('./admin/passenger_details', {title: 'Passenger Details', adults: adults, children: children, flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
                 });
             }
