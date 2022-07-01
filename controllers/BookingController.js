@@ -302,6 +302,9 @@ const before_payment_get = (req, res) => {
     const ScheduleId = sess.ScheduleId;
     // const RegisteredTravellerID = 2;
     const seat_array = sess.seat_array;
+    if(req.user != null){
+        sess.reg = true;
+    }
     const reg = sess.reg;
 
 
@@ -312,7 +315,8 @@ const before_payment_get = (req, res) => {
         Booking.getTravelClassPrice(TravelClassID, ScheduleId, dbCon, function(err, result, fileld){
             if(err) throw err;
             const travel_class_price = (result[0]["Price"]);
-
+            console.log(req.user);
+            console.log(reg)
             if (reg){
                 Booking.getDiscountPercentage(TravellerID, dbCon, function(err, result, fileld){
                     if(err) throw err;
@@ -327,6 +331,7 @@ const before_payment_get = (req, res) => {
                     const tot_discount = subtotal * discount_percentage /100;
                     sess.tot_discount = tot_discount;
         
+                    console.log(tot_discount);
                     const tot_to_pay = subtotal - tot_discount;
         
                     res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout', subtotal: subtotal, tot_discount: tot_discount, tot_to_pay: tot_to_pay});
@@ -362,6 +367,9 @@ const before_payment_post = (req, res) => {
     const subtotal = sess.subtotal;
     const tot_discount = sess.tot_discount;
     const seat_array = sess.seat_array;
+    if(req.user != null){
+        sess.reg = true;
+    }
     const reg = sess.reg;
     const TravellerID = sess.TravellerID;
     const TravelClassID = sess.TravelClassID;
