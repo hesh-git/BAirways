@@ -34,7 +34,7 @@
                 <div class="col-2"><%= adults[i]["Gender"] %></div>
                 <div class="col-2"><%= adults[i]["FirstName"] %></div>
                 <div class="col-2"><%= adults[i]["LastName"] %></div>
-                <div class="col-2"><%= adults[i]["DateOfBirth"] %></div>
+                <div class="col-2"><%= moment(adults[i]["DateOfBirth"]).format('Do MMMM, YYYY') %></div>
             </div>
             <hr class="line-top">
     <% } } %>
@@ -51,15 +51,19 @@
         <div class="col-2 sub-title">Date of Birth</div>
         </div>
         <hr class="line-top">
-
-        <% for(let i = 0; i < adults.length; i++) { %>
+        <% if(children.length == 0) { %>
+            <div>
+                <h4 class="col-8 text-center">No Child Passengers</h4>
+            </div>
+        <% } 
+         for(let i = 0; i < children.length; i++) { %>
             <div class="row">
                 <div class="col-2"><%= children[i]["BookingID"] %></div>
                 <div class="col-2"><%= children[i]["SeatNo"] %></div>
                 <div class="col-2"><%= children[i]["Gender"] %></div>
                 <div class="col-2"><%= children[i]["FirstName"] %></div>
                 <div class="col-2"><%= children[i]["LastName"] %></div>
-                <div class="col-2"><%= children[i]["DateOfBirth"] %></div>
+                <div class="col-2"><%= moment(children[i]["DateOfBirth"]).format('Do MMMM, YYYY') %></div>
             </div>
             <hr class="line-top">
     <% } } %>
