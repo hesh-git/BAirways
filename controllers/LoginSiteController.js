@@ -17,7 +17,7 @@ const login_page = (req,res) => {
 }
 
 const admin_login_get = (req,res) => {
-    res.render('AdminLogin', {title: 'Admin | Login ', layout: './layouts/auth_layout'})
+    res.render('AdminLogin', {title: 'Admin | Login', layout: './layouts/auth_layout'})
 }
 
 const admin_logout_get = (req,res) => {
@@ -43,8 +43,8 @@ const admin_login_post = (req,res,next) => {
     if(!errors.isEmpty()) {
         const alert = errors.array()[0]
         
-        res.render('login', {
-             title: 'Login Page', layout: './layouts/auth_layout',alert
+        res.render('AdminLogin', {
+             title: 'Admin | Login', layout: './layouts/auth_layout',alert
         })
     }
     else{
@@ -71,8 +71,8 @@ const admin_login_post = (req,res,next) => {
                 }else{
                 // req.session.flag = 4;
                     const alert = {"msg": "Email and password do not match. Not logged"};
-                    res.render('login', {
-                        title: 'Login Page', layout: './layouts/auth_layout',alert
+                    res.render('AdminLogin', {
+                        title: 'Admin | Login', layout: './layouts/auth_layout',alert
                     });
                 }
             });
