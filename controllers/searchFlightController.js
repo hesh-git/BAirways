@@ -5,21 +5,24 @@ const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
     const con = req.dbCon;
+
     const is_guest = req.query.guest;
     if(is_guest) {
         res.cookie('jwt', '', {maxAge: 1});
     }
 
-    //Get all airport codes with their names
+    //Get all the Airports cords with their names
     FlightSearchModel.getAirports(con, (err, result, fields) => {
         if (err) throw err;
 
         const airportCodes = [];
         const airportNames = [];
+
         result.forEach((value, index, array) => {
             airportCodes.push(value["AirportCode"]);
             airportNames.push(value["Name"]);
         })
+
 
         FlightSearchModel.getAllClasses(con, (err, result, fields) => {
             if (err) throw err;
@@ -36,7 +39,6 @@ const searchFlight_get = (req, res) => {
 
         
     })
-
 
     
 }
@@ -110,7 +112,6 @@ const searchFlight_post = (req, res) => {
         
 
         // res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, airportCodesandNames : airportCodesandNames, layout : './layouts/schedule_layout'});
-
     });
 }
 

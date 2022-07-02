@@ -29,6 +29,7 @@ const getAllClasses = function(con,callback){
 }
 
 module.exports = {
+
     getFlightByOrigin,
     getAirports,
     getAllClasses
