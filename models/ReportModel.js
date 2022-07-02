@@ -22,8 +22,18 @@ const get_booking_statistics = (FromDate,ToDate, dbCon, callback) => {
 }
 
 const get_flight_statistics = (Origin, Destination, dbCon, callback) => {
-    const sql_flight_statistics = "SELECT `FlightScheduleID`, `FlightState`, `TotalNumPassengers` FROM `flight_statistics` WHERE `Origin` = ? AND `Destination` = ?";
-    dbCon.query(sql_flight_statistics, [Origin, Destination], callback);
+    const today = new Date();
+    const sql_change_to_ontime_today = "UPDATE `FlightSchedule` SET `StateID` = ? WHERE `DepartureDate` = ? AND `DepartureTime` <= ? AND `StateID` = ?";
+    const month = today.getUTCMonth() + 1;
+    const dateformated = today.getUTCFullYear() + "-" + month +"-" + today.getUTCDate();
+    const time = today.getHours() + ":" + today.getMinutes();
+    dbCon.query(sql_change_to_ontime_today, [2, dateformated, time, 1], (err, result, fields) => {
+        const sql_change_to_ontime_past = "UPDATE `FlightSchedule` SET `StateID` = ? WHERE `DepartureDate` < ? AND `StateID` = ?";
+        dbCon.query(sql_change_to_ontime_past, [2, dateformated, 1], (err, result, fields) => {
+            const sql_flight_statistics = "SELECT `FlightScheduleID`, `FlightState`, `TotalNumPassengers` FROM `flight_statistics` WHERE `Origin` = ? AND `Destination` = ? AND ((`ArrivalDate` = ? AND `ArrivalTime` < ?) OR (`ArrivalDate` < ?))";
+            dbCon.query(sql_flight_statistics, [Origin, Destination, dateformated, time, dateformated], callback);
+        });
+    });
 }
 
 const get_revenue_details = (dbCon, callback) => {

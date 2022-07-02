@@ -134,7 +134,7 @@ const add_schedule_post = (req, res) => {
     // details of newly adding flight schedule
     FlightNo = data.FlightNo;
     AircraftID = data.AircraftID; 
-    StateID = 1 // for newly adding flight schedules state is future (stateID = 1)
+    StateID = 1 // for newly adding flight schedules state is upcoming (stateID = 1)
     DepartureDate = data.DepartureDate;
     DepartureTime = data.DepartureTime;
     ArrivalDate = data.ArrivalDate;
