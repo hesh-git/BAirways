@@ -3,45 +3,39 @@
     <div class="container rounded shadow-sm">
       <h2 class="title text-center py-3">Book Your Flight</h2>
       <form action="/searchFlight" method="POST">
-        <!-- <div class="row">
-          
-          <div class="col-md-2 pe-0 col-sm-12">
-            <div class="btn radio-btn mb-3">
-              <label class="radio">
-                <input type="radio" value="a" id="book" name="book" checked /> Roundtrip
-                <span></span>
-              </label>
-            </div>
+        <% if(typeof alert != 'undefined') { %>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <%= alert.msg %>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
           </div>
-          <div class="col-md-2 pe-0 col-sm-12">
-            <div class="btn radio-btn mb-3">
-              <label class="radio">
-                <input type="radio" value="a" id="book" name="book" /> One way
-                <span></span>
-              </label>
-            </div>
-          </div> -->
-
+    <% } %>
         <div class="row">
           <div class="col-md-6 col-12 mb-4">
-            <div class="form-control d-flex flex-column">
+            <div class="form-control d-flex flex-column mb-3">
               <p class="h-blue">FLYING FROM</p>
-              <!-- <input
+              <!-- <select
                 class="inputbox"
                 placeholder="City or Airport"
                 name="Ffrom"
                 id="Ffrom"
                 type="text"
-              /> -->
-              <select name="Ffrom" id="Ffrom">
-                <% for(let i=0; i< airportNames.length; i++){ %>
-                    <option><%= airportNames[i] %> </option>
-                <%} %>
-              </select>
+
+              > -->
+              <select 
+                name="Ffrom"
+                id="Ffrom" 
+                class="mb-5"
+                >
+                <% for(let i=0; i < airportNames.length; i++) { %> 
+                    <option value="<%= airportCodes[i] %>"><%= airportNames[i] %></option>
+                <% } %> 
+            </select>
             </div>
           </div>
           <div class="col-md-6 col-12 mb-4">
-            <div class="form-control d-flex flex-column">
+            <div class="form-control d-flex flex-column mb-3">
               <p class="h-blue">FLYING TO</p>
               <!-- <input
                 class="inputbox"
@@ -50,60 +44,75 @@
                 name="Fto"
                 id="Fto"
               /> -->
-              <select name="Ffrom" id="Ffrom">
-                <% for(let i=0; i< airportNames.length; i++){ %>
-                    <option><%= airportNames[i] %> </option>
-                <%} %>
-              </select>
+
+              <select 
+              name="Fto"
+              id="Fto" 
+              class="mb-5"
+              >
+              <% for(let i=0; i < airportNames.length; i++) { %> 
+                  <option value="<%= airportCodes[i] %>"><%= airportNames[i] %></option>
+              <% } %> 
+          </select>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 col-12 mb-4">
-            <div class="form-control d-flex flex-column">
+            <div class="form-control d-flex flex-column mb-4">
               <p class="h-blue">DEPARTING</p>
-              <input class="inputbox textmuted" type="date" name="departing" id="departing"/>
+              <!-- <input class="inputbox textmuted mb-5" type="date" name="departing" id="departing" required /> -->
+              <div class="inputbox mb-5">
+                  <input type="date" name="departing" class="form-control" id="departing" required>
+              </div>
+              <!-- </select> -->
+              <!-- <input class="inputbox textmuted" type="date" name="departing" id="departing"/> -->
             </div>
           </div>
-          <div class="col-md-6 col-12 mb-4">
-            <div class="form-control d-flex flex-column">
+          <!-- <div class="col-md-6 col-12 mb-4">
+            <div class="form-control d-flex flex-column mb-3">
               <p class="h-blue">RETURNING</p>
-              <input class="inputbox textmuted" type="date" name="returning" id="returning" />
+              <input class="inputbox textmuted mb-5" type="date" name="returning" id="returning" />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <div class="col-md-4 mb-4">
-            <div class="form-control d-flex flex-column">
+            <div class="form-control d-flex flex-column mb-3">
               <p class="h-blue">ADULTS(18+)</p>
-              <select class="border-0 outline-none" name="adults">
-                <option value="" hidden selected>0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+              <select class="border-0 outline-none mb-5" name="adults" required>
+                <!-- <option value=0 hidden selected>0</option> -->
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
               </select>
             </div>
           </div>
           <div class="col-md-4 mb-4">
-            <div class="form-control d-flex flex-column">
+            <div class="form-control d-flex flex-column mb-3">
               <p class="h-blue">CHILDREN(0-17)</p>
-              <select class="border-0 outline-none" name="children">
-                <option value="" hidden selected>0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+              <select class="border-0 outline-none mb-5" name="children">
+                <option value=0 hidden selected>0</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
               </select>
             </div>
           </div>
           <div class="col-md-4 mb-4">
-            <div class="form-control d-flex flex-column">
+            <div class="form-control d-flex flex-column mb-3">
               <p class="h-blue">TRAVEL CLASS</p>
               <select class="border-0 outline-none" name="travelClass">
-                <option value="" hidden selected>Class</option>
-                <option value="1">Economy</option>
-                <option value="2">Premium</option>
-                <option value="3">Business</option>
+                <% for(let i=0; i < travelClasses.length; i++) { %> 
+                  <option value="<%= travelClasses[i].ID %>"><%= travelClasses[i].Name %> </option>
+              <% } %> 
               </select>
+
+
             </div>
           </div>
         </div>

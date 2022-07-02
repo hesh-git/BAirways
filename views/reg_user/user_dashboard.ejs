@@ -1,0 +1,45 @@
+<h1 class="main-title pt-3 pb-3">Dashboard</h1>
+<h2 class="text-center title pb-5">My Bookings
+</h2>
+<div>
+    <div class="row">
+        <div class="col-2 sub-title">Flight</div>
+        <div class="col-2 sub-title">From</div>
+        <div class="col-2 sub-title">Duration</div>
+        <div class="col-2 sub-title">To</div>
+        <div class="col-2 sub-title">Date</div>
+        <div class="col-2 sub-title">Status</div>
+    </div>
+    <hr class="line-top">
+    <!-- for one schedule of a flight-->
+    <% for(let i = 0; i < schedules1.length; i++) {%> 
+        <div class="row">
+            <div class="col-2">
+                <div><%= schedules1[i].FlightNo %> </div>
+                <div><%= schedules1[i].AircraftID %> </div>
+            </div>
+            <div class="col-2">
+                <div><%= moment(schedules1[i].DepartureDate).format('Do MMMM, YYYY') %> </div>
+                <div><%= schedules1[i].DepartureTime %> </div>
+                <div><%= schedules1[i].Origin  %> </div>
+            </div>
+            <div class="col-2">
+                <div><%= schedules1[i].duration_days  %>d <%= schedules1[i].duration_hours %>h <%= schedules1[i].duration_minutes %>min   </div>
+                <hr class="line-top">
+                <div></div>
+            </div>
+            <div class="col-2">
+                <div><%= moment(schedules1[i].ArrivalDate).format('Do MMMM, YYYY') %> </div>
+                <div><%= schedules1[i].ArrivalTime %> </div>
+                <div><%= schedules1[i].Destination %> </div>
+            </div>
+            <div class="col-2"><%= moment(schedules1[i].BookingDate).format('Do MMMM, YYYY') %> </div>
+            <div class="col-2"><%= schedules1[i].State %> </div>
+        </div>
+        <hr class="line-top">
+    <% } %> 
+</div>
+
+<div class="text-center mt-5">
+    <a href="/searchFlight" class="link link-btn btn btn-primary btn-lg btn-block">Add Booking</a>
+</div>

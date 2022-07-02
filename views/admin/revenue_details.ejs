@@ -1,0 +1,19 @@
+<div class="mt-3">
+    <div class="row">
+        <div class="col-6 sub-title">Model Name</div>
+        <div class="col-6 sub-title">Total Revenue</div>
+    </div>
+    <hr class="line-top">
+
+    <% if(typeof revenue_details == 'undefined' ) { %> 
+        <h4 class="text-center">No Models to display</h4>
+    <% } else { 
+            for(let i =0; i < revenue_details.length; i++) {%> 
+                <div class="row">
+                    <div class="col-6"><%= revenue_details[i]["ModelName"] %></div>
+                    <div class="col-6"><%= revenue_details[i]["TotalRevenue"] %></div>
+                </div>
+                <hr class="line-top">
+            <% }
+     } %>
+</div>

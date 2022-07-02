@@ -5,7 +5,9 @@
 }
 
 body {
-    background-color: blue
+
+    background-image: url("./images/bg-image.svg");
+    
 }
 
 .container {
