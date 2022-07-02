@@ -17,16 +17,24 @@ const add_flight_schedule = (FlightNo, AircraftID, StateID, DepartureDate, Depar
 const update_flight_schedule = (schedule_id, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, callback) => {
 
 
-        const sql = "UPDATE `FlightSchedule` SET `DepartureDate` = ?, `DepartureTime` = ?, `ArrivalDate` = ?, `ArrivalTime` = ? WHERE `ID` = ?";
+        const sql = "UPDATE `FlightSchedule` SET `DepartureDate` = ?, `DepartureTime` = ?, `ArrivalDate` = ?, `ArrivalTime` = ?, `StateID` = ? WHERE `ID` = ?";
 
-        dbCon.query(sql, [DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, schedule_id], callback);
+        dbCon.query(sql, [DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, 3, schedule_id], callback);
     
 }
 
 const get_schedules_for_day = (Date, dbCon, callback) => {
-    const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
+    const sql_change_to_ontime = "UPDATE `FlightSchedule` SET `StateID` = ? WHERE `DepartureDate` = ? AND `DepartureTime` <= ? AND `StateID` = ?";
+    const month = Date.getUTCMonth() + 1;
+    const dateformated = Date.getUTCFullYear() + "-" + month +"-" + Date.getUTCDate();
+    const time = Date.getHours() + ":" + Date.getMinutes();
+    dbCon.query(sql_change_to_ontime, [2, dateformated, time, 1], (err, result, fields) => {
 
-    dbCon.query(sql, [Date, Date], callback);
+        const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
+
+        dbCon.query(sql, [Date, Date], callback);
+    });
+    
 }
 
 const get_all_states = (dbCon, callback) => {
