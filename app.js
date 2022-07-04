@@ -27,7 +27,7 @@ const loginRoutes = require('./routes/Auth');
 
 const userRoutes = require('./routes/UserRoutes');
 
-const {requireAuth, checkUser} = require('./middleware/AuthMiddleware');
+const {requireAuth, checkUser, requireAuthAdmin} = require('./middleware/AuthMiddleware');
 
 
 
@@ -97,7 +97,7 @@ app.use(bookingRoutes);
 
 // admin site routes
 
-app.use('/admin',requireAuth, adminRoutes);
+app.use('/admin',requireAuthAdmin, adminRoutes);
 
 app.use(express.json());
 

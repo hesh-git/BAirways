@@ -35,6 +35,24 @@ const requireAuth = (req,res,next) =>{
     }
 }
 
+const requireAuthAdmin = (req,res,next) =>{
+    const cookies = parseCookies(req);
+    const token = cookies.jwt;
+    
+    //check json web token exists & is verified
+    if(token){
+        jwt.verify(token, 'B airways secret', (err, decodedToken) => {
+            if(err){
+                res.redirect('/adminlogin');
+            }else{
+                next();
+            }
+        })
+    }else{
+        res.redirect('/adminlogin')
+    }
+}
+
 //check current user
 const checkUser = (req,res,next) =>{
     const cookies = parseCookies(req);
@@ -61,5 +79,6 @@ const checkUser = (req,res,next) =>{
 
 module.exports = {
     requireAuth,
-    checkUser
+    checkUser,
+    requireAuthAdmin
 }

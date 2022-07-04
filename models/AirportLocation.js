@@ -21,9 +21,15 @@ const get_all_airports = (dbCon, callback) => {
     dbCon.query(sql, callback);
 }
 
+const check_airport_code = (AirportCode, dbCon, callback) => {
+    const sql = "SELECT * FROM `airport` WHERE `AirportCode` = ?";
+    dbCon.query(sql, [AirportCode], callback);
+}
+
 module.exports = {
     save_to_location,
     save_location_pair,
     save_airport_code,
-    get_all_airports
+    get_all_airports,
+    check_airport_code
 }

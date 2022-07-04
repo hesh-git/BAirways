@@ -1,8 +1,42 @@
 <form action="/admin/add_schedule" method="POST">
+    <% if(typeof alert != 'undefined') { %>
+        <div
+          class="alert alert-warning alert-dismissible fade show"
+          role="alert"
+        >
+          <%= alert.msg %>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+    <% } %>
+
+    <% if(typeof success != 'undefined') { %>
+        <div
+          class="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          <%= success.msg %>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+    <% } %>
+    
     <div class="form-group row mt-5">
         <label for="flightNo" class="col-sm-2 col-form-label">Flight No</label>
          
-        <select name="FlightNo" id="flightNo" class="col-sm-10 custom-select">
+        <select name="FlightNo" id="flightNo" class="col-sm-10 custom-select" required>
             <% for(let i = 0; i < flightNoList.length; i++){ %>
                 <option><%= flightNoList[i] %> </option>
             <% } %> 
@@ -11,7 +45,7 @@
 
     <div class="form-group row mt-4">
         <label for="aircraftID" class="col-sm-2 col-form-label">Aircraft ID</label>
-        <select name="AircraftID" id="aircraftID" class="col-sm-10 custom-select">
+        <select name="AircraftID" id="aircraftID" class="col-sm-10 custom-select" required>
             <% for(let i = 0; i < aircraftIDList.length; i++) { %> 
                 <option><%= aircraftIDList[i] %> </option>
             <% } %> 
