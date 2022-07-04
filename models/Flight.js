@@ -1,5 +1,10 @@
 const util = require('util');
 
+const check_flightNo = (FlightNo, dbCon, callback) => {
+    const sql = "SELECT * FROM `flight` WHERE `FlightNo` = ?";
+    dbCon.query(sql, [FlightNo], callback);
+}
+
 const save = (FlightNo, Origin, Destination, dbCon, callback) => {
     let sql_route = 'INSERT INTO `route`(`Origin`, `Destination`) VALUES (?, ?)';
     dbCon.query(sql_route, [Origin, Destination], (err, result, fields) => {
@@ -48,5 +53,6 @@ module.exports = {
     save,
     get_all_flightNo,
     get_flightDetails,
-    get_flightNo_with_price
+    get_flightNo_with_price,
+    check_flightNo
 }
