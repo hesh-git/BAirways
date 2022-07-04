@@ -9,6 +9,10 @@ const save = (data, dbCon, callback) => {
     dbCon.query(sql, [data.ModelName, data.SeatingCapacity, data.NoOfAircrafts], callback);
 }
 
+const check_model = (ModelName, dbCon, callback) => {
+    const sql = "SELECT * FROM `aircraftmodel` WHERE `ModelName` = ?";
+    dbCon.query(sql, [ModelName], callback);
+}
 const save_seat_capacity = (ModelID, TravelClassID, NumRows, NumCols, dbCon, callback) => {
     let sql = "INSERT INTO `SeatingCapacity`(`ModelID`, `TravelClassID`, `NumRows`, `NumCols`) VALUES (?,?,?,?)";
     dbCon.query(sql, [ModelID, TravelClassID, NumRows, NumCols], (err, result, fields) => {
@@ -42,10 +46,12 @@ const add_seats_to_seat = (FlightScheduleID, TravelClassID, RowStart, NumRows, N
     const available_seat_sql = "INSERT INTO `AvailableSeats`(`FlightScheduleID`, `TravelClassID`, `AvailableNoSeats`) VALUES (?,?,?)";
     dbCon.query(available_seat_sql, [FlightScheduleID, TravelClassID, availableNoSeats], callback);
 }
+
 module.exports = {
     save,
     save_seat_capacity,
     set_database,
     get_seat_cap_details,
-    add_seats_to_seat
+    add_seats_to_seat,
+    check_model
 }

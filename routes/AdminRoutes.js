@@ -23,6 +23,10 @@ router.get('/add_aircraft', adminSiteController.add_aircraft_get);
 router.post('/add_aircraft', adminSiteController.add_aircraft_post);
 
 
+// add a aircrafts for a existing model
+router.get('/add_aircraft_ex', adminSiteController.add_aircraft_ex_get);
+router.post('/add_aircraft_ex', adminSiteController.add_aircraft_ex_post);
+
 // add a flight
 router.get('/add_flight', adminSiteController.add_flight_get);
 router.post('/add_flight', adminSiteController.add_flight_post);
