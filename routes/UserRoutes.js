@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/profile', userSiteController.view_profile_get);
 
-router.get('/dashboard', userSiteController.view_dashboard_get);
+router.get('/', userSiteController.view_dashboard_get);
 
 // router.get('/editProfile', userSiteController.view_edit_profile_post);
 

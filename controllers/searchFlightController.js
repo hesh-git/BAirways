@@ -13,7 +13,9 @@ const searchFlight_get = (req, res) => {
 
     //Get all the Airports cords with their names
     FlightSearchModel.getAirports(con, (err, result, fields) => {
-        if (err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const airportCodes = [];
         const airportNames = [];
@@ -25,7 +27,9 @@ const searchFlight_get = (req, res) => {
 
 
         FlightSearchModel.getAllClasses(con, (err, result, fields) => {
-            if (err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
             const travelClasses =  [];
             result.forEach((value,index,array) => {
                 const travelClass = {
@@ -73,7 +77,9 @@ const searchFlight_post = (req, res) => {
 
     FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
 
-        if (error) throw error;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
         const availableFlightDetails = [];
 
         result.forEach((value,index,array) => {
@@ -97,7 +103,9 @@ const searchFlight_post = (req, res) => {
 
                 
         FlightSearchModel.getAirports(con, (err, result, fields) => {
-            if (err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
     
             const airportCodesandNames = {
 

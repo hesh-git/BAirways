@@ -18,7 +18,9 @@ const add_pass_details_get = (req, res) => {
         if(req.user != null) {
             const reg_id = req.user.id;
             Booking.get_travellerID(reg_id, dbCon, (err, result, fields) => {
-                if(err) throw err;
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }
 
                 const travellerID = result[0]["ID"];
                 sess.TravellerID = travellerID;
@@ -51,8 +53,9 @@ const add_passenger_details_post = (req, res) => {
     } else {
 
         Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID, NumPassengers, dbCon, function(err, result, fileld){
-            if(err)
-                throw err
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
             const BookingID = result.insertId;
             sess.BookingID = BookingID;
 
@@ -63,8 +66,9 @@ const add_passenger_details_post = (req, res) => {
                 let FirstName = data['FirstNameP'+i];
                 let LastName = data['LastNameP'+i];
                 Booking.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
-                    if(err)
-                        throw err
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
                 })
             }
 
@@ -74,8 +78,9 @@ const add_passenger_details_post = (req, res) => {
                 let FirstName = data['FirstNameC'+i];
                 let LastName = data['LastNameC'+i];
                 Booking.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
-                    if(err)
-                        throw err
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
                     
                 })
             }
@@ -105,20 +110,23 @@ const add_guest_details_post =(req, res) => {
     } else {
 
         Booking.addTraveller(dbCon, function(err, result, fileld){
-            if(err)
-                throw err
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
             
             const TravellerID = result.insertId;
             sess.TravellerID = TravellerID;
 
             Booking.addGuest(TravellerID, data['FirstName'], data['LastName'], data['Email'], data['ContactNumber'], dbCon, function(err, result, fields){
-                if (err)
-                    throw err    
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }    
             })
 
             Booking.addBooking(FlightScheduleID, TravellerID, TravelClassID,BookingStateID,NumPassengers, dbCon, function(err, result, fileld){
-                if(err)
-                    throw err
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }
                 const BookingID = result.insertId;
                 sess.BookingID = BookingID;
         
@@ -128,8 +136,9 @@ const add_guest_details_post =(req, res) => {
                     let FirstName = data['FirstNameP'+i];
                     let LastName = data['LastNameP'+i];
                     Booking.addPassenger(BookingID, 1, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
-                        if(err)
-                            throw err
+                        if(err) {
+                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                        }
                     })
                 }
         
@@ -139,8 +148,9 @@ const add_guest_details_post =(req, res) => {
                     let FirstName = data['FirstNameC'+i];
                     let LastName = data['LastNameC'+i];
                     Booking.addPassenger(BookingID, 2, Gender, FirstName, LastName, DateOfBirth, dbCon, function (err, result, fields){
-                        if(err)
-                            throw err
+                        if(err) {
+                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                        }
                         
                     })
                 }
@@ -167,7 +177,9 @@ const select_seat_get = (req, res) => {
     } else {
 
         Booking.getCapacity(ScheduleId, dbCon, (err, result, fields) => {
-            if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
 
             const rows = [];
             rows.push(result[0]["NumRows"]);
@@ -175,14 +187,18 @@ const select_seat_get = (req, res) => {
             rows.push(result[2]["NumRows"]);
 
             Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
-                if(err) throw err;
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }
                 const seat_cap = {};
         
                 seat_cap[0] = seatCapacity[0]["NumRows"];
                 seat_cap[1] = seatCapacity[0]["NumCols"];
         
                 Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
-                    if(err) throw err;
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
         
                     const booked_seats = [];
         
@@ -234,7 +250,9 @@ const select_seat_post = (req, res) => {
             const alert = "Please select only " + total_passengers + " seats";
             
             Booking.getCapacity(ScheduleId, dbCon, (err, result, fields) => {
-                if(err) throw err;
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }
         
                 const rows = [];
                 rows.push(result[0]["NumRows"]);
@@ -242,14 +260,18 @@ const select_seat_post = (req, res) => {
                 rows.push(result[2]["NumRows"]);
         
                 Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
-                    if(err) throw err;
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
                     const seat_cap = {};
             
                     seat_cap[0] = seatCapacity[0]["NumRows"];
                     seat_cap[1] = seatCapacity[0]["NumCols"];
             
                     Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
-                        if(err) throw err;
+                        if(err) {
+                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                        }
             
                         const booked_seats = [];
             
@@ -282,7 +304,9 @@ const select_seat_post = (req, res) => {
         else {
             for (let i=0; i < seat_array.length; i++){
                 Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
-                    if(err) throw err;
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
                 })
             }; 
         
@@ -313,13 +337,15 @@ const before_payment_get = (req, res) => {
     } else {
 
         Booking.getTravelClassPrice(TravelClassID, ScheduleId, dbCon, function(err, result, fileld){
-            if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
             const travel_class_price = (result[0]["Price"]);
-            console.log(req.user);
-            console.log(reg)
             if (reg){
                 Booking.getDiscountPercentage(TravellerID, dbCon, function(err, result, fileld){
-                    if(err) throw err;
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
         
                     const discount_percentage = (result[0]["Discount"]);
         
@@ -331,7 +357,6 @@ const before_payment_get = (req, res) => {
                     const tot_discount = subtotal * discount_percentage /100;
                     sess.tot_discount = tot_discount;
         
-                    console.log(tot_discount);
                     const tot_to_pay = subtotal - tot_discount;
         
                     res.render('beforePayment', {title: 'Payment', layout: './layouts/payment_layout', subtotal: subtotal, tot_discount: tot_discount, tot_to_pay: tot_to_pay});
@@ -382,10 +407,14 @@ const before_payment_post = (req, res) => {
     } else {
 
         Booking.completeBooking(tot_discount, subtotal, BookingID, bookingDate, bookingTime,dbCon, function(err, result, fileld){
-            if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
 
             Booking.getAvailableCapacity(ScheduleId, dbCon, function(err, result, fileld){
-                if(err) throw err;
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }
                 const available_seats_current = (result[0]["AvailableNoSeats"]);
                 const passengers_current = (result[0]["NoPassengers"]);
                 
@@ -394,16 +423,22 @@ const before_payment_post = (req, res) => {
                 const passenger_count = seat_array.length;
 
                 Booking.updateAvailableNoSeats(passenger_count, available_seats_new, passengers_new, ScheduleId, TravelClassID, dbCon, function(err, result, fileld){
-                    if(err) throw err;
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
 
                     for (let i=0; i < seat_array.length; i++){
                         Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
-                            if(err) throw err;
+                            if(err) {
+                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                            }
                         })
                     }; 
                     
                     Booking.getPassengers(BookingID, dbCon, function(err, passengers, fileld){
-                        if(err) throw err; 
+                        if(err) {
+                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                        } 
                         const passenger_list = [];
 
                         passengers.forEach((value, index, array) => {
@@ -415,19 +450,25 @@ const before_payment_post = (req, res) => {
                             const ID = passenger_list[k];
 
                             Booking.addSeatNumber(seatNo, ID, dbCon, function(err, result, fileld){
-                                if (err) throw err;
+                                if(err) {
+                                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                                }
                             });
                         }
 
                         if (reg) {
                             Booking.getNoBookings(TravellerID, dbCon, function(err, result, fileld){
-                                if(err) throw err;
+                                if(err) {
+                                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                                }
 
                                 const no_bookings_current = result[0]["NumBookings"];
                                 const no_bookings_new = no_bookings_current + 1;
 
                                 Booking.updateNoBooking(no_bookings_new, TravellerID, dbCon, function(err, result, fileld){
-                                    if(err) throw err;
+                                    if(err) {
+                                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                                    }
                                     res.redirect("/success"); 
 
                                 });

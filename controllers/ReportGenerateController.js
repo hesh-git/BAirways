@@ -6,7 +6,9 @@ const passenger_details_get = (req, res) => {
     const dbCon = req.dbCon;
 
     FlightModel.get_all_flightNo(dbCon, (err, result, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const flightNoList = [];
         
@@ -25,7 +27,9 @@ const passenger_details_post = (req, res) => {
 
     const FlightNo = data.FlightNo;
     FlightModel.get_all_flightNo(dbCon, (err, result, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const flightNoList = [];
         
@@ -33,6 +37,9 @@ const passenger_details_post = (req, res) => {
             flightNoList.push(value["FlightNo"]);
         });
         ReportModel.get_next_immediate_flight(FlightNo, dbCon, (err, flightID, fields) => {
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
             if(flightID === undefined || flightID.length == 0) {
                 res.render('./admin/passenger_details', {title: 'Passenger Details', flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
             } else {
@@ -40,7 +47,9 @@ const passenger_details_post = (req, res) => {
 
 
                 ReportModel.get_passenger_details(scheduleID, dbCon, (err, passenger_details, fields) => {
-                    if(err) throw err;
+                    if(err) {
+                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                    }
 
                     const adults = [];
                     const children = [];
@@ -52,9 +61,6 @@ const passenger_details_post = (req, res) => {
                         }
                     });
 
-                    
-                    console.log("adults: " ,adults);
-                    console.log("children:", children);
                     res.render('./admin/passenger_details', {title: 'Passenger Details', adults: adults, children: children, flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
                 });
             }
@@ -66,7 +72,9 @@ const passenger_statistics_get = (req, res) => {
     const dbCon = req.dbCon;
     
     AirportLocationModel.get_all_airports(dbCon, (err, result, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const airportCodes = []
         
@@ -89,7 +97,9 @@ const passenger_statistics_post = (req, res) => {
     const Destination = data.Destination;
 
     AirportLocationModel.get_all_airports(dbCon, (err, result, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const airportCodes = []
         
@@ -98,7 +108,9 @@ const passenger_statistics_post = (req, res) => {
         });
 
         ReportModel.get_passenger_statistics(FromDate, ToDate, Destination, dbCon, (err, result, fields) => {
-            if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
 
             const num_passengers = result[0]["total_passengers"];
 
@@ -126,6 +138,9 @@ const booking_statistics_post = (req, res) => {
     const FromDate = data.FromDate;
 
     ReportModel.get_booking_statistics(FromDate, ToDate, dbCon, (err, result, fields) => {
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
         const booking_statistics = {};
 
         result.forEach((value, index, array) => {
@@ -142,7 +157,9 @@ const flight_statistics_get = (req, res) => {
 
     // get all airport codes : need to limit
     AirportLocationModel.get_all_airports(dbCon, (err, result, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const airportCodes = []
         
@@ -163,7 +180,9 @@ const flight_statistics_post = (req, res) => {
     const Destination = data.Destination;
 
     AirportLocationModel.get_all_airports(dbCon, (err, result, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const airportCodes = []
         
@@ -171,7 +190,9 @@ const flight_statistics_post = (req, res) => {
             airportCodes.push(value["AirportCode"])
         });
         ReportModel.get_flight_statistics(Origin, Destination, dbCon, (err, result, fields) => { 
-            if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
 
             const flight_statistics = [];
 
@@ -192,7 +213,9 @@ const revenue_details_get = (req, res) => {
     const dbCon = req.dbCon;
 
     ReportModel.get_revenue_details(dbCon, (err, result, fields) => {
-
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
         const revenue_details = [];
 
         result.forEach((value, index, array) => {
