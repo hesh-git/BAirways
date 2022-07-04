@@ -30,6 +30,7 @@ const get_schedules_for_day = (Date, dbCon, callback) => {
     const time = Date.getHours() + ":" + Date.getMinutes();
     dbCon.query(sql_change_to_ontime, [2, dateformated, time, 1], (err, result, fields) => {
 
+        // const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
         const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
 
         dbCon.query(sql, [Date, Date], callback);

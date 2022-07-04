@@ -31,10 +31,16 @@ const dashboard = (req, res) => {
     const today = new Date(); // get today date
 
     FlightSchedule.get_schedules_for_day(today, dbCon, (err, schedules, fields) => {
-        if(err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        } 
+
 
         FlightSchedule.get_all_states(dbCon, (err, states, fields) => {
-            if(err) throw err;
+            // if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
 
             const state_list = {}; // states as key=>value paires
             
@@ -91,6 +97,7 @@ const dashboard = (req, res) => {
             
             
         })
+        // }
     })
     
 }
