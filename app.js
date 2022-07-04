@@ -107,6 +107,8 @@ app.use('/register', loginRoutes);
 app.use('/auth', loginRoutes);
 app.use('/user',requireAuth, userRoutes);
 
-
+app.use((req, res) => {
+    res.status(404).render('404', { title : '404', layout: "./layouts/payment_layout"});
+}); 
 
 
