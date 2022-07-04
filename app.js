@@ -108,7 +108,7 @@ app.use('/auth', loginRoutes);
 app.use('/user',requireAuth, userRoutes);
 
 app.use((req, res) => {
-    res.status(404).render('404', { title : '404', layout: "./layouts/payment_layout"});
+    res.status(404).render('error', { title : '404', layout: "./layouts/payment_layout", error: {"msg": "Page Not Found", "status": 404}});
 }); 
 
 
