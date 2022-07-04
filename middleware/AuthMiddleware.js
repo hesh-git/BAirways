@@ -27,7 +27,13 @@ const requireAuth = (req,res,next) =>{
             if(err){
                 res.redirect('/');
             }else{
-                next();
+                let userId = decodedToken.id;
+                let userType = decodedToken.userType;
+                if(userType != "traveller") {
+                    return res.status(403).render('error', { title : '403', layout: "./layouts/payment_layout", error: {"msg": "Forbidden", "status": 403}});
+                } else {
+                    next();
+                }
             }
         })
     }else{
@@ -45,7 +51,13 @@ const requireAuthAdmin = (req,res,next) =>{
             if(err){
                 res.redirect('/adminlogin');
             }else{
-                next();
+                let userId = decodedToken.id;
+                let userType = decodedToken.userType;
+                if(userType != "admin") {
+                    return res.status(403).render('error', { title : '403', layout: "./layouts/payment_layout", error: {"msg": "Forbidden", "status": 403}});
+                } else {
+                    next();
+                }
             }
         })
     }else{
