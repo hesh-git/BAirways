@@ -75,7 +75,7 @@ const searchFlight_post = (req, res) => {
     sess.no_children = parseInt(data.children);
     sess.TravelClassID = data.travelClass;
 
-    FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
+    FlightSearchModel.getFlightByOrigin(data , con, function(err, result, fields){
 
         if(err) {
             return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
