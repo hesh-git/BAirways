@@ -14,7 +14,13 @@
 
     <button type="submit" class="mt-5 link link-btn btn btn-primary btn-lg btn-block">Generate</button>
 
-    <% if (typeof FlightNo != 'undefined' && typeof adults != 'undefined') { %> 
+    <% if(typeof FlightNo != 'undefined' && typeof adults == 'undefined') { %> 
+        <div class="mt-5 text-center">
+            <h4 class="">No Passengers</h4>
+        </div>
+    <% }
+
+    if (typeof FlightNo != 'undefined' && typeof adults != 'undefined') { %> 
         <h2 class="mt-5 mb-5">Adults Details</h2>
 
         <div class="row">
