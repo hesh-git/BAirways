@@ -34,10 +34,14 @@ body{
     background-color: #25529b;
     color: white;
     width: 320px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     top: 0;
     bottom: 0;
     /* height: 100%; */
+}
+
+.sidebar-a{
+    overflow-y:scroll;
 }
 
 .sidebar header{
