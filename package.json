@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "db-migrate": "^0.11.13",
     "db-migrate-mysql": "^2.2.0",

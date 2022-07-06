@@ -148,7 +148,7 @@ const booking_statistics_post = (req, res) => {
         });
 
         res.render('./admin/booking_statistics', {title: 'Booking Statistics', booking_statistics: booking_statistics, FromDate: FromDate, ToDate: ToDate, layout: './layouts/admin_layout'});
-    })
+    });
 }
 
 const flight_statistics_get = (req, res) => {
