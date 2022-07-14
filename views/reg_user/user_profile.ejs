@@ -44,6 +44,13 @@
                         </div>
                 </div>
                </div>
+               <div>
+                <% if(userDetail.CategoryID == 2) { %> 
+                    <div>you are a frequent user</div>
+                    <% } else if(userDetail.CategoryID == 3) {%> 
+                        <div>you are a gold user</div>
+                    <% } %> 
+               </div>
            </div>
        </div>
     </div>
