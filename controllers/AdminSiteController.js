@@ -226,7 +226,7 @@ const add_schedule_post = (req, res) => {
                         req.flash("success", "Flight Schedule Successfully added");
                         // add_schedule_get(req, res);
                         res.redirect("/admin/add_schedule");
-                        dbCon.release();
+                        // dbCon.release();
 
                     });
                 })
@@ -439,7 +439,7 @@ const add_airport_post = (req, res) => {
                         res.redirect('/admin/add_airport');
                         // add_airport_get(req, res);
 
-                        dbCon.release();
+                        // dbCon.release();
                     })
                     
                 })
