@@ -1,5 +1,6 @@
 const getUserByEmail = (email,dbCon,callback) => {
-    var sql = 'select * from user where email = ?';
+    // var sql = 'select * from user where email = ?';
+    const sql = 'SELECT * FROM `user` USE INDEX(`idx_email`) WHERE `email` = ?';
     dbCon.query(sql,email,callback);
 }
 
