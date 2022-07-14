@@ -91,8 +91,25 @@ input[type=button], input[type=submit]{
     cursor: pointer;
 }
 
-.Psidebar{
-    height: 150px;
-    background-color: black;
+.container{
+    align-content: center;
 }
 
+.Psidebar{
+    height: 400px;
+    background-color: rgb(45, 45, 45);
+}
+
+.content{
+    height: 400px;
+  
+}
+
+.row{
+    height: 60px;
+}
+
+.mt-3 h3{
+    color: #C1D9F8;
+    font-weight: bold;
+}
