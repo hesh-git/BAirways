@@ -16,12 +16,12 @@
             </div>
             <p class="login-card-description">Log into your account</p>
             <form action="/auth_login" method="post">
-              <% if(typeof alert != 'undefined') { %>
+              <% if(error != "") { %>
               <div
                 class="alert alert-warning alert-dismissible fade show"
                 role="alert"
               >
-                <%= alert.msg %>
+                <%= error%>
                 <button
                   type="button"
                   class="close"
