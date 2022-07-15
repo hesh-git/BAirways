@@ -16,6 +16,8 @@ router.get("/adminlogin", loginSiteController.admin_login_get);
 
 router.get("/adminlogout", loginSiteController.admin_logout_get);
 
+router.get("/userlogout", loginSiteController.user_logout_get);
+
 router.post("/adminlogin", loginSiteController.admin_login_post);
 
 //POST request

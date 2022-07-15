@@ -5,6 +5,14 @@ body{
     margin-top: 20px;
 }
 
+/* h3{
+    color: aliceblue;
+} */
+
+.white-text {
+    color: aliceblue;
+}
+
 .main{
     padding: 15px;
     font-family: Arial, Helvetica, sans-serif;
@@ -25,8 +33,15 @@ body{
     position: fixed;
     background-color: #25529b;
     color: white;
-    width: 300px;
-    height: 100%;
+    width: 320px;
+    /* overflow-y: scroll; */
+    top: 0;
+    bottom: 0;
+    /* height: 100%; */
+}
+
+.sidebar-a{
+    overflow-y:scroll;
 }
 
 .sidebar header{
@@ -96,20 +111,75 @@ input[type=button], input[type=submit]{
 }
 
 .Psidebar{
-    height: 400px;
-    background-color: rgb(45, 45, 45);
+    /* height: 150px; */
+    background-color: rgb(14, 35, 78);
 }
 
-.content{
-    height: 400px;
+.badge{
+    position: relative;
+    width: 216px;
+    display: inline-block;
+    margin: 40px;
+}
+   
+.title{
+      font-family: "Montserrat", sans-serif;
+      font-weight: bold;
+      font-size: 1.7em;
+      position: absolute;
+      top: -28px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+      width: 100%;
+      background: red;
+      padding: 20px 0;
+}
+    
+.subtitle{
+      position: absolute;
+      font-family: "Fjalla One", sans-serif;
+      font-size: 1.8em;
+      width: 100%;
+      text-align: center;
+      color: white;
+      position: absolute;
+      top: 100px;
+}
+
+after{
+          content: "★ ★ ★";
+          display: block;
+          font-size: .4em;
+          position: relative;
+          margin: 15px 0 0;
+          transition: all .3s;
+}
+    
+
+hover .subtitle:after{
+        word-spacing: 30px; 
+}
   
+
+.line-top {
+    border-top: 1px solid #af912f;
 }
 
-.row{
-    height: 60px;
+.sub-title {
+    color: #af912f;
+    font-size: 1.2em;
 }
 
-.mt-3 h3{
-    color: #C1D9F8;
-    font-weight: bold;
+/* .nav-link {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    font-size: 1.2em;
+} */
+
+.main-title {
+    color: #0b2145;
+}
+
+.title {
+    color: #3C94F8;
 }

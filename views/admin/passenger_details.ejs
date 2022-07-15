@@ -12,9 +12,15 @@
         </select>
     </div>
 
-    <button type="submit" class="mt-5 link link-btn btn btn-outline-primary btn-lg btn-block">Generate</button>
+    <button type="submit" class="mt-5 link link-btn btn btn-primary btn-lg btn-block">Generate</button>
 
-    <% if (typeof FlightNo != 'undefined' && adults != undefined) { %> 
+    <% if(typeof FlightNo != 'undefined' && typeof adults == 'undefined') { %> 
+        <div class="mt-5 text-center">
+            <h4 class="">No Passengers</h4>
+        </div>
+    <% }
+
+    if (typeof FlightNo != 'undefined' && typeof adults != 'undefined') { %> 
         <h2 class="mt-5 mb-5">Adults Details</h2>
 
         <div class="row">
@@ -27,19 +33,24 @@
         </div>
         <hr class="line-top">
 
-        <% for(let i = 0; i < adults.length; i++) { %>
+        <% if(adults.length == 0) { %>
+            <div>
+                <h4 class="col-8 text-center">No Adult Passengers</h4>
+            </div>
+        <% } 
+         for(let i = 0; i < adults.length; i++) { %>
             <div class="row">
                 <div class="col-2"><%= adults[i]["BookingID"] %></div>
                 <div class="col-2"><%= adults[i]["SeatNo"] %></div>
                 <div class="col-2"><%= adults[i]["Gender"] %></div>
                 <div class="col-2"><%= adults[i]["FirstName"] %></div>
                 <div class="col-2"><%= adults[i]["LastName"] %></div>
-                <div class="col-2"><%= adults[i]["DateOfBirth"] %></div>
+                <div class="col-2"><%= moment(adults[i]["DateOfBirth"]).format('Do MMMM, YYYY') %></div>
             </div>
             <hr class="line-top">
     <% } } %>
 
-    <% if (typeof FlightNo != 'undefined' && children != undefined) { %> 
+    <% if (typeof FlightNo != 'undefined' && typeof children != 'undefined') { %> 
         <h2 class="mt-5 mb-5">Children Details</h2>
 
         <div class="row">
@@ -51,15 +62,19 @@
         <div class="col-2 sub-title">Date of Birth</div>
         </div>
         <hr class="line-top">
-
-        <% for(let i = 0; i < adults.length; i++) { %>
+        <% if(children.length == 0) { %>
+            <div>
+                <h4 class="col-8 text-center">No Child Passengers</h4>
+            </div>
+        <% } 
+         for(let i = 0; i < children.length; i++) { %>
             <div class="row">
                 <div class="col-2"><%= children[i]["BookingID"] %></div>
                 <div class="col-2"><%= children[i]["SeatNo"] %></div>
                 <div class="col-2"><%= children[i]["Gender"] %></div>
                 <div class="col-2"><%= children[i]["FirstName"] %></div>
                 <div class="col-2"><%= children[i]["LastName"] %></div>
-                <div class="col-2"><%= children[i]["DateOfBirth"] %></div>
+                <div class="col-2"><%= moment(children[i]["DateOfBirth"]).format('Do MMMM, YYYY') %></div>
             </div>
             <hr class="line-top">
     <% } } %>

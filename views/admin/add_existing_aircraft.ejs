@@ -1,0 +1,61 @@
+<form action="/admin/add_aircraft_ex" method="POST">
+    <% if(error != '') { %>
+        <div
+          class="alert alert-warning alert-dismissible fade show"
+          role="alert"
+        >
+          <%= error %>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <% } %>
+
+        <% if(success != '') { %>
+          <div
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+          >
+            <%= success %>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        <% } %>
+
+    <div class="form-group row mt-5">
+        <label for="noOfAircrafts" class="col-sm-2 col-form-label">No of Aircrafts</label>
+        <div class="col-sm-10">
+            <input onchange="addFields()" type="number" name="NoOfAircrafts" class="form-control" id="noOfAircrafts" required>
+        </div>
+    </div>
+
+    <div class="form-group row" id="aircraftIDs">
+
+    </div>
+
+    <button type="submit" class="link link-btn btn btn-primary btn-lg btn-block">Add</button>
+</form>
+
+<script>
+    function addFields() {
+        const no_aircrafts = document.getElementById("noOfAircrafts").value;
+        const aircraft_ids = document.getElementById("aircraftIDs");
+        let input_fields = ''
+        for(let i = 0; i < no_aircrafts; i++) {
+            let num = i +1;
+            input_fields += '<div class="col-4"><label>AircraftID'+ num +'</label><input type="text" name="id'+ i +'" required></div>'
+        }
+        aircraft_ids.innerHTML = input_fields;
+    }
+</script>

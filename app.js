@@ -2,13 +2,13 @@ require('dotenv').config();
 
 const moment = require("moment");
 const express = require('express');
-
+const flash = require('connect-flash');
 
 
 //const expressLayouts = require('express-ejs-layouts');
 const morgan =require('morgan')
 
-const flash = require('express-flash')
+// const flash = require('express-flash')
 
 
 const searchFlightRoutes = require('./routes/searchFlight-routes')
@@ -27,7 +27,7 @@ const loginRoutes = require('./routes/Auth');
 
 const userRoutes = require('./routes/UserRoutes');
 
-const {requireAuth, checkUser} = require('./middleware/AuthMiddleware');
+const {requireAuth, checkUser, requireAuthAdmin} = require('./middleware/AuthMiddleware');
 
 
 
@@ -37,8 +37,12 @@ const app = express();
 app.use(session({
     secret : 'ABCDefg',
     resave : false,
-    saveUninitialized : true
+    saveUninitialized : true,
+    cookie: { maxAge: 3*24*60*60*1000 },
+    expires: new Date(Date.now() + (3*24*60*60*1000))
   }));
+
+app.use(flash());
 
 app.use((req, res, next)=>{
     res.locals.moment = moment;
@@ -80,7 +84,13 @@ app.use(expressLayouts);
 app.use(function(req, res, next) {
     req.dbCon = dbCon;
     next()
-  })
+});
+
+app.use(function(req, res, next) {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
 
 
 //middleware
@@ -95,7 +105,7 @@ app.use(bookingRoutes);
 
 // admin site routes
 
-app.use('/admin',requireAuth, adminRoutes);
+app.use('/admin',requireAuthAdmin, adminRoutes);
 
 app.use(express.json());
 
@@ -103,8 +113,10 @@ app.use(express.json());
 app.use('/', loginRoutes);
 app.use('/register', loginRoutes);
 app.use('/auth', loginRoutes);
-app.use('/user', userRoutes);
+app.use('/user',requireAuth, userRoutes);
 
-
+app.use((req, res) => {
+    res.status(404).render('error', { title : '404', layout: "./layouts/payment_layout", error: {"msg": "Page Not Found", "status": 404}});
+}); 
 
 

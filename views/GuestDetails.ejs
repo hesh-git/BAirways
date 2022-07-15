@@ -15,7 +15,7 @@
                     <div class="col-md-6 form-group mb-3">
                       <label for="Gender" class="col-form-label">Gender</label>
                       <select class="custom-select" id="Gender" name="GenderP<%= i %>">
-                        <option disabled selected value>Choose...</option>
+                        <!-- <option disabled selected value>Choose...</option> -->
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                       </select>
@@ -31,11 +31,11 @@
                   <div class="row">
                     <div class="col-sm-6 form-group mb-3">
                       <label for="" class="col-form-label">First Name</label>
-                      <input type="text" class="form-control" name="FirstNameP<%= i %>" id="FirstName" required>
+                      <input pattern="[a-zA-Z\s]+" title="Only white space and charaters are allowed" type="text" class="form-control" name="FirstNameP<%= i %>" id="FirstName" required>
                     </div>
                     <div class="col-sm-6 form-group mb-3">
                       <label for="" class="col-form-label">Last Name</label>
-                      <input type="text" class="form-control" name="LastNameP<%= i %>" id="LastName"  required>
+                      <input pattern="[a-zA-Z\s]+" title="Only white space and charaters are allowed" type="text" class="form-control" name="LastNameP<%= i %>" id="LastName"  required>
                     </div>
                   </div>                   
                 </div>
@@ -51,7 +51,7 @@
                     <div class="col-md-6 form-group mb-3">
                       <label for="Gender" class="col-form-label">Gender</label>
                       <select class="custom-select" id="Gender" name="GenderC<%= i %>">
-                        <option disabled selected value>Choose...</option>
+                        <!-- <option disabled selected value>Choose...</option> -->
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                       </select>
@@ -66,11 +66,11 @@
                   <div class="row">
                     <div class="col-sm-6 form-group mb-3">
                       <label for="" class="col-form-label">First Name</label>
-                      <input type="text" class="form-control" name="FirstNameC<%= i %>" id="FirstName" required>
+                      <input pattern="[a-zA-Z\s]+" title="Only white space and charaters are allowed" type="text" class="form-control" name="FirstNameC<%= i %>" id="FirstName" required>
                     </div>
                     <div class="col-sm-6 form-group mb-3">
                       <label for="" class="col-form-label">Last Name</label>
-                      <input type="text" class="form-control" name="LastNameC<%= i %>" id="LastName"  required>
+                      <input pattern="[a-zA-Z\s]+" title="Only white space and charaters are allowed" type="text" class="form-control" name="LastNameC<%= i %>" id="LastName"  required>
                     </div>
                   </div>
                 </div>
@@ -84,11 +84,11 @@
                 <div class="row">
                   <div class="col-sm-6 form-group mb-3">
                     <label for="" class="col-form-label">First Name</label>
-                    <input type="text" class="form-control" name="FirstName" id="FirstName" required>
+                    <input pattern="[a-zA-Z\s]+" title="Only white space and charaters are allowed" type="text" class="form-control" name="FirstName" id="FirstName" required>
                   </div>
                   <div class="col-sm-6 form-group mb-3">
                     <label for="" class="col-form-label">Last Name</label>
-                    <input type="text" class="form-control" name="LastName" id="LastName"  required>
+                    <input pattern="[a-zA-Z\s]+" title="Only white space and charaters are allowed" type="text" class="form-control" name="LastName" id="LastName"  required>
                   </div>
                 </div>
 
@@ -99,7 +99,7 @@
                   </div>
                   <div class="col-sm-6 form-group mb-3">
                     <label for="" class="col-form-label">Contact Number</label>
-                    <input type="text" class="form-control" name="ContactNumber" id="ContactNumber"  required>
+                    <input type="tel" pattern="[0]{1}[0-9]{9}" title="Contact number must start with 0 followed by 9 digits" class="form-control" name="ContactNumber" id="ContactNumber"  required>
                   </div>
                 </div>
 
@@ -108,7 +108,7 @@
 
             <div class="row">
               <div class="col-md-12 form-group">
-                <Button type="submit" class="btn btn-primary py-2 px-4"> Submit </Button>
+                <button type="submit" class="btn btn-primary py-2 px-4"> Submit </button>
               </div>
             </div>  
             

@@ -7,16 +7,18 @@ const UserModel = require("../models/userModel");
 const view_profile_get = (req, res) => {
     const con = req.dbCon;
 
-    const TravellerID = 4;
+    const TravellerID = req.user.id;
     ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
-        if (err) throw err;
-        console.log(result);
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
             
             const userDetail = {
                 'fName': result[0]['FirstName'],
                 'lName': result[0]['LastName'],
                 'email': result[0]['Email'],
                 'ContactNumber': result[0]['ContactNumber'],
+                'CategoryID': result[0]['CatagoryID']
             }
             res.render('./reg_user/user_profile', {title: 'user | Profile',userDetail:userDetail, layout: './layouts/user_layout'});
         })
@@ -27,13 +29,17 @@ const view_profile_get = (req, res) => {
 const view_dashboard_get = (req, res) =>{ 
     const dbCon = req.dbCon;
 
-    const TravellerID = 4;
+    const RegisteredID = req.user.id;
 
-    UserDashboardModel.view_dashboard_get(TravellerID, dbCon, (err, schedules1, fields) => {
-        if(err) throw err;
+    UserDashboardModel.view_dashboard_get(RegisteredID, dbCon, (err, schedules1, fields) => {
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         FlightSchedule.get_all_states(dbCon, (err, states, fields) => {
-            if(err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
 
             const state_list = {}; // states as key=>value paires
             
@@ -43,7 +49,9 @@ const view_dashboard_get = (req, res) =>{
             });
 
             FlightModel.get_all_flightNo(dbCon, (err, flight_details, fields) => {
-                if(err) throw err;
+                if(err) {
+                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+                }
 
                 const flights_list = {}; // flights as key=>value paires
 
@@ -91,10 +99,11 @@ const view_dashboard_get = (req, res) =>{
 const view_edit_profile_get = (req,res) => {
     const con = req.dbCon;
 
-    const TravellerID = 4;
+    const TravellerID = req.user.id;
     ProfileModel.viewUserProfile(TravellerID,con,(err,result,fields)=>{
-        if (err) throw err;
-        console.log(result);
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
             
             const userDetail = {
                 'fName': result[0]['FirstName'],

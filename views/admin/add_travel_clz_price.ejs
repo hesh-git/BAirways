@@ -1,15 +1,49 @@
 <form action="/admin/add_price" method="POST">
 
-    <div class="form-group row">
+    <!-- <div class="form-group row">
         <label for="TravelClassID" class="col-sm-2 col-form-label">Travel Class</label>
         <div class="col-sm-10">
             <select name="TravelClassID" id="TravelClassID" class="btn btn-secondary btn-block">
-                <% for(let i=0; i < TravelClasses.length; i++) { %> 
-                    <option value="<%= TravelClasses[i]['ID'] %>"><%= TravelClasses[i]['Name'] %></option>
-                <% } %> 
-            </select>
+                 <% // for(let i=0; i < TravelClasses.length; i++) { %>  -->
+                    <!-- <option value="<%= // TravelClasses[i]['ID'] %>"><%=// TravelClasses[i]['Name'] %></option> -->
+                <% //} %> 
+            <!-- </select>
+        </div> -->
+    <!-- </div> -->
+
+    <% if(error != '') { %>
+        <div
+          class="alert alert-warning alert-dismissible fade show"
+          role="alert"
+        >
+          <%= error %>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
-    </div>
+    <% } %>
+
+    <% if(success != '') { %>
+        <div
+          class="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          <%= success %>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+    <% } %>
 
     <div class="form-group row">
         <label for="FlightNo" class="col-sm-2 col-form-label">Flight Number</label>
@@ -35,11 +69,23 @@
 
     <div class="form-group row">
         <label for="Price" class="col-sm-2 col-form-label">Price</label>
-        <div class="col-sm-10">
-            <input type="number" min="0.00" max="500000.00" step="0.01" class="form-control" name="Price" id="Price">
+        <div class="col-sm-10 row">
+            <!-- <input type="number" min="0.00" max="500000.00" step="0.01" class="form-control" name="Price" id="Price"> -->
+            <div class="col-4">
+                <h5>Economy</h5>
+                <input type="number" min="0.00" max="500000.00" step="0.01" name="eco_price" class="form-control" id="eco_price" required>
+            </div>
+            <div class="col-4">
+                <h5>Business</h5>
+                <input type="number" min="0.00" max="500000.00" step="0.01" name="busi_price" class="form-control" id="busi_price" required>
+            </div>
+            <div class="col-4">
+                <h5>Platinum</h5>
+                <input type="number" min="0.00" max="500000.00" step="0.01" name="plat_price" class="form-control" id="plat_price" required>
+            </div>
         </div>
     </div>
 
-    <button type="submit" class="link link-btn btn btn-outline-primary btn-lg btn-block">Add</button>
+    <button type="submit" class="link link-btn btn btn-primary btn-lg btn-block">Add</button>
 
 </form>

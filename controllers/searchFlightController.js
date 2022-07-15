@@ -4,23 +4,32 @@ const { check, validationResult } = require("express-validator");
 const FlightSearchModel = require("../models/FlightSearchModel");
 
 const searchFlight_get = (req, res) => {
-    //console.log(req.user);
     const con = req.dbCon;
 
-    //Get all airport codes with their names
+    const is_guest = req.query.guest;
+    if(is_guest) {
+        res.cookie('jwt', '', {maxAge: 1});
+    }
+
+    //Get all the Airports cords with their names
     FlightSearchModel.getAirports(con, (err, result, fields) => {
-        if (err) throw err;
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
 
         const airportCodes = [];
         const airportNames = [];
-        console.log(result);
+
         result.forEach((value, index, array) => {
             airportCodes.push(value["AirportCode"]);
             airportNames.push(value["Name"]);
         })
 
+
         FlightSearchModel.getAllClasses(con, (err, result, fields) => {
-            if (err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
             const travelClasses =  [];
             result.forEach((value,index,array) => {
                 const travelClass = {
@@ -35,7 +44,6 @@ const searchFlight_get = (req, res) => {
         
     })
 
-
     
 }
 
@@ -47,23 +55,36 @@ const searchFlight_post = (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         const alert = errors.array()[0]
-        console.log(alert)
         res.render('searchFlight', {
              title: 'searchFlight', layout: './layouts/flightsearch_layout',alert
         })  
     }
 
-    
-    FlightSearchModel.getFlightByOrigin(data , con, function(error, result, fields){
+    // add flight search details to session
+    const  sess = req.session;
+    if(req.user == null) {
+        sess.reg = false;
+    } else {
+        sess.reg = true;
+    }
 
-        if (error) throw error;
+    sess.origin = data.Ffrom;
+    sess.destination = data.Fto;
+    sess.departureDate = data.departing;
+    sess.no_adults = parseInt(data.adults);
+    sess.no_children = parseInt(data.children);
+    sess.TravelClassID = data.travelClass;
+
+    FlightSearchModel.getFlightByOrigin(data , con, function(err, result, fields){
+
+        if(err) {
+            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+        }
         const availableFlightDetails = [];
 
-        
-
         result.forEach((value,index,array) => {
-            console.log(value)
             const availableFlightDetail = {
+                'FlightScheduleID': value['FlightScheduleID'],
                 'FFromCode' : value['Origin'],
                 'FToCode' : value['Destination'],
                 'DepartureTime' : value['DepartureTime'],
@@ -82,13 +103,14 @@ const searchFlight_post = (req, res) => {
 
                 
         FlightSearchModel.getAirports(con, (err, result, fields) => {
-            if (err) throw err;
+            if(err) {
+                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
+            }
     
             const airportCodesandNames = {
 
             };
            
-            console.log(result);
             result.forEach((value, index, array) => {
                 airportCodesandNames[value['AirportCode']] = value['Name'];
             
@@ -98,7 +120,6 @@ const searchFlight_post = (req, res) => {
         
 
         // res.render("flightSheduleTimeTable", {title: "Available Flights", availableFlightDetails : availableFlightDetails, airportCodesandNames : airportCodesandNames, layout : './layouts/schedule_layout'});
-
     });
 }
 

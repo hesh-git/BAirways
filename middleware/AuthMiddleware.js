@@ -25,15 +25,43 @@ const requireAuth = (req,res,next) =>{
     if(token){
         jwt.verify(token, 'B airways secret', (err, decodedToken) => {
             if(err){
-                console.log(err.message);
                 res.redirect('/');
             }else{
-                console.log(decodedToken);
-                next();
+                let userId = decodedToken.id;
+                let userType = decodedToken.userType;
+                if(userType != "traveller") {
+                    return res.status(403).render('error', { title : '403', layout: "./layouts/payment_layout", error: {"msg": "Forbidden", "status": 403}});
+                } else {
+                    next();
+                }
             }
         })
     }else{
         res.redirect('/')
+    }
+}
+
+const requireAuthAdmin = (req,res,next) =>{
+    const cookies = parseCookies(req);
+    const token = cookies.jwt;
+    
+    //check json web token exists & is verified
+    if(token){
+        jwt.verify(token, 'B airways secret', (err, decodedToken) => {
+            if(err){
+                res.redirect('/adminlogin');
+            }else{
+                let userId = decodedToken.id;
+                let userType = decodedToken.userType;
+                if(userType != "admin") {
+                    return res.status(403).render('error', { title : '403', layout: "./layouts/payment_layout", error: {"msg": "Forbidden", "status": 403}});
+                } else {
+                    next();
+                }
+            }
+        })
+    }else{
+        res.redirect('/adminlogin')
     }
 }
 
@@ -46,11 +74,9 @@ const checkUser = (req,res,next) =>{
     if(token){
         jwt.verify(token, 'B airways secret', (err, decodedToken) => {
             if(err){
-                console.log(err.message);
                 req.user = null;
                 next();
             }else{
-                console.log(decodedToken);
                 let userId = decodedToken.id;
                 let userType = decodedToken.userType; 
                 req.user = {id: userId, userType: userType};
@@ -65,5 +91,6 @@ const checkUser = (req,res,next) =>{
 
 module.exports = {
     requireAuth,
-    checkUser
+    checkUser,
+    requireAuthAdmin
 }

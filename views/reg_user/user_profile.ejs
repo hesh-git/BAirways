@@ -3,17 +3,28 @@
         <div class="col-md-4 mt-1">
             <div class="card text-center Psidebar">
                 <div class="card-body">
-                    <img src="/public/images/user-286.jpg" class="rounder-circle" width="150">
+                    <!-- <img src="user-286.jpg" class="rounder-circle" width="150"> -->
                     <div class="mt-3">
-                        <h3><%= userDetail.fName %> <%= userDetail.lName %></h3>
-                        <form action="">
-                            <input type="Submit" value="Sign Out" />
-                        </form>
-                        <form action="/user/editProfile">
-                            <input type="Submit" value="Edit Profile" />
-                        </form>
+                        <h3 class="font-weight-bold white-text"><%= userDetail.fName %> <%= userDetail.lName %></h3>
+                        <a href="/userlogout">Sign out</a>   
+                        <!-- <a href="/user/editProfile">Edit Profile</a>  -->
                     </div>
                 </div>
+                <div>
+                    <div class="badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="216px" height="232px" viewBox="0 0 216 232">
+                              <path fill="#2B2B2B" d="M207,0C171.827,0.001,43.875,0.004,9.003,0c-5.619-0.001-9,3.514-9,9c0,28.23-0.006,151.375,0,169    c0.005,13.875,94.499,54,107.999,54S216,191.57,216,178V9C216,3.298,212.732,0,207,0z"/>
+                      </svg>
+                        <p class="title">YOU ARE A</p>
+                        <p class="subtitle">
+                            <% if(userDetail.CategoryID == 2) { %> 
+                                <div>you are a frequent user</div>
+                                <% } else if(userDetail.CategoryID == 3) {%> 
+                                    <div>you are a gold user</div>
+                                <% } %> 
+                        </p>
+                      </div>
+                   </div>
             </div>
         </div>
        <div class="col-md-8 mt-1">
@@ -46,16 +57,9 @@
                                 <%= userDetail.ContactNumber %>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-md-3">
-                                <h5>Address</h5>
-                            </div>
-                            <div class="col-md-9 text-secondary">
-                                Matara
-                            </div> 
-                        </div> -->
                 </div>
                </div>
+              
            </div>
        </div>
     </div>
