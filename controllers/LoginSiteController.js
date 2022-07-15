@@ -173,7 +173,7 @@ const login_post = (req,res,next) => {
             userModel.getUserByEmail(email,dbCon,function(err,result,fields){
                 if(err) {
                     return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                } else if(result == 'undefined'){
+                } else if(result.length != 0){
                     alert = {
                         "msg": 'Email already in use'
                     }
@@ -181,6 +181,7 @@ const login_post = (req,res,next) => {
                         title: 'Signup Page', layout: './layouts/auth_layout',alert: alert
                    })
                 }else{
+                    console.log(result);
                     userModel.addUser(fName,lName,email,encryptedPassword,contact,dbCon,function(err,result, fields){
                         if(err) {
                             return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
