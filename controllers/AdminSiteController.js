@@ -8,20 +8,6 @@ const FlightSearchModel = require("../models/FlightSearchModel");
 const TravelClassPriceModel = require("../models/TravelClassPriceModel");
 const DateTimeValidator = require("../validators/datetimeValidator");
 
-const get_flightDetails = (FlightNo, dbCon) => {
-    let details = [];
-    FlightModel.get_flightDetails(FlightNo, dbCon, (err, result, fields) => {
-        if(err) throw err;
-        // return result;
-        details.push(result[0])
-        
-        // details["Origin"] = result[0]["Origin"];
-        // details["Destination"] = result[0]["Destination"];
-    });
-
-    return details;
-}
-
 
 
 const dashboard = (req, res) => {
@@ -155,95 +141,17 @@ const add_schedule_post = (req, res) => {
 
     if(DateTimeValidator.validate_date_time(DepartureDate, DepartureTime, ArrivalDate, ArrivalTime)) {
 
-        dbCon.beginTransaction((err) => {
+        FlightSchedule.add_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result) => {
             if(err) {
                 return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
             }
-        
-            FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
-                // if(err) throw err;
-                if(err) {
-                    dbCon.rollback(() => {
-                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                    });
-                }
-                
-                const flightScheduleID = result.insertId;
 
-                AircraftModel.get_seat_cap_details(flightScheduleID, dbCon, (err, seat_cap_details, fields) => {
-                    // if(err) throw err;
-                    if(err) {
-                        dbCon.rollback(() => {
-                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                        });
-                    }
-
-                    seat_capacities = {};
-                    seat_cap_details.forEach((value, index, array) => {
-                        seat_capacities[value["TravelClassID"]] = {
-                            "NumRows": value["NumRows"],
-                            "NumCols": value["NumCols"]
-                        }
-                    });
-
-                    AircraftModel.add_seats_to_seat(flightScheduleID, 1, 0, seat_capacities[1]["NumRows"], seat_capacities[1]["NumCols"], dbCon, (err, result, fields) => {
-                        // if(err) throw err;
-                        if(err) {
-                            dbCon.rollback(() => {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            });
-                        }
-                    });
-
-                    AircraftModel.add_seats_to_seat(flightScheduleID, 2, seat_capacities[1]["NumRows"], seat_capacities[2]["NumRows"], seat_capacities[2]["NumCols"], dbCon, (err, result, fields) => {
-                        // if(err) throw err;
-                        if(err) {
-                            dbCon.rollback(() => {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            });
-                        }
-                    });
-
-                    AircraftModel.add_seats_to_seat(flightScheduleID, 3, seat_capacities[1]["NumRows"] + seat_capacities[2]["NumRows"], seat_capacities[3]["NumRows"], seat_capacities[3]["NumCols"], dbCon, (err, result, fields) => {
-                        // if(err) throw err;
-                        if(err) {
-                            dbCon.rollback(() => {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            });
-                        }
-                    });
-
-                    dbCon.commit((err) => {
-                        if(err) {
-                            dbCon.rollback(() => {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            });
-                        }
-
-                        // res.redirect("/admin/add_schedule")
-                        // res.locals.success = {"msg": "Flight Schedule Successfully added"};
-                        // console.log("Flight Schedule Successfully added");
-                        req.flash("success", "Flight Schedule Successfully added");
-                        // add_schedule_get(req, res);
-                        res.redirect("/admin/add_schedule");
-                        // dbCon.release();
-
-                    });
-                })
-
-                // res.redirect("/admin/add_schedule")
-                // res.locals.success = {"msg": "Flight Schedule Successfully added"};
-                // console.log("Flight Schedule Successfully added");
-                // add_schedule_get(req, res);
-                // dbCon.release();
-            })
+            req.flash("success", "Flight Schedule Successfully added");
+            res.redirect("/admin/add_schedule");
         })
     } else {
         req.flash("error", "Date and time are not valid");
         res.redirect("/admin/add_schedule");
-        // res.locals.alert = {"msg": "Date and time are not valid"};
-        // // console.log("date and time are not valid");
-        // add_schedule_get(req, res);
     }
 }
 
@@ -298,7 +206,7 @@ const add_airport_post = (req, res) => {
     const dbCon = req.dbCon; // get database connection from the request
 
     // location levels of airport
-    const AirportCode = data.AirportCode;
+    const AirportCode = data.AirportCode.toUpperCase();
     const Country = data.Country;
     const State = data.State;
     const City = data.City;
@@ -310,139 +218,14 @@ const add_airport_post = (req, res) => {
         }
 
         if(result.length == 0) {
-            dbCon.beginTransaction((err) => {
+
+            AirportLocationModel.save_airport(AirportCode, City, State, Country, dbCon, (err, result) => {
                 if(err) {
                     return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                 }
 
-                // save the airport code to database
-                AirportLocationModel.save_to_location(AirportCode, dbCon, (err, result, fields) => {
-                    // if(err) throw err;
-                    if(err) {
-                        dbCon.rollback(() => {
-                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                        });
-                    }
-
-                    const airport_location_id = result.insertId; // location id of airport
-                    // save airport code to airport
-                    AirportLocationModel.save_airport_code(AirportCode, airport_location_id, dbCon, (err, result, fields) => {
-                        // if(err) throw err;
-                        if(err) {
-                            dbCon.rollback(() => {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            });
-                        }
-
-                        // save city to database
-                        AirportLocationModel.save_to_location(City, dbCon, (err, result, fields) => {
-                            // if(err) throw err;
-                            if(err) {
-                                dbCon.rollback(() => {
-                                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                });
-                            }
-
-                            const city_id = result.insertId; // location id of city
-
-                            // add airport code and city as pair to database
-                            AirportLocationModel.save_location_pair(city_id,airport_location_id, dbCon, (err, result, fields) => {
-                                // if(err) throw err;
-                                if(err) {
-                                    dbCon.rollback(() => {
-                                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                    });
-                                }
-
-                                // if state exists in location levels
-                                if(State) {
-                                    AirportLocationModel.save_to_location(State, dbCon, (err, result, fields) => {
-                                        // if(err) throw err;
-                                        if(err) {
-                                            dbCon.rollback(() => {
-                                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                            });
-                                        }
-
-                                        const state_id = result.insertId; // location id of State
-
-                                        // add city and state as a location pair to database
-                                        AirportLocationModel.save_location_pair(state_id, city_id, dbCon, (err, result, fields) => {
-                                            // if(err) throw err;
-                                            if(err) {
-                                                dbCon.rollback(() => {
-                                                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                                });
-                                            }
-
-                                            // save Country
-                                            AirportLocationModel.save_to_location(Country, dbCon, (err, result, fields) => {
-                                                // if(err) throw err;
-                                                if(err) {
-                                                    dbCon.rollback(() => {
-                                                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                                    });
-                                                }
-
-                                                const country_id = result.insertId; // location id of country
-
-                                                // add country and state as a location pair to database
-                                                AirportLocationModel.save_location_pair(country_id, state_id, dbCon, (err, result, fields) => {
-                                                    if(err) {
-                                                        dbCon.rollback(() => {
-                                                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                                        });
-                                                    }
-
-
-                                                });
-                                            });
-                                        });
-
-                                    });
-                                }
-                                // when there is no state exists in location levels
-                                else {
-                                    // save country
-                                    AirportLocationModel.save_to_location(Country, dbCon, (err, result, fields) => {
-                                        if(err) {
-                                            dbCon.rollback(() => {
-                                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                            });
-                                        }
-
-                                        const country_id = result.insertId; // location id of country
-
-                                        // add country and city as a location pair to database
-                                        AirportLocationModel.save_location_pair(country_id, city_id, dbCon, (err, result, fields) => {
-                                            if(err) {
-                                                dbCon.rollback(() => {
-                                                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                                });
-                                            }
-                                        });
-                                    });
-                                }
-                            });
-                        });
-                    });
-
-                    dbCon.commit((err) => {
-                        if(err) {
-                            dbCon.rollback(() => {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            });
-                        }
-
-                        req.flash("success", "Airport successfully added");
-                        // res.locals.success = {"msg": "Airport successfully added"};
-                        res.redirect('/admin/add_airport');
-                        // add_airport_get(req, res);
-
-                        // dbCon.release();
-                    })
-                    
-                })
+                req.flash("success", "Airport successfully added");
+                res.redirect('/admin/add_airport');
             })
 
         } else {
@@ -786,7 +569,6 @@ module.exports = {
     add_aircraft_ex_post,
     add_flight_get,
     add_flight_post,
-    get_flightDetails,
     add_price_get,
     add_price_post,
     update_schedule_get,
