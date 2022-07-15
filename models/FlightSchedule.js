@@ -27,16 +27,21 @@ const update_flight_schedule = (schedule_id, DepartureDate, DepartureTime, Arriv
 
 const get_schedules_for_day = (Date, dbCon, callback) => {
     const sql_change_to_ontime = "UPDATE `FlightSchedule` SET `StateID` = ? WHERE `DepartureDate` = ? AND `DepartureTime` <= ? AND `StateID` = ?";
-    const month = Date.getUTCMonth() + 1;
-    const dateformated = Date.getUTCFullYear() + "-" + month +"-" + Date.getUTCDate();
-    const time = Date.getHours() + ":" + Date.getMinutes();
+    //const month = Date.getUTCMonth() + 1;
+    const month = Date.month() + 1;
+    //const dateformated = Date.getUTCFullYear() + "-" + month +"-" + Date.getUTCDate();
+    const dateformated = Date.year() + "-" + month +"-" + Date.date();
+    //const time = Date.getHours() + ":" + Date.getMinutes();
+    const time = Date.hour() + ":" + Date.minutes();
+    console.log(dateformated);
+    
     dbCon.query(sql_change_to_ontime, [2, dateformated, time, 1], (err, result, fields) => {
         if(err) throw err;
 
         // const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
         const sql = "SELECT * FROM `FlightSchedule` WHERE `DepartureDate` <= ? AND `ArrivalDate` >= ?";
-
-        dbCon.query(sql, [Date, Date], callback);
+        
+        dbCon.query(sql, [dateformated, dateformated], callback);
     });
     
 }
