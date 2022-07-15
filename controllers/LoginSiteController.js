@@ -41,11 +41,11 @@ const admin_login_post = (req,res,next) => {
 
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
-        const alert = errors.array()[0]
+        const alert = errors.array()[0].msg
+
+        req.flash('error', alert);
         
-        res.render('AdminLogin', {
-             title: 'Admin | Login', layout: './layouts/auth_layout',alert
-        })
+        res.redirect('/adminlogin');
     }
     else{
         adminModel.getUserByEmail(email,con, function(err,result, fields){
@@ -53,8 +53,9 @@ const admin_login_post = (req,res,next) => {
                 return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
             }
 
-            if(!result.length){
-              res.send('Not logged in');
+            if(result.length == 0){
+                req.flash('error',"Invalid login. Please try again");
+                return res.redirect('/adminlogin');
             }
             var id = result[0].ID;
             
@@ -77,10 +78,8 @@ const admin_login_post = (req,res,next) => {
                     })
                 }else{
                 // req.session.flag = 4;
-                    const alert = {"msg": "Email and password do not match. Not logged"};
-                    res.render('AdminLogin', {
-                        title: 'Admin | Login', layout: './layouts/auth_layout',alert
-                    });
+                    req.flash('error', 'Email and password did not match');
+                    res.redirect('/adminlogin');
                 }
             });
         })
@@ -94,10 +93,9 @@ const login_post = (req,res,next) => {
 
     const errors = validationResult(req)
         if(!errors.isEmpty()) {
-            const alert = errors.array()[0]
-            res.render('login', {
-                 title: 'Login Page', layout: './layouts/auth_layout',alert
-            })
+            const alert = errors.array()[0].msg
+            req.flash('error', alert);
+            res.redirect('/');
         }
         else{
             userModel.getUserByEmail(email,con, function(err,result, fields){
@@ -105,10 +103,8 @@ const login_post = (req,res,next) => {
                     return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                 }
                 if(result.length == 0){
-                  const alert = {"msg": "You don't have an account.. please sign up"};
-                  res.render('login', {
-                    title: 'Login Page', layout: './layouts/auth_layout',alert
-                  });
+                  req.flash('error',"You don't have an account with us. Please sign up");
+                  res.redirect('/register');
                 } else {
                     var id = result[0].ID;
                     
@@ -138,11 +134,8 @@ const login_post = (req,res,next) => {
                                 })
                             })
                         }   else{
-                            // req.session.flag = 4;
-                            const alert = {"msg": "Email and password do not match. Not logged"};
-                            res.render('login', {
-                                title: 'Login Page', layout: './layouts/auth_layout',alert
-                            });
+                            req.flash('error', 'Email and password did not match. Not logged in');
+                            res.redirect('/')
                         }
                     });
                 }});
@@ -164,22 +157,17 @@ const login_post = (req,res,next) => {
         const errors = validationResult(req)
         if(!errors.isEmpty()) {
             // return res.status(422).jsonp(errors.array())
-            const alert = errors.array()[0]
-            res.render('signup', {
-                 title: 'Signup Page', layout: './layouts/auth_layout',alert
-            })
+            const alert = errors.array()[0].msg
+            req.flash('error', alert);
+            res.redirect('/register');
         }
         else{  
             userModel.getUserByEmail(email,dbCon,function(err,result,fields){
                 if(err) {
                     return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                 } else if(result.length != 0){
-                    alert = {
-                        "msg": 'Email already in use'
-                    }
-                    res.render('signup', {
-                        title: 'Signup Page', layout: './layouts/auth_layout',alert: alert
-                   })
+                    req.flash('error', 'Email already exists');
+                    res.redirect('/register');
                 }else{
                     console.log(result);
                     userModel.addUser(fName,lName,email,encryptedPassword,contact,dbCon,function(err,result, fields){
