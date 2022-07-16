@@ -16,9 +16,6 @@ const dashboard = (req, res) => {
     var moment = require('moment');
     // const today = new Date(); // get today date
     const today =  moment();// get today date
-    
-    
-    console.log(today);
 
     FlightSchedule.get_schedules_for_day(today, dbCon, (err, schedules, fields) => {
         if(err) {
