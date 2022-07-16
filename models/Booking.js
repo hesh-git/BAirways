@@ -1,9 +1,3 @@
-// const save = (data, dbCon, callback) => {
-    
-//     let sql = 'INSERT INTO `passengerdetails`(`BookingID`, `TypeID`, `SeatNo`, `Gender`, `FirstName`, `LastName`, `dateOfBirth`) VALUES(?, ?, ?, ?, ?,?,?)';
-//     dbCon.query(sql, [1, 1, 1, data.Gender, data.FirstName, data.LastName, data.DateOfBirth], callback);
-// }
-
 const get_travellerID = (ID, dbCon, callback) => {
     const sql_traveller_id = "SELECT `T`.`ID` `ID` FROM `RegisteredTraveller` `RT` JOIN `Traveller` `T` ON `RT`.`TravellerID` = `T`.`ID` WHERE `RT`.`ID` = ?";
     dbCon.query(sql_traveller_id, [ID], callback);
@@ -41,19 +35,10 @@ const getCapacity = (ScheduleId, dbCon, callback) =>{
     dbCon.query(sql_capacity,[ScheduleId], callback);
 }
 
-const getSeatsbyState = (ScheduleID, TravelClassID, SeatStateID, dbCon, callback) => {
-    var sql_seats = 'SELECT `SeatNo` from `Seat` `S` JOIN `FlightSchedule` `FS` on S.AircraftID = FS.AircraftID where FS.ID=? AND S.TravelClassID=? AND S.SeatStateID=?';
-    dbCon.query(sql_seats, [ScheduleID,TravelClassID, SeatStateID], callback);
-}
 
 const getSeatsbyTravelClass = (ScheduleID, TravelClassID, dbCon, callback) => {
     var sql_seats = 'SELECT `SeatNo`, `SeatStateID` from `Seat` `S` WHERE `FlightScheduleID` = ? AND TravelClassID=?';
     dbCon.query(sql_seats, [ScheduleID,TravelClassID], callback);
-}
-
-const getSeats = (ScheduleID, dbCon, callback) => {
-    var sql_seats = 'SELECT `SeatNo`, `TravelClassID`, `SeatStateID` from `Seat` `S` JOIN `FlightSchedule` `FS` on S.AircraftID = FS.AircraftID where FS.ID=?';
-    dbCon.query(sql_seats, [ScheduleID], callback);
 }
 
 const updateSeatState = (stateID, ScheduleId, SeatNo, dbCon, callback) => {
@@ -123,10 +108,6 @@ const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, BookingDate
     dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingDate, BookingTime, BookingID], callback)
 }
 
-// const completeBooking = (DiscountAmount,TotalticketPrice, BookingID, dbCon, callback) => {
-//     var sql_com_booking = 'UPDATE `Booking` SET `DiscountAmount` = ?, `TotalticketPrice` = ?, `BookingStateID` = 2 WHERE `ID` = ?';
-//     dbCon.query(sql_com_booking, [DiscountAmount, TotalticketPrice, BookingID], callback)
-// }
 
 
 
@@ -137,8 +118,6 @@ module.exports = {
     addGuest,
     getCapacity,
     getCapacitybyTravelClass,
-    getSeats,
-    getSeatsbyState,
     getSeatsbyTravelClass,
     updateSeatState,
     getAvailableCapacity,
