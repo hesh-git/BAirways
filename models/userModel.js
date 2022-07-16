@@ -6,7 +6,7 @@ const getUserByEmail = (email,dbCon,callback) => {
 
 
 const addUser = (fName,lName,email,password,contact, dbCon,callback) =>{
-    console.log(fName,lName,email,password,contact)
+    
     var sql_user = 'INSERT INTO `user` (`Email`,`UsertypeID`) VALUES (?,?)';
     dbCon.query(sql_user,[email,2],(err,result,fields) =>{
         if(err){

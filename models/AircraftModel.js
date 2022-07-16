@@ -21,7 +21,7 @@ const save_seat_capacity = (ModelID, TravelClassID, NumRows, NumCols, dbCon, cal
 }
 
 const get_seat_cap_details = (FlightScheduleID, dbCon, callback) => {
-    console.log(FlightScheduleID);
+
     let sql = "SELECT `SC`.`NumRows`, `SC`.`NumCols`, `SC`.`TravelClassID` FROM `FlightSchedule` `FS` JOIN `Aircraft` `A` JOIN `SeatingCapacity` `SC` ON `FS`.`AircraftID` = `A`.`ID` AND `A`.`ModelID` = `SC`.`ModelID` WHERE `FS`.`ID` = ?";
     dbCon.query(sql, [FlightScheduleID], callback);
 }

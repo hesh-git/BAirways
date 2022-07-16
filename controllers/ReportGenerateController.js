@@ -41,19 +41,18 @@ const passenger_details_post = (req, res) => {
         if(err) {
             return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
         }
-        console.log(flightID, "flightID");
+    
         if(flightID === undefined || flightID.length == 0) {
             res.render('./admin/passenger_details', {title: 'Passenger Details', flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
             // res.render('./admin/passenger_details', {title: 'Passenger Details', flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
         } else {
             const scheduleID = flightID[0].ID;
-            console.log("Schedule id: ", scheduleID);
-
+        
             ReportModel.get_passenger_details(scheduleID, dbCon, (err, passenger_details, fields) => {
                 if(err) {
                     return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                 }
-                console.log("passenger details", passenger_details);
+                
                 const adults = [];
                 const children = [];
                 passenger_details.forEach((value, index, array) => {
@@ -63,13 +62,7 @@ const passenger_details_post = (req, res) => {
                         children.push(value);
                     }
                 });
-                console.log("adults: ", adults);
-                console.log("children: ", children);
-
-                // req.flash("adults", adults);
-                // req.flash("children", children);
-                // req.flash("FlightNo", FlightNo);
-                // res.redirect("/admin/passenger_details");
+                
                 res.render('./admin/passenger_details', {title: 'Passenger Details', adults: adults, children: children, flightNoList: flightNoList, FlightNo: FlightNo, layout: './layouts/admin_layout'});
             });
         }
@@ -152,7 +145,7 @@ const booking_statistics_post = (req, res) => {
             booking_statistics[value["TypeID"]] = value["total_bookings"];
         });
 
-        // console.log(booking_statistics);
+        
         res.render('./admin/booking_statistics', {title: 'Booking Statistics', booking_statistics: booking_statistics, FromDate: FromDate, ToDate: ToDate, layout: './layouts/admin_layout'});
     });
 }
