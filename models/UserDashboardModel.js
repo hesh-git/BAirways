@@ -1,4 +1,4 @@
-const view_dashboard_get = (RegisteredID, dbCon, callback) => {
+const   view_dashboard_get = (RegisteredID, dbCon, callback) => {
     const today = new Date();
     const sql_change_to_ontime_today = "UPDATE `FlightSchedule` SET `StateID` = ? WHERE `DepartureDate` = ? AND `DepartureTime` <= ? AND `StateID` = ?";
     const month = today.getUTCMonth() + 1;

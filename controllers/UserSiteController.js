@@ -124,8 +124,6 @@ const view_edit_profile_post = (req, res) => {
     LastName = data.lName;
     Email = data.email;
 
-    
-
 
     res.render('./reg_user/user_editprofile', {title: 'user | Edit Profile', layout: './layouts/user_layout'});
 }
