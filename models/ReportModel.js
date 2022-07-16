@@ -1,8 +1,8 @@
 const get_passenger_details = (scheduleID, dbCon, callback) => {
     
         // get passenger details from passenger details view
-        const sql_get_passenger_details = "SELECT * FROM `passenger_details` WHERE `FlightScheduleID` = ?";
-        dbCon.query(sql_get_passenger_details, [scheduleID], callback);
+        const sql_get_passenger_details = "SELECT * FROM `passenger_details` WHERE `FlightScheduleID` = ? AND `BookingStateID` = ?";
+        dbCon.query(sql_get_passenger_details, [scheduleID, 2], callback);
     
 }
 
