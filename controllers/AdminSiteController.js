@@ -13,8 +13,9 @@ const DateTimeValidator = require("../validators/datetimeValidator");
 const dashboard = (req, res) => {
     
     const dbCon = req.dbCon;
-
-    const today = new Date(); // get today date
+    var moment = require('moment');
+    // const today = new Date(); // get today date
+    const today =  moment();// get today date
 
     FlightSchedule.get_schedules_for_day(today, dbCon, (err, schedules, fields) => {
         if(err) {
