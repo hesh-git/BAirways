@@ -16,7 +16,7 @@ const add_pass_details_get = (req, res) => {
     } else {
 
         if(req.user != null && req.user.userType == "traveller") {
-            // console.log("registered user")
+            
             const reg_id = req.user.id;
             Booking.get_travellerID(reg_id, dbCon, (err, result, fields) => {
                 if(err) {

@@ -169,7 +169,6 @@ const login_post = (req,res,next) => {
                     req.flash('error', 'Email already exists');
                     res.redirect('/register');
                 }else{
-                    console.log(result);
                     userModel.addUser(fName,lName,email,encryptedPassword,contact,dbCon,function(err,result, fields){
                         if(err) {
                             return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});

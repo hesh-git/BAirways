@@ -183,17 +183,10 @@ const update_schedule_post = (req, res) => {
 
             req.flash("success", "Flight Schedule Successfully updated!");
             res.redirect("/admin");
-            // res.locals.success = {"msg": "Flight Schedule Successfully updated!"};
-            // console.log("Flight Schedule Successfully added");
-            // update_schedule_get(req, res);
-            // dashboard(req, res);
         });
     } else {
         req.flash("error", "Date and time are not valid");
         res.redirect("/admin/update_schedule");
-        // res.locals.alert = {"msg": "Date and time are not valid"};
-        // console.log("date and time are not valid");
-        // update_schedule_get(req, res);
     }
 }
 // add a airport
@@ -354,7 +347,6 @@ const add_aircraft_ex_post = (req, res) => {
 
     AircraftModel.set_database(dbCon);
     // save aircraft model data to database
-    // console.log(req.dbCon);
 
     const NoOfAircrafts = data.NoOfAircrafts; // number of aircrafts for user entered model
     const modelId = sess.ModelId;
