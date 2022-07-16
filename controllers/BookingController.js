@@ -449,9 +449,6 @@ const add_payment_get =(req, res ) => {
     res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
 }
 
-// const add_payment_post = (req, res) => {
-//     res.render(window.close());
-// }
 
 const success_get = (req, res) => {
     const user = req.user;
@@ -472,7 +469,6 @@ module.exports ={
     add_guest_details_post,
     select_seat_get,
     add_payment_get,
-    // add_payment_post,
     before_payment_get,
     before_payment_post,
     select_seat_post,
