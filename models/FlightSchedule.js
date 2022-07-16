@@ -80,7 +80,7 @@ const add_schedule = (FlightNo, AircraftID, StateID, DepartureDate, DepartureTim
                         });
                     }
     
-                    seat_capacities = {};
+                    const seat_capacities = {};
                     seat_cap_details.forEach((value, index, array) => {
                         seat_capacities[value["TravelClassID"]] = {
                             "NumRows": value["NumRows"],
