@@ -56,9 +56,10 @@ const getSeats = (ScheduleID, dbCon, callback) => {
     dbCon.query(sql_seats, [ScheduleID], callback);
 }
 
-const updateSeatState = (stateID, SeatNo, dbCon, callback) => {
-    var sql_update_state = 'UPDATE `seat` SET `SeatStateId` = ? WHERE `seatno` = ? ';
-    dbCon.query(sql_update_state, [stateID, SeatNo], callback);
+const updateSeatState = (stateID, ScheduleId, SeatNo, dbCon, callback) => {
+    // console.log(stateID, ScheduleId, SeatNo, dbCon, callback);
+    var sql_update_state = 'UPDATE `seat` SET `SeatStateId` = ? WHERE `seatno` = ? AND `FlightScheduleID` = ?';
+    dbCon.query(sql_update_state, [stateID, SeatNo, ScheduleId], callback);
 }
 
 const getAvailableCapacity = (SheduleID, dbCon, callback) => {

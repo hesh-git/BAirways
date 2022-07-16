@@ -210,6 +210,8 @@ const select_seat_get = (req, res) => {
                         
                     })
 
+                
+
                     var intial_index = 0;
                     if (TravelClassId == 1){
                         intial_index = 0;
@@ -256,7 +258,7 @@ const select_seat_post = (req, res) => {
 
         else {
             for (let i=0; i < seat_array.length; i++){
-                Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
+                Booking.updateSeatState(stateID, ScheduleId, seat_array[i], dbCon, function(err, result, fileld){
                     if(err) {
                         return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                     }
@@ -380,8 +382,11 @@ const before_payment_post = (req, res) => {
                         return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                     }
 
+                    
                     for (let i=0; i < seat_array.length; i++){
-                        Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
+                        
+                        Booking.updateSeatState(stateID, ScheduleId, seat_array[i], dbCon, function(err, result, fileld){
+                            
                             if(err) {
                                 return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                             }
