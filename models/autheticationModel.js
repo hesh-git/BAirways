@@ -1,5 +1,5 @@
 const getPwrdByID = (id,dbCon,callback) =>{
-    var sql = 'select password from authentication where UserID = ? limit 1';
+    var sql = 'select password from authentication USE INDEX(`idx_userid`) where UserID = ? limit 1';
     dbCon.query(sql,id,callback);
 }
 

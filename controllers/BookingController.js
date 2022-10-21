@@ -15,7 +15,8 @@ const add_pass_details_get = (req, res) => {
         res.redirect("/searchFlight");
     } else {
 
-        if(req.user != null) {
+        if(req.user != null && req.user.userType == "traveller") {
+            
             const reg_id = req.user.id;
             Booking.get_travellerID(reg_id, dbCon, (err, result, fields) => {
                 if(err) {
@@ -209,6 +210,8 @@ const select_seat_get = (req, res) => {
                         
                     })
 
+                
+
                     var intial_index = 0;
                     if (TravelClassId == 1){
                         intial_index = 0;
@@ -248,62 +251,14 @@ const select_seat_post = (req, res) => {
 
         if(no_selected_seats != total_passengers) {
             const alert = "Please select only " + total_passengers + " seats";
+            req.flash("error", alert);
+            res.redirect("/seat-selection");
             
-            Booking.getCapacity(ScheduleId, dbCon, (err, result, fields) => {
-                if(err) {
-                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                }
-        
-                const rows = [];
-                rows.push(result[0]["NumRows"]);
-                rows.push(result[1]["NumRows"]); 
-                rows.push(result[2]["NumRows"]);
-        
-                Booking.getCapacitybyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatCapacity, fields) => {
-                    if(err) {
-                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                    }
-                    const seat_cap = {};
-            
-                    seat_cap[0] = seatCapacity[0]["NumRows"];
-                    seat_cap[1] = seatCapacity[0]["NumCols"];
-            
-                    Booking.getSeatsbyTravelClass(ScheduleId, TravelClassId, dbCon, (err, seatStates, fields) => {
-                        if(err) {
-                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                        }
-            
-                        const booked_seats = [];
-            
-                        seatStates.forEach((value, index, array) => {
-                            if(value["SeatStateID"] == 3) { // only booked seats
-                                booked_seats.push(value.SeatNo);    
-                            }
-                            
-                        })
-        
-                        var intial_index = 0;
-                        if (TravelClassId == 1){
-                            intial_index = 0;
-                        } else if (TravelClassId == 2){
-                            intial_index = rows[0];
-                        } else if (TravelClassId == 3){
-                            intial_index = rows[0] + rows [1];
-                        }
-            
-                        res.render('seatSelection', {title: 'Seat Selection', alert: alert, layout: './layouts/seat_select_layout', seat_cap: seat_cap, booked_seats: booked_seats, intial_index: intial_index});
-                        
-                        
-                    });
-                    
-                });
-        
-            });
         }
 
         else {
             for (let i=0; i < seat_array.length; i++){
-                Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
+                Booking.updateSeatState(stateID, ScheduleId, seat_array[i], dbCon, function(err, result, fileld){
                     if(err) {
                         return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                     }
@@ -326,7 +281,7 @@ const before_payment_get = (req, res) => {
     const ScheduleId = sess.ScheduleId;
     // const RegisteredTravellerID = 2;
     const seat_array = sess.seat_array;
-    if(req.user != null){
+    if(req.user != null && req.user.userType == "traveller" ){
         sess.reg = true;
     }
     const reg = sess.reg;
@@ -392,7 +347,7 @@ const before_payment_post = (req, res) => {
     const subtotal = sess.subtotal;
     const tot_discount = sess.tot_discount;
     const seat_array = sess.seat_array;
-    if(req.user != null){
+    if(req.user != null && req.user.userType == "traveller"){
         sess.reg = true;
     }
     const reg = sess.reg;
@@ -427,8 +382,11 @@ const before_payment_post = (req, res) => {
                         return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                     }
 
+                    
                     for (let i=0; i < seat_array.length; i++){
-                        Booking.updateSeatState(stateID, seat_array[i], dbCon, function(err, result, fileld){
+                        
+                        Booking.updateSeatState(stateID, ScheduleId, seat_array[i], dbCon, function(err, result, fileld){
+                            
                             if(err) {
                                 return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                             }
@@ -491,15 +449,12 @@ const add_payment_get =(req, res ) => {
     res.render('payment', {title: 'Payment', layout: './layouts/payment_layout'});
 }
 
-// const add_payment_post = (req, res) => {
-//     res.render(window.close());
-// }
 
 const success_get = (req, res) => {
     const user = req.user;
     let registered = false;
 
-    if(user != null) {
+    if(user != null && req.user.userType == "traveller") {
         registered = true;
     }
     req.session.destroy();
@@ -514,7 +469,6 @@ module.exports ={
     add_guest_details_post,
     select_seat_get,
     add_payment_get,
-    // add_payment_post,
     before_payment_get,
     before_payment_post,
     select_seat_post,

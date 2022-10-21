@@ -1,11 +1,12 @@
 const getUserByEmail = (email,dbCon,callback) => {
-    var sql = 'select * from user where email = ?';
+    // var sql = 'select * from user where email = ?';
+    const sql = 'SELECT * FROM `user` USE INDEX(`idx_email`) WHERE `email` = ?';
     dbCon.query(sql,email,callback);
 }
 
 
 const addUser = (fName,lName,email,password,contact, dbCon,callback) =>{
-    console.log(fName,lName,email,password,contact)
+    
     var sql_user = 'INSERT INTO `user` (`Email`,`UsertypeID`) VALUES (?,?)';
     dbCon.query(sql_user,[email,2],(err,result,fields) =>{
         if(err){

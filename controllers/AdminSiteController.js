@@ -8,27 +8,14 @@ const FlightSearchModel = require("../models/FlightSearchModel");
 const TravelClassPriceModel = require("../models/TravelClassPriceModel");
 const DateTimeValidator = require("../validators/datetimeValidator");
 
-const get_flightDetails = (FlightNo, dbCon) => {
-    let details = [];
-    FlightModel.get_flightDetails(FlightNo, dbCon, (err, result, fields) => {
-        if(err) throw err;
-        // return result;
-        details.push(result[0])
-        
-        // details["Origin"] = result[0]["Origin"];
-        // details["Destination"] = result[0]["Destination"];
-    });
-
-    return details;
-}
-
 
 
 const dashboard = (req, res) => {
     
     const dbCon = req.dbCon;
-
-    const today = new Date(); // get today date
+    var moment = require('moment');
+    // const today = new Date(); // get today date
+    const today =  moment();// get today date
 
     FlightSchedule.get_schedules_for_day(today, dbCon, (err, schedules, fields) => {
         if(err) {
@@ -92,13 +79,7 @@ const dashboard = (req, res) => {
                 });
 
                 res.render('./admin/admin_dashboard', {title: 'Admin | Dashboard', schedules: schedules, layout: './layouts/admin_layout'});
-            })
-
-            
-
-            
-            
-            
+            });
         })
         // }
     })
@@ -161,59 +142,17 @@ const add_schedule_post = (req, res) => {
 
     if(DateTimeValidator.validate_date_time(DepartureDate, DepartureTime, ArrivalDate, ArrivalTime)) {
 
-        FlightSchedule.add_flight_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result, fields) => {
-            // if(err) throw err;
+        FlightSchedule.add_schedule(FlightNo, AircraftID, StateID, DepartureDate, DepartureTime, ArrivalDate, ArrivalTime, dbCon, (err, result) => {
             if(err) {
                 return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
             }
-            
-            const flightScheduleID = result.insertId;
 
-            AircraftModel.get_seat_cap_details(flightScheduleID, dbCon, (err, seat_cap_details, fields) => {
-                // if(err) throw err;
-                if(err) {
-                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                }
-
-                seat_capacities = {};
-                seat_cap_details.forEach((value, index, array) => {
-                    seat_capacities[value["TravelClassID"]] = {
-                        "NumRows": value["NumRows"],
-                        "NumCols": value["NumCols"]
-                    }
-                });
-
-                AircraftModel.add_seats_to_seat(flightScheduleID, 1, 0, seat_capacities[1]["NumRows"], seat_capacities[1]["NumCols"], dbCon, (err, result, fields) => {
-                    // if(err) throw err;
-                    if(err) {
-                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                    }
-                });
-
-                AircraftModel.add_seats_to_seat(flightScheduleID, 2, seat_capacities[1]["NumRows"], seat_capacities[2]["NumRows"], seat_capacities[2]["NumCols"], dbCon, (err, result, fields) => {
-                    // if(err) throw err;
-                    if(err) {
-                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                    }
-                });
-
-                AircraftModel.add_seats_to_seat(flightScheduleID, 3, seat_capacities[1]["NumRows"] + seat_capacities[2]["NumRows"], seat_capacities[3]["NumRows"], seat_capacities[3]["NumCols"], dbCon, (err, result, fields) => {
-                    // if(err) throw err;
-                    if(err) {
-                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                    }
-                });
-            })
-
-            // res.redirect("/admin/add_schedule")
-            res.locals.success = {"msg": "Flight Schedule Successfully added"};
-            // console.log("Flight Schedule Successfully added");
-            add_schedule_get(req, res);
+            req.flash("success", "Flight Schedule Successfully added");
+            res.redirect("/admin/add_schedule");
         })
     } else {
-        res.locals.alert = {"msg": "Date and time are not valid"};
-        // console.log("date and time are not valid");
-        add_schedule_get(req, res);
+        req.flash("error", "Date and time are not valid");
+        res.redirect("/admin/add_schedule");
     }
 }
 
@@ -243,16 +182,12 @@ const update_schedule_post = (req, res) => {
                 return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
             }
 
-            // res.redirect("/admin");
-            res.locals.success = {"msg": "Flight Schedule Successfully updated!"};
-            // console.log("Flight Schedule Successfully added");
-            // update_schedule_get(req, res);
-            dashboard(req, res);
+            req.flash("success", "Flight Schedule Successfully updated!");
+            res.redirect("/admin");
         });
     } else {
-        res.locals.alert = {"msg": "Date and time are not valid"};
-        // console.log("date and time are not valid");
-        update_schedule_get(req, res);
+        req.flash("error", "Date and time are not valid");
+        res.redirect("/admin/update_schedule");
     }
 }
 // add a airport
@@ -265,7 +200,7 @@ const add_airport_post = (req, res) => {
     const dbCon = req.dbCon; // get database connection from the request
 
     // location levels of airport
-    const AirportCode = data.AirportCode;
+    const AirportCode = data.AirportCode.toUpperCase();
     const Country = data.Country;
     const State = data.State;
     const City = data.City;
@@ -278,106 +213,20 @@ const add_airport_post = (req, res) => {
 
         if(result.length == 0) {
 
-            // save the airport code to database
-            AirportLocationModel.save_to_location(AirportCode, dbCon, (err, result, fields) => {
-                // if(err) throw err;
+            AirportLocationModel.save_airport(AirportCode, City, State, Country, dbCon, (err, result) => {
                 if(err) {
                     return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                 }
 
-                const airport_location_id = result.insertId; // location id of airport
-                // save airport code to airport
-                AirportLocationModel.save_airport_code(AirportCode, airport_location_id, dbCon, (err, result, fields) => {
-                    // if(err) throw err;
-                    if(err) {
-                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                    }
-
-                    // save city to database
-                    AirportLocationModel.save_to_location(City, dbCon, (err, result, fields) => {
-                        // if(err) throw err;
-                        if(err) {
-                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                        }
-
-                        const city_id = result.insertId; // location id of city
-
-                        // add airport code and city as pair to database
-                        AirportLocationModel.save_location_pair(city_id,airport_location_id, dbCon, (err, result, fields) => {
-                            // if(err) throw err;
-                            if(err) {
-                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                            }
-
-                            // if state exists in location levels
-                            if(State) {
-                                AirportLocationModel.save_to_location(State, dbCon, (err, result, fields) => {
-                                    // if(err) throw err;
-                                    if(err) {
-                                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                    }
-
-                                    const state_id = result.insertId; // location id of State
-
-                                    // add city and state as a location pair to database
-                                    AirportLocationModel.save_location_pair(state_id, city_id, dbCon, (err, result, fields) => {
-                                        // if(err) throw err;
-                                        if(err) {
-                                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                        }
-
-                                        // save Country
-                                        AirportLocationModel.save_to_location(Country, dbCon, (err, result, fields) => {
-                                            // if(err) throw err;
-                                            if(err) {
-                                                return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                            }
-
-                                            const country_id = result.insertId; // location id of country
-
-                                            // add country and state as a location pair to database
-                                            AirportLocationModel.save_location_pair(country_id, state_id, dbCon, (err, result, fields) => {
-                                                if(err) {
-                                                    return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                                }
-
-
-                                            })
-                                        })
-                                    })
-
-                                })
-                            }
-                            // when there is no state exists in location levels
-                            else {
-                                // save country
-                                AirportLocationModel.save_to_location(Country, dbCon, (err, result, fields) => {
-                                    if(err) {
-                                        return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                    }
-
-                                    const country_id = result.insertId; // location id of country
-
-                                    // add country and city as a location pair to database
-                                    AirportLocationModel.save_location_pair(country_id, city_id, dbCon, (err, result, fields) => {
-                                        if(err) {
-                                            return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
-                                        }
-                                    })
-                                })
-                            }
-                        })
-                    })
-                })
-                res.locals.success = {"msg": "Airport successfully added"};
-                // res.redirect('/admin/add_airport');
-                add_airport_get(req, res);
+                req.flash("success", "Airport successfully added");
+                res.redirect('/admin/add_airport');
             })
 
         } else {
-            res.locals.alert = {"msg": "AirportCode already existing in the system"};
-                // res.redirect('/admin/add_airport');
-            add_airport_get(req, res);
+            req.flash("error", "AirportCode already existing in the system");
+            // res.locals.alert = {"msg": "AirportCode already existing in the system"};
+            res.redirect('/admin/add_airport');
+            // add_airport_get(req, res);
         }
     });
 }
@@ -469,16 +318,24 @@ const add_aircraft_post = (req, res) => {
                         })
                         
                     }
-                    res.locals.success = {"msg": "Aircrafts added Successfully"}
-                    add_aircraft_get(req, res);
+                    req.flash("success", "Aircrafts added Successfully");
+                    res.redirect("/admin/add_aircraft");
+                    // res.locals.success = {"msg": "Aircrafts added Successfully"}
+                    // add_aircraft_get(req, res);
                 });
-                res.locals.alert = {"msg": "Number of rows in the aircraft should not be greater than 26"};
-                add_aircraft_get(req, res);
+                
+            } else {
+                req.flash("error", "Number of rows in the aircraft should not be greater than 26");
+                res.redirect("/admin/add_aircraft");
+                // res.locals.alert = {"msg": "Number of rows in the aircraft should not be greater than 26"};
+                // add_aircraft_get(req, res);
             }
         } else {
             sess.ModelId = result[0]["ID"];
-            res.locals.alert = {"msg": "Given Aircraft model already added to the system. Add only aircrafts"};
-            add_aircraft_ex_get(req, res);
+            req.flash("error", "Given Aircraft model already added to the system. Add only aircrafts");
+            res.redirect("/admin/add_aircraft_ex");
+            // res.locals.alert = {"msg": "Given Aircraft model already added to the system. Add only aircrafts"};
+            // add_aircraft_ex_get(req, res);
         }
     })
     
@@ -491,7 +348,6 @@ const add_aircraft_ex_post = (req, res) => {
 
     AircraftModel.set_database(dbCon);
     // save aircraft model data to database
-    // console.log(req.dbCon);
 
     const NoOfAircrafts = data.NoOfAircrafts; // number of aircrafts for user entered model
     const modelId = sess.ModelId;
@@ -522,9 +378,10 @@ const add_aircraft_ex_post = (req, res) => {
             })
         }
 
-        // res.redirect('/admin/add_aircraft');
-        res.locals.success = {"msg": "Aircrafts added Successfully"}
-        add_aircraft_get(req, res);
+        req.flash("success", "Aircrafts added Successfully");
+        res.redirect('/admin/add_aircraft');
+        // res.locals.success = {"msg": "Aircrafts added Successfully"}
+        // add_aircraft_get(req, res);
     }
     
 }
@@ -561,8 +418,10 @@ const add_flight_post = (req, res) => {
     const Destination = data.Destination;
 
     if(Origin === Destination) {
-        res.locals.alert = {"msg": "Origin and Destination must not be identical"};
-        add_flight_get(req, res);
+        req.flash("error", "Origin and Destination must not be identical");
+        res.redirect("/admin/add_flight");
+        // res.locals.alert = {"msg": "Origin and Destination must not be identical"};
+        // add_flight_get(req, res);
     } else {
 
         FlightModel.check_flightNo(FlightNo, dbCon, (err, result, fields) => {
@@ -576,13 +435,16 @@ const add_flight_post = (req, res) => {
                         return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                     }
             
-                    // res.redirect("/admin/add_flight");
-                    res.locals.success = {"msg": "Flight added successfully"};
-                    add_flight_get(req, res);
+                    req.flash("success", "Flight added successfully");
+                    res.redirect("/admin/add_flight");
+                    // res.locals.success = {"msg": "Flight added successfully"};
+                    // add_flight_get(req, res);
                 });
             } else {
-                res.locals.alert = {"msg": "Flight number already existing in the system"};
-                add_flight_get(req, res);
+                req.flash("error", "Flight number already existing in the system");
+                res.redirect("/admin/add_flight");
+                // res.locals.alert = {"msg": "Flight number already existing in the system"};
+                // add_flight_get(req, res);
             }
         });
 
@@ -666,17 +528,20 @@ const add_price_post = (req, res) => {
                             return res.status(500).render('error', { title : '500', layout: "./layouts/payment_layout", error: {"msg": "Internal Server Error", "status": 500}});
                         }
                         
-                        // res.redirect('/admin/add_price');
-                        res.locals.success = {"msg": "Price added Successfully!"};
-                        add_price_get(req, res);
+                        req.flash("success", "Price added Successfully!");
+                        res.redirect('/admin/add_price');
+                        // res.locals.success = {"msg": "Price added Successfully!"};
+                        // add_price_get(req, res);
                     })
         
                 })
                 
             })
         } else {
-            res.locals.alert = {"msg": "Price already exists in the system"};
-            add_price_get(req, res);
+            req.flash("error", "Price already exists in the system");
+            res.redirect("/admin/add_price");
+            // res.locals.alert = {"msg": "Price already exists in the system"};
+            // add_price_get(req, res);
         }
     })
 
@@ -697,7 +562,6 @@ module.exports = {
     add_aircraft_ex_post,
     add_flight_get,
     add_flight_post,
-    get_flightDetails,
     add_price_get,
     add_price_post,
     update_schedule_get,

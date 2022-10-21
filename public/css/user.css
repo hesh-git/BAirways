@@ -34,10 +34,14 @@ body{
     background-color: #25529b;
     color: white;
     width: 320px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     top: 0;
     bottom: 0;
     /* height: 100%; */
+}
+
+.sidebar-a{
+    overflow-y:scroll;
 }
 
 .sidebar header{
@@ -106,6 +110,53 @@ input[type=button], input[type=submit]{
     /* height: 150px; */
     background-color: rgb(14, 35, 78);
 }
+
+.badge{
+    position: relative;
+    width: 216px;
+    display: inline-block;
+    margin: 40px;
+}
+   
+.title1{
+      font-family: "Montserrat", sans-serif;
+      font-weight: bold;
+      font-size: 1.7em;
+      position: absolute;
+      top: -28px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+      width: 100%;
+      background: #25529b;
+      padding: 20px 0;
+      color: #e091dd;
+}
+    
+.subtitle{
+      position: absolute;
+      font-family: "Fjalla One", sans-serif;
+      font-size: 1.8em;
+      width: 100%;
+      text-align: center;
+      color: white;
+      position: absolute;
+      top: 100px;
+}
+
+after{
+          content: "★ ★ ★";
+          display: block;
+          font-size: .4em;
+          position: relative;
+          margin: 15px 0 0;
+          transition: all .3s;
+}
+    
+
+hover .subtitle:after{
+        word-spacing: 30px; 
+}
+  
 
 .line-top {
     border-top: 1px solid #af912f;

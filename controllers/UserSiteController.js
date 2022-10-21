@@ -18,6 +18,7 @@ const view_profile_get = (req, res) => {
                 'lName': result[0]['LastName'],
                 'email': result[0]['Email'],
                 'ContactNumber': result[0]['ContactNumber'],
+                'CategoryID': result[0]['CatagoryID']
             }
             res.render('./reg_user/user_profile', {title: 'user | Profile',userDetail:userDetail, layout: './layouts/user_layout'});
         })

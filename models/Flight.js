@@ -30,19 +30,14 @@ const get_flightNo_with_price = (dbCon, callback) => {
 const get_flightDetails = async (FlightNo, dbCon) => {
     const query = util.promisify(dbCon.query).bind(dbCon);
     let sql = "SELECT * FROM `Flight` WHERE `FlightNo` = ?";
-    // dbCon.query(sql, [FlightNo], (err, result, fields) => {
-    //     if(err) throw err;
-
-    //     return callback(null, result);
-    // })
-    // console.log(results);
+    
     const func = async () => {
         try {
-            console.log("in try");
+           
             const result = await query(sql, [FlightNo]);
             return result;
         } finally {
-            console.log("done");
+            
         }
     };
 

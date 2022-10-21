@@ -6,12 +6,12 @@
             <input type="text" class="form-control" name="" id="">
         </div>
     </div> -->
-    <% if(typeof alert != 'undefined') { %>
+    <% if(error != "") { %>
         <div
           class="alert alert-warning alert-dismissible fade show"
           role="alert"
         >
-          <%= alert.msg %>
+          <%= error %>
           <button
             type="button"
             class="close"
@@ -23,12 +23,12 @@
         </div>
     <% } %>
 
-    <% if(typeof success != 'undefined') { %>
+    <% if(success != "") { %>
         <div
           class="alert alert-success alert-dismissible fade show"
           role="alert"
         >
-          <%= success.msg %>
+          <%= success %>
           <button
             type="button"
             class="close"

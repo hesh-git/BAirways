@@ -2,13 +2,13 @@ require('dotenv').config();
 
 const moment = require("moment");
 const express = require('express');
-
+const flash = require('connect-flash');
 
 
 //const expressLayouts = require('express-ejs-layouts');
 const morgan =require('morgan')
 
-const flash = require('express-flash')
+// const flash = require('express-flash')
 
 
 const searchFlightRoutes = require('./routes/searchFlight-routes')
@@ -41,6 +41,8 @@ app.use(session({
     cookie: { maxAge: 3*24*60*60*1000 },
     expires: new Date(Date.now() + (3*24*60*60*1000))
   }));
+
+app.use(flash());
 
 app.use((req, res, next)=>{
     res.locals.moment = moment;
@@ -82,7 +84,13 @@ app.use(expressLayouts);
 app.use(function(req, res, next) {
     req.dbCon = dbCon;
     next()
-  })
+});
+
+app.use(function(req, res, next) {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
 
 
 //middleware
